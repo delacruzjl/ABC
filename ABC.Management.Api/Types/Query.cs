@@ -10,6 +10,7 @@ public static class Query
     [UseProjection]
     [UseFiltering]
     [UseSorting]
+    [GraphQLDescription("Retrieve antecedents options")]
     public static async Task<IQueryable<Antecedent>> GetAntecedents(UnitOfWork uow, CancellationToken cancellationToken)
         => await uow.Antecedents.GetAsync(cancellationToken);
 
@@ -17,6 +18,7 @@ public static class Query
     [UseProjection]
     [UseFiltering]
     [UseSorting]
+    [GraphQLDescription("Retrieve behaviors options")]
     public static async Task<IQueryable<Behavior>> GetBehaviors(UnitOfWork uow)
          => await uow.Behaviors.GetAsync();
 
@@ -24,6 +26,7 @@ public static class Query
     [UseProjection]
     [UseFiltering]
     [UseSorting]
+    [GraphQLDescription("Retrieve consequences options")]
     public static async Task<IQueryable<Consequence>> GetConsequences(UnitOfWork uow)
          => await uow.Consequences.GetAsync();
 
@@ -31,6 +34,7 @@ public static class Query
     [UseProjection]
     [UseFiltering]
     [UseSorting]
+    [GraphQLDescription("Retrieve available children")]
     public static async Task<IQueryable<Child>> GetChildren(UnitOfWork uow)
          => await uow.Children.GetAsync();
 }

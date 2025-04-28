@@ -50,6 +50,8 @@ public class CreateChildHandler(
             response.Errors.Add(
                 ErrorBuilder.New()
                 .SetException(ex)
+                .SetMessage("Error creating child")
+                .SetCode("ChildCreateError")
                 .Build());
         }
 
