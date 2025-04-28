@@ -8,6 +8,7 @@ namespace ABC.Management.Api.Types;
 [ExtendObjectType(nameof(Mutation))]
 public sealed class MutationRemoveResolvers
 {
+    [GraphQLDescription("Remove an antecedent")]
     public async Task<bool> RemoveAntecedent(
         IMediator handler,
         Guid antecedentId,
@@ -18,6 +19,7 @@ public sealed class MutationRemoveResolvers
         return !context.HasErrors;
     }
 
+    [GraphQLDescription("Remove a behavior")]
     public async Task<bool> RemoveBehavior(
        IMediator handler,
        Guid behaviorId,
@@ -28,6 +30,7 @@ public sealed class MutationRemoveResolvers
         return !context.HasErrors;
     }
 
+    [GraphQLDescription("Remove a consequence")]
     public async Task<bool> RemoveConsequence(
        IMediator handler,
        Guid consequenceId,
@@ -38,6 +41,7 @@ public sealed class MutationRemoveResolvers
         return !context.HasErrors;
     }
 
+    [GraphQLDescription("Remove a child")]
     public async Task<bool> RemoveChild(
        IMediator handler,
        Guid childId,
