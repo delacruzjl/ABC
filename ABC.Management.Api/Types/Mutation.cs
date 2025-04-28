@@ -1,6 +1,6 @@
 ﻿using ABC.Management.Api.Commands;
+using ABC.Management.Api.Extensions;
 using ABC.Management.Domain.Entities;
-using ABC.SharedKernel;
 using HotChocolate.Resolvers;
 using Mediator;
 
@@ -9,6 +9,7 @@ namespace ABC.Management.Api.Types;
 [MutationType]
 public static class Mutation
 {
+    [GraphQLDescription("Add a new antecedent")]
     public static async Task<Antecedent?> AddAntecedent(
         IMediator handler,
         string name,
@@ -16,9 +17,10 @@ public static class Mutation
         IResolverContext context)
     {
         var command = CreateAntecedentCommand.Create(name, description);
-        return await ExecuteCommandHandler(handler, context, command);
+        return await command.ExecuteHandler(handler, context);
     }
 
+    [GraphQLDescription("Add a new behavior")]
     public static async Task<Behavior?> AddBehavior(
         IMediator handler,
         string name,
@@ -26,9 +28,10 @@ public static class Mutation
         IResolverContext context)
     {
         var command = CreateBehaviorCommand.Create(name, description);
-        return await ExecuteCommandHandler(handler, context, command);
+        return await command.ExecuteHandler(handler, context);
     }
 
+    [GraphQLDescription("Add a new consequence")]
     public static async Task<Consequence?> AddConsequence(
         IMediator handler,
         string name,
@@ -36,9 +39,10 @@ public static class Mutation
         IResolverContext context)
     {
         var command = CreateConsequenceCommand.Create(name, description);
-        return await ExecuteCommandHandler(handler, context, command);
+        return await command.ExecuteHandler(handler, context);
     }
 
+    [GraphQLDescription("Add a new child")]
     public static async Task<Child?> AddChild(
         IMediator handler,
         string lastName,
@@ -47,18 +51,6 @@ public static class Mutation
         IResolverContext context)
     {
         var command = CreateChildCommand.Create(lastName, firstName, age);
-        return await ExecuteCommandHandler(handler, context, command);
-    }
-
-
-    private static async Task<T?> ExecuteCommandHandler<T>(
-        IMediator handler,
-        IResolverContext context,
-        IRequest<BaseResponseCommand<T>> command) where T : Entity
-    {
-        var response = await handler.Send(command);
-        response.Errors.ForEach(context.ReportError);
-
-        return response.Entity;
+        return await command.ExecuteHandler(handler, context);
     }
 }

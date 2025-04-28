@@ -1,3 +1,4 @@
+using ABC.Management.Api.Types;
 using ABC.Management.Domain.Validators;
 using ABC.PostGreSQL;
 using ABC.PostGreSQL.Extensions;
@@ -20,6 +21,7 @@ services
     .ModifyRequestOptions(o =>
         o.IncludeExceptionDetails = builder.Environment.IsDevelopment())
     .AddTypes()
+    .AddTypeExtension<MutationRemoveResolvers>()
     .AddFiltering()
     .AddSorting()
     .AddProjections();

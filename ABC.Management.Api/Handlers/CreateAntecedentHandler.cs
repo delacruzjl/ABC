@@ -50,6 +50,8 @@ public class CreateAntecedentHandler(
         {
             response.Errors.Add(
                 ErrorBuilder.New()
+                .SetMessage("Error creating antecedent")
+                .SetCode("AntecedentCreateError")
                 .SetException(ex)
                 .Build());
         }

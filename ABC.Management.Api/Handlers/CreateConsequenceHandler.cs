@@ -50,6 +50,8 @@ public class CreateConsequenceHandler(
             response.Errors.Add(
                 ErrorBuilder.New()
                 .SetException(ex)
+                .SetMessage("Error creating consequence")
+                .SetCode("ConsequenceCreateError")
                 .Build());
         }
 

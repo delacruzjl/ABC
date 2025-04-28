@@ -48,6 +48,8 @@ public class CreateBehaviorHandler(
         {
             response.Errors.Add(
                 ErrorBuilder.New()
+                .SetMessage("Error creating behavior")
+                .SetCode("BehaviorCreateError")
                 .SetException(ex)
                 .Build());
         }
