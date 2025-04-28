@@ -1,0 +1,19 @@
+<Solution>
+  <Configurations>
+    <Platform Name="Any CPU" />
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Folder Name="/Solution Items/" Id="8ec462fd-d22e-90a8-e5ce-7e832ba40c5d">
+    <File Path=".gitignore" />
+    <File Path="Directory.Packages.props" />
+    <File Path="global.json" />
+  </Folder>
+  <Project Path="ABC.AppHost/ABC.AppHost.csproj" Id="8e3300f3-051d-48db-b7a9-773e276785a0" />
+  <Project Path="ABC.Management.Api/ABC.Management.Api.csproj" />
+  <Project Path="ABC.Management.Domain.Tests/ABC.Management.Domain.Tests.csproj" />
+  <Project Path="ABC.Management.Domain/ABC.Management.Domain.csproj" />
+  <Project Path="ABC.PostGreSQL/ABC.PostGreSQL.csproj" />
+  <Project Path="ABC.ServiceDefaults/ABC.ServiceDefaults.csproj" />
+  <Project Path="ABC.SharedKernell/ABC.SharedKernell.csproj" />
+</Solution>

@@ -398,3 +398,11 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+
+# custom stuff
+*.feature.cs
+/.vs
+**/bin/
+**/obj/
+**/*.lutconfig
+*.user
