@@ -1,6 +1,6 @@
 ﻿using ABC.Management.Domain.Entities;
 using ABC.PostGreSQL.ValidationServices;
-using ABC.SharedKernell;
+using ABC.SharedKernel;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;

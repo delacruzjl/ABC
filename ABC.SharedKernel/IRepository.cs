@@ -1,6 +1,6 @@
 ﻿using System.Linq.Expressions;
 
-namespace ABC.SharedKernell;
+namespace ABC.SharedKernel;
 
 public interface IRepository<TEntity> : IDisposable where TEntity : Entity
 {

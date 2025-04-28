@@ -1,4 +1,4 @@
-﻿using ABC.SharedKernell;
+﻿using ABC.SharedKernel;
 
 namespace ABC.Management.Api.Commands
 {
