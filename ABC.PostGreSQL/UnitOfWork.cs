@@ -1,5 +1,5 @@
 ﻿using ABC.Management.Domain.Entities;
-using ABC.SharedKernell;
+using ABC.SharedKernel;
 using Microsoft.EntityFrameworkCore;
 
 namespace ABC.PostGreSQL

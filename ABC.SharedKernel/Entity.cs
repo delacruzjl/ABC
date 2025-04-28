@@ -1,4 +1,4 @@
-﻿namespace ABC.SharedKernell;
+﻿namespace ABC.SharedKernel;
 
 public abstract class Entity(Guid id) : IEquatable<Entity>
 {

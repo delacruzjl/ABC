@@ -1,6 +1,6 @@
 ﻿using ABC.Management.Api.Commands;
 using ABC.Management.Domain.Entities;
-using ABC.SharedKernell;
+using ABC.SharedKernel;
 using HotChocolate.Resolvers;
 using Mediator;
 

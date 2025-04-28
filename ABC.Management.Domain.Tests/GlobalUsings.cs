@@ -1,5 +1,5 @@
 ﻿global using ABC.Management.Domain.Entities;
-global using ABC.SharedKernell;
+global using ABC.SharedKernel;
 global using FakeItEasy;
 global using Microsoft.Extensions.DependencyInjection;
 global using Xunit;

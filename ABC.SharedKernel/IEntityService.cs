@@ -1,4 +1,4 @@
-﻿namespace ABC.SharedKernell;
+﻿namespace ABC.SharedKernel;
 
 public interface IEntityService<T> where T : Entity
 {

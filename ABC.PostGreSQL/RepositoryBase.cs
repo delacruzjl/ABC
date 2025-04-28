@@ -1,4 +1,4 @@
-﻿using ABC.SharedKernell;
+﻿using ABC.SharedKernel;
 using Microsoft.EntityFrameworkCore;
 using System.Data;
 using System.Linq.Expressions;
