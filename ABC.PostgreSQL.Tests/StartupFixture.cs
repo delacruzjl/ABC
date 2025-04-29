@@ -7,12 +7,13 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Threading.Tasks;
 using Testcontainers.PostgreSql;
-using Xunit;
 
-namespace ABC.Management.Domain.Tests;
+namespace ABC.PostgreSQL.Tests;
 
-public class StartupFixture : IAsyncLifetime
+public class StartupFixture 
 {
+    public static StartupFixture Instance { get; } = new StartupFixture();
+
     public IServiceProvider Services;
 
     private readonly PostgreSqlContainer _container;
