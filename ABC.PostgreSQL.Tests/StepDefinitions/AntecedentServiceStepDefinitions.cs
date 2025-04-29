@@ -16,12 +16,12 @@ public class AntecedentServiceStepDefinitions
 {
     private readonly AntecedentService _sut;
     private string _expectedName = string.Empty;
-    private Antecedent? _actual;
+    private Antecedent _actual;
 
-    private IEnumerable<Antecedent> _antecedents = 
+    private readonly IEnumerable<Antecedent> _antecedents =
         Enumerable.Range(0, 5)
         .Select(i => new Antecedent(
-            Guid.NewGuid(), 
+            Guid.NewGuid(),
             $"Antecedent{i}",
             Faker.Lorem.Sentence(1)));
 
@@ -32,11 +32,12 @@ public class AntecedentServiceStepDefinitions
             .GetRequiredService<UnitOfWork>();
 
         Action action = async () =>
+        {
             await uow.Antecedents.AddRangeAsync(_antecedents);
+            _ = await uow.SaveChangesAsync();
+        };
 
         action.Invoke();
-        _ = uow.SaveChangesAsync().Result;
-
         _sut = new AntecedentService(uow);
     }
 
