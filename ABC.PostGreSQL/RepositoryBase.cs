@@ -20,27 +20,6 @@ public class RepositoryBase<TContext,TEntity> : IRepository<TEntity>
         _dbSet = _dbContext.Set<TEntity>();
     }
 
-    public void Dispose()
-    {
-        Dispose(true);
-        GC.SuppressFinalize(this);
-    }
-
-    protected virtual void Dispose(bool disposing)
-    {
-        if (_disposed)
-        {
-            return;
-        }
-
-        if (disposing)
-        {
-            _dbContext.Dispose();
-        }
-
-        _disposed = true;
-    }
-
     public async Task<TEntity> FindAsync(
         Guid id,
         CancellationToken cancellationToken = default)
@@ -90,6 +69,32 @@ public class RepositoryBase<TContext,TEntity> : IRepository<TEntity>
         }
 
         _dbSet.Attach(entity);
-        _dbSet.Remove(entity);        
+        _dbSet.Remove(entity);    
+
     }
+
+    public void Dispose()
+    {
+        Dispose(true);
+        GC.SuppressFinalize(this);
+    }
+
+    protected virtual void Dispose(bool disposing)
+    {
+        if (_disposed)
+        {
+            return;
+        }
+
+        if (disposing)
+        {
+            _dbContext.Dispose();
+        }
+
+        _disposed = true;
+    }
+
+    public async Task AddRangeAsync(
+        params IEnumerable<TEntity> entities) =>
+        await _dbSet.AddRangeAsync(entities);
 }
