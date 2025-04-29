@@ -5,19 +5,19 @@ using Mediator;
 
 namespace ABC.Management.Api.Handlers;
 
-public class RemoveAntecedentHandler(
-    UnitOfWork _uow) : IRequestHandler<RemoveAntecedentCommand, BaseResponseCommand<Antecedent>>
+public class RemoveChildHandler(
+    UnitOfWork _uow) : IRequestHandler<RemoveChildCommand, BaseResponseCommand<Child>>
 {
-    public async ValueTask<BaseResponseCommand<Antecedent>> Handle(
-        RemoveAntecedentCommand request,
+    public async ValueTask<BaseResponseCommand<Child>> Handle(
+        RemoveChildCommand request,
         CancellationToken cancellationToken)
     {
         var id = request.Entity.Id;
-        BaseResponseCommand<Antecedent> response = new();        
+        BaseResponseCommand<Child> response = new();
 
         try
         {
-            await _uow.Antecedents.RemoveAsync(id, cancellationToken);
+            await _uow.Children.RemoveAsync(id, cancellationToken);
             var count = await _uow.SaveChangesAsync();
             if (count == 0)
             {
@@ -28,8 +28,8 @@ public class RemoveAntecedentHandler(
         {
             response.Errors.Add(
                 ErrorBuilder.New()
-                .SetMessage("Error removing antecedent")
-                .SetCode(nameof(RemoveAntecedentHandler))
+                .SetMessage("Error removing Child")
+                .SetCode(nameof(RemoveChildHandler))
                 .SetException(ex)
                 .Build());
         }
