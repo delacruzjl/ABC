@@ -13,9 +13,4 @@ public class BehaviorService(UnitOfWork _uow) : IEntityService<Behavior>
             a.Name == name, cancellationToken);
         return behaviors.SingleOrDefault();
     }
-
-    public async Task<Behavior?> GetValue(
-        Guid id,
-        CancellationToken cancellationToken = default) =>
-        await _uow.Behaviors.FindAsync(id, cancellationToken);
 }

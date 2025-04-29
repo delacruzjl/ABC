@@ -12,9 +12,4 @@ public class AntecedentService(UnitOfWork _uow) : IEntityService<Antecedent>
         var antecedents = await _uow.Antecedents.GetAsync(a => a.Name == name, cancellationToken);
         return antecedents.SingleOrDefault();
     }
-
-    public async Task<Antecedent?> GetValue(
-        Guid id,
-        CancellationToken cancellationToken = default) =>
-        await _uow.Antecedents.FindAsync(id, cancellationToken);
 }
