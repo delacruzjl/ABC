@@ -6,7 +6,7 @@ using Mediator;
 namespace ABC.Management.Api.Handlers;
 
 public class RemoveAntecedentHandler(
-    UnitOfWork _uow) : IRequestHandler<RemoveAntecedentCommand, BaseResponseCommand<Antecedent>>
+    IUnitOfWork _uow) : IRequestHandler<RemoveAntecedentCommand, BaseResponseCommand<Antecedent>>
 {
     public async ValueTask<BaseResponseCommand<Antecedent>> Handle(
         RemoveAntecedentCommand request,

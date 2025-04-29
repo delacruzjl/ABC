@@ -8,7 +8,7 @@ using Mediator;
 namespace ABC.Management.Api.Handlers;
 
 public class CreateConsequenceHandler(
-    UnitOfWork _uow,
+    IUnitOfWork _uow,
     IValidator<Consequence> _consequenceValidator)
     : IRequestHandler<CreateConsequenceCommand, BaseResponseCommand<Consequence>>
 {

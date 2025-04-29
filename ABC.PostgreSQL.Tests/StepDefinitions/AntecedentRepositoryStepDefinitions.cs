@@ -16,7 +16,7 @@ public class AntecedentRepositoryStepDefinitions
 {
     private StartupFixture fixture = StartupFixture.Instance;
 
-    private UnitOfWork _uow;
+    private IUnitOfWork _uow;
     private int _actual;
     private int _expected;
     private Guid _antecedentId;
@@ -26,7 +26,7 @@ public class AntecedentRepositoryStepDefinitions
     public void GivenIHaveAUnitOfWork()
     {
         _uow = fixture.Services
-            .GetRequiredService<UnitOfWork>();
+            .GetRequiredService<IUnitOfWork>();
     }
 
     [Given("{int} rows in the antecedent table")]

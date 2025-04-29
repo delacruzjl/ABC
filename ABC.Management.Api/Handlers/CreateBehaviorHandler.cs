@@ -7,7 +7,7 @@ using Mediator;
 namespace ABC.Management.Api.Handlers;
 
 public class CreateBehaviorHandler(
-    UnitOfWork _uow,
+    IUnitOfWork _uow,
     IValidator<Behavior> _behaviorValidator)
     : IRequestHandler<CreateBehaviorCommand, BaseResponseCommand<Behavior>>
 {

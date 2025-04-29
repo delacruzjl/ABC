@@ -6,7 +6,7 @@ using Mediator;
 namespace ABC.Management.Api.Handlers;
 
 public class RemoveBehaviorHandler(
-    UnitOfWork _uow) : IRequestHandler<RemoveBehaviorCommand, BaseResponseCommand<Behavior>>
+    IUnitOfWork _uow) : IRequestHandler<RemoveBehaviorCommand, BaseResponseCommand<Behavior>>
 {
     public async ValueTask<BaseResponseCommand<Behavior>> Handle(
         RemoveBehaviorCommand request,

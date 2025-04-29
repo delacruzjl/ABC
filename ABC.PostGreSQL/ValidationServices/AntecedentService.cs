@@ -3,7 +3,7 @@ using ABC.SharedKernel;
 
 namespace ABC.PostGreSQL.ValidationServices;
 
-public class AntecedentService(UnitOfWork _uow) : IEntityService<Antecedent>
+public class AntecedentService(IUnitOfWork _uow) : IEntityService<Antecedent>
 {
     public async Task<Antecedent?> GetByName(
         string name,

@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 namespace ABC.PostGreSQL
 {
     public class UnitOfWork(
-        IDbContextFactory<ABCContext> _dbContextFactory) : IDisposable
+        IDbContextFactory<ABCContext> _dbContextFactory) : IUnitOfWork
     {
         private readonly ABCContext _dbContext = _dbContextFactory.CreateDbContext();
         private bool _disposedValue;

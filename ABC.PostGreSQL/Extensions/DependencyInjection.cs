@@ -23,7 +23,7 @@ public static class DependencyInjection
         services.AddDbContextFactory<ABCContext>(options =>
             options.UseNpgsql(builder.Configuration.GetConnectionString(connectionName)));
 
-        services.AddScoped<UnitOfWork>();
+        services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddScoped<IEntityService<Antecedent>, AntecedentService>();
         services.AddScoped<IEntityService<Behavior>, BehaviorService>();
         services.AddScoped<IEntityService<Consequence>, ConsequenceService>();

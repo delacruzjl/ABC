@@ -7,7 +7,7 @@ using Mediator;
 namespace ABC.Management.Api.Handlers;
 
 public class CreateAntecedentHandler(
-    UnitOfWork _uow,
+    IUnitOfWork _uow,
     IValidator<Antecedent> _antecedentValidator)
     : IRequestHandler<CreateAntecedentCommand, BaseResponseCommand<Antecedent>>
 {
