@@ -1,11 +1,11 @@
-﻿using ABC.Management.Domain.Entities;
+﻿using System.Diagnostics.CodeAnalysis;
+using ABC.Management.Domain.Entities;
 using ABC.PostGreSQL.ValidationServices;
 using ABC.SharedKernel;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System.Diagnostics.CodeAnalysis;
 
 namespace ABC.PostGreSQL.Extensions;
 
@@ -17,9 +17,11 @@ public static class DependencyInjection
     {
         var services = builder.Services;
 
+        var connectionName = builder.Configuration["databaseName"]
+            ?? throw new InvalidOperationException($"Connection string key 'databaseName' not found.");
+
         services.AddDbContextFactory<ABCContext>(options =>
-            options.UseNpgsql(builder.Configuration.GetConnectionString("abcdata")
-                ?? throw new InvalidOperationException("Connection string 'abcdata' not found.")));
+            options.UseNpgsql(builder.Configuration.GetConnectionString(connectionName)));
 
         services.AddScoped<UnitOfWork>();
         services.AddScoped<IEntityService<Antecedent>, AntecedentService>();

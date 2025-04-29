@@ -4,13 +4,16 @@ var postgres = builder
     .AddPostgres("postgres")
     .WithPgWeb(pgWeb => pgWeb.WithHostPort(5050));
 
-var dbNameKey = $"Parameters:databaseName";
-var databaseName = builder.Configuration[dbNameKey];
+var dbNameKey = "databaseName";
+var databaseNameParameter = builder.AddParameter(dbNameKey);
+
+var databaseName = builder.Configuration[$"Parameters:{dbNameKey}"];
 
 var db = postgres
     .AddDatabase(databaseName!);
 
 var managementApi = builder.AddProject<Projects.ABC_Management_Api>("abcmanagementapi")
+    .WithEnvironment(dbNameKey, databaseNameParameter)
     .WithReference(db)
     .WaitFor(db);
 
