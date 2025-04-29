@@ -28,7 +28,7 @@ public class StartupFixture
         collection.AddDbContextFactory<ABCContext>(options =>
             options.UseNpgsql(_container.GetConnectionString()));
 
-        collection.AddTransient<UnitOfWork>();
+        collection.AddTransient<IUnitOfWork, UnitOfWork>();
         collection.AddTransient<IEntityService<Antecedent>, AntecedentService>();
         collection.AddTransient<IEntityService<Behavior>, BehaviorService>();
         collection.AddTransient<IEntityService<Consequence>, ConsequenceService>();

@@ -29,7 +29,7 @@ public class AntecedentServiceStepDefinitions
     public AntecedentServiceStepDefinitions()
     {
         var uow = StartupFixture.Instance.Services
-            .GetRequiredService<UnitOfWork>();
+            .GetRequiredService<IUnitOfWork>();
 
         Action action = async () =>
         {

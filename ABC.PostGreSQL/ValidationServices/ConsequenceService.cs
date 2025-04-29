@@ -3,7 +3,7 @@ using ABC.SharedKernel;
 
 namespace ABC.PostGreSQL.ValidationServices;
 
-public class ConsequenceService(UnitOfWork _uow) : IEntityService<Consequence>
+public class ConsequenceService(IUnitOfWork _uow) : IEntityService<Consequence>
 {
     public async Task<Consequence?> GetByName(
         string name,

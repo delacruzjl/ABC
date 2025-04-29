@@ -6,7 +6,7 @@ using Mediator;
 namespace ABC.Management.Api.Handlers;
 
 public class RemoveChildHandler(
-    UnitOfWork _uow) : IRequestHandler<RemoveChildCommand, BaseResponseCommand<Child>>
+    IUnitOfWork _uow) : IRequestHandler<RemoveChildCommand, BaseResponseCommand<Child>>
 {
     public async ValueTask<BaseResponseCommand<Child>> Handle(
         RemoveChildCommand request,

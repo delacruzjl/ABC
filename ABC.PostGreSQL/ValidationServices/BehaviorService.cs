@@ -3,7 +3,7 @@ using ABC.SharedKernel;
 
 namespace ABC.PostGreSQL.ValidationServices;
 
-public class BehaviorService(UnitOfWork _uow) : IEntityService<Behavior>
+public class BehaviorService(IUnitOfWork _uow) : IEntityService<Behavior>
 {
     public async Task<Behavior?> GetByName(
         string name,

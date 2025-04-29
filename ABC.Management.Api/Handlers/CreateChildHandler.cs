@@ -8,7 +8,7 @@ using Mediator;
 namespace ABC.Management.Api.Handlers;
 
 public class CreateChildHandler(
-    UnitOfWork _uow,
+    IUnitOfWork _uow,
     IValidator<Child> _childValidator)
     : IRequestHandler<CreateChildCommand, BaseResponseCommand<Child>>
 {

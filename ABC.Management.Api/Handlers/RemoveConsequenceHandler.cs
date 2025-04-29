@@ -6,7 +6,7 @@ using Mediator;
 namespace ABC.Management.Api.Handlers;
 
 public class RemoveConsequenceHandler(
-    UnitOfWork _uow) : IRequestHandler<RemoveConsequenceCommand, BaseResponseCommand<Consequence>>
+    IUnitOfWork _uow) : IRequestHandler<RemoveConsequenceCommand, BaseResponseCommand<Consequence>>
 {
     public async ValueTask<BaseResponseCommand<Consequence>> Handle(
         RemoveConsequenceCommand request,
