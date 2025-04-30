@@ -7,42 +7,31 @@ public class ChildSpecsStepDefinitions : IClassFixture<StartupFixture>
     private ValidationResult? _validationResult;
     private readonly ChildValidator _childValidator;
 
-    public ChildSpecsStepDefinitions(StartupFixture fixture)
-    {
+    public ChildSpecsStepDefinitions(StartupFixture fixture) =>
         _childValidator = new();
-    }
 
     [Given("I create a Child entity")]
-    public void GivenICreateAChildEntity()
-    {
+    public void GivenICreateAChildEntity() =>
         _child = new();
-    }
 
     [Given("Last Name is empty")]
-    public void GivenLastNameIsEmpty()
-    {
-        _child = new(Guid.NewGuid(), null!, "Fake Last", 13);
-    }
+    public void GivenLastNameIsEmpty() => 
+        _child = new(Guid.NewGuid(), null!, "Fake Last", 13, []);
 
     [When("Validating child")]
     public async Task WhenValidatingChild() =>
         _validationResult = await _childValidator.ValidateAsync(_child!);
 
     [Then("validation should be false")]
-    public void ThenValidationShouldBeFalse()
-    {
+    public void ThenValidationShouldBeFalse() =>
         _validationResult?.IsValid.Should().BeFalse();
-    }
 
     [Given("Last Name is {string}")]
-    public void GivenLastNameIs(string lastName)
-    {
+    public void GivenLastNameIs(string lastName) =>
         _child = new() { LastName = lastName };
-    }
 
     [Given("First name is {string}")]
-    public void GivenFirstNameIs(string firstName)
-    {
+    public void GivenFirstNameIs(string firstName) =>
         _child = new()
         {
             Id = _child!.Id,
@@ -50,24 +39,18 @@ public class ChildSpecsStepDefinitions : IClassFixture<StartupFixture>
             LastName = _child.LastName,
             BirthYear = _child.BirthYear
         };
-    }
 
-
-    [Given("Age is {int}")]
-    public void GivenAgeIs(int age)
-    {
+    [Given("birth year is {int}")]
+    public void GivenBirthYearIs(int birthYear) =>
         _child = new()
         {
             Id = _child!.Id,
             FirstName = _child.FirstName,
             LastName = _child.LastName,
-            BirthYear = age
+            BirthYear = birthYear
         };
-    }
 
     [Then("validation should be true")]
-    public void ThenValidationShouldBeTrue()
-    {
+    public void ThenValidationShouldBeTrue() =>
         _validationResult!.IsValid.Should().BeTrue();
-    }
 }
