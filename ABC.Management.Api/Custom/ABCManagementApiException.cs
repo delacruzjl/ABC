@@ -6,13 +6,13 @@ public class ABCManagementApiException : Exception
 
     public ABCManagementApiException()
     {
-        Errors = [];
+        Errors = new List<IError>();
     }
 
     public ABCManagementApiException(string message)
         : base(message)
     {
-        Errors = [];
+        Errors = new List<IError>();
     }
 
     public ABCManagementApiException(string message, Exception inner, List<IError> errors)
