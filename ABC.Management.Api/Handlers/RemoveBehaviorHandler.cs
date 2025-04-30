@@ -28,7 +28,7 @@ public class RemoveBehaviorHandler(
         {
             response.Errors.Add(
                 ErrorBuilder.New()
-                .SetMessage("Error removing antecedent")
+                .SetMessage("Error removing behavior")
                 .SetCode(nameof(RemoveBehaviorHandler))
                 .SetException(ex)
                 .Build());
