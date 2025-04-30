@@ -4,19 +4,22 @@
     <Platform Name="x64" />
     <Platform Name="x86" />
   </Configurations>
+  <Folder Name="/Aspire/">
+    <Project Path="ABC.AppHost/ABC.AppHost.csproj" Id="8e3300f3-051d-48db-b7a9-773e276785a0" />
+    <Project Path="ABC.ServiceDefaults/ABC.ServiceDefaults.csproj" />
+  </Folder>
   <Folder Name="/Solution Items/" Id="8ec462fd-d22e-90a8-e5ce-7e832ba40c5d">
     <File Path=".gitignore" />
     <File Path="Directory.Packages.props" />
     <File Path="global.json" />
   </Folder>
   <Folder Name="/Tests/" Id="02ea681e-c7d8-13c7-8484-4ac65e1b71e8">
+    <Project Path="ABC.Management.Api.Tests/ABC.Management.Api.Tests.csproj" />
     <Project Path="ABC.Management.Domain.Tests/ABC.Management.Domain.Tests.csproj" />
     <Project Path="ABC.PostGreSQL.Tests/ABC.PostgreSQL.Tests.csproj" />
   </Folder>
-  <Project Path="ABC.AppHost/ABC.AppHost.csproj" Id="8e3300f3-051d-48db-b7a9-773e276785a0" />
   <Project Path="ABC.Management.Api/ABC.Management.Api.csproj" />
   <Project Path="ABC.Management.Domain/ABC.Management.Domain.csproj" />
   <Project Path="ABC.PostGreSQL/ABC.PostGreSQL.csproj" />
-  <Project Path="ABC.ServiceDefaults/ABC.ServiceDefaults.csproj" />
   <Project Path="ABC.SharedKernel/ABC.SharedKernel.csproj" Id="d31d86b9-a928-6032-b253-33b99a8828c2" />
 </Solution>
