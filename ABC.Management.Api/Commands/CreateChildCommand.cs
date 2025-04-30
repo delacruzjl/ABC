@@ -6,13 +6,18 @@ namespace ABC.Management.Api.Commands;
 public record CreateChildCommand(Child Value)
     : IRequest<BaseResponseCommand<Child>>
 {
-    internal static CreateChildCommand Create(string lastName, string firstName, int age)
+    internal static CreateChildCommand Create(
+        string lastName,
+        string firstName,
+        int birthYear,
+        params IEnumerable<string>? conditions)
     {
         Child child = new()
         {
             LastName = lastName,
             FirstName = firstName,
-            Age = age
+            BirthYear = birthYear,
+            Conditions = conditions?.ToList() ?? []
         };
 
         CreateChildCommand command = new(child);

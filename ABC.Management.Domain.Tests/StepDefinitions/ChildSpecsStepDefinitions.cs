@@ -48,7 +48,7 @@ public class ChildSpecsStepDefinitions : IClassFixture<StartupFixture>
             Id = _child!.Id,
             FirstName = firstName,
             LastName = _child.LastName,
-            Age = _child.Age
+            BirthYear = _child.BirthYear
         };
     }
 
@@ -61,7 +61,7 @@ public class ChildSpecsStepDefinitions : IClassFixture<StartupFixture>
             Id = _child!.Id,
             FirstName = _child.FirstName,
             LastName = _child.LastName,
-            Age = age
+            BirthYear = age
         };
     }
 

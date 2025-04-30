@@ -47,10 +47,11 @@ public static class Mutation
         IMediator handler,
         string lastName,
         string firstName,
-        int age,
+        int birthYear,
+        IEnumerable<string>? conditions,
         IResolverContext context)
     {
-        var command = CreateChildCommand.Create(lastName, firstName, age);
+        var command = CreateChildCommand.Create(lastName, firstName, birthYear, conditions);
         return await command.ExecuteHandler(handler, context);
     }
 }

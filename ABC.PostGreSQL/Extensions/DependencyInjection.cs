@@ -17,11 +17,9 @@ public static class DependencyInjection
     {
         var services = builder.Services;
 
-        var connectionName = builder.Configuration["databaseName"]
-            ?? throw new InvalidOperationException($"Connection string key 'databaseName' not found.");
-
+        var connectionName = builder.Configuration["databaseName"];
         services.AddDbContextFactory<ABCContext>(options =>
-            options.UseNpgsql(builder.Configuration.GetConnectionString(connectionName)));
+            options.UseNpgsql(builder.Configuration.GetConnectionString(connectionName!)));
 
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddScoped<IEntityService<Antecedent>, AntecedentService>();

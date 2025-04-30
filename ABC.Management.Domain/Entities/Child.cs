@@ -3,20 +3,22 @@ public class Child(
     Guid id,
     string lastName,
     string firstName,
-    int age) : Entity(id)
+    int birthYear,
+    List<string> conditions) : Entity(id)
 {
+
     public string LastName { get; init; } = lastName;
     public string FirstName { get; init; } = firstName;
-    public int Age { get; init; } = age;
+    public int BirthYear { get; init; } = birthYear;
+    public List<string> Conditions { get; init; } = conditions;
 
-
-    public Child(Guid id) : this(id, string.Empty, string.Empty, 0)
+    public Child(Guid id) : this(id, string.Empty, string.Empty, 0, [])
     {
 
     }
 
     public Child() : this(Guid.NewGuid())
     {
-        
+
     }
 }
