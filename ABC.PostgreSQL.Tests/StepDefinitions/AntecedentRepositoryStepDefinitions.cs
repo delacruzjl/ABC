@@ -7,7 +7,6 @@ using System;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
-using Xunit;
 
 namespace ABC.PostgreSQL.Tests.StepDefinitions;
 
