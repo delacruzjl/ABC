@@ -6,7 +6,7 @@ namespace ABC.Management.Api.Commands;
 public record CreateConsequenceCommand(Consequence Value)
     : IRequest<BaseResponseCommand<Consequence>>
 {
-    internal static CreateConsequenceCommand Create(string name, string description)
+    public static CreateConsequenceCommand Create(string name, string description)
     {
         Consequence consequence = new()
         {

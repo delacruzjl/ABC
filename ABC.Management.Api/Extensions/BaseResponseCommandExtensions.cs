@@ -9,8 +9,8 @@ public static class BaseResponseCommandExtensions
 {
     public static async Task<T?> ExecuteHandler<T>(
         this IRequest<BaseResponseCommand<T>> command,
-    IMediator handler,
-    IResolverContext context) where T : Entity
+        IMediator handler,
+        IResolverContext context) where T : Entity
     {
         var response = await handler.Send(command);
         response.Errors.ForEach(context.ReportError);

@@ -1,6 +1,7 @@
 using ABC.Management.Domain.Entities;
 using ABC.PostGreSQL;
 using ABC.SharedKernel;
+using Bogus.DataSets;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using Reqnroll;
@@ -18,6 +19,12 @@ public class ConsequenceServiceStepDefinitions
     private Consequence _actual;
     private string _consequenceName;
     private IEntityService<Consequence> _sut;
+    private readonly Lorem _lorem;
+
+    public ConsequenceServiceStepDefinitions()
+    {
+        _lorem = new Bogus.DataSets.Lorem(locale: "en");
+    }
 
     [Given("I have a name found in the consequence table")]
     public async Task GivenIHaveANameFoundInTheConsequenceTable()
@@ -27,7 +34,7 @@ public class ConsequenceServiceStepDefinitions
             .Select(i => new Consequence(
                 Guid.NewGuid(),
                 $"behavior{i}",
-                Faker.Lorem.Sentence(1 + i)))
+                _lorem.Sentence()))
             .ToList();
 
         var _uow = fixture.Services

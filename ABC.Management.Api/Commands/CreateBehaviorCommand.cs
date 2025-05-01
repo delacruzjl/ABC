@@ -6,7 +6,7 @@ namespace ABC.Management.Api.Commands;
 public record CreateBehaviorCommand(Behavior Value)
     : IRequest<BaseResponseCommand<Behavior>>
 {
-    internal static CreateBehaviorCommand Create(string name, string description)
+    public static CreateBehaviorCommand Create(string name, string description)
     {
 
         Behavior behavior = new()
