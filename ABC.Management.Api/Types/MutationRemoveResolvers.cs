@@ -14,7 +14,7 @@ public sealed class MutationRemoveResolvers
         Guid antecedentId,
         IResolverContext context)
     {
-        var command = RemoveAntecedentCommand.Create(antecedentId);
+        var command = RemoveAntecedentResponseCommand.Create(antecedentId);
         _ = await command.ExecuteHandler(handler, context);
         return !context.HasErrors;
     }
@@ -25,7 +25,7 @@ public sealed class MutationRemoveResolvers
        Guid behaviorId,
        IResolverContext context)
     {
-        var command = RemoveBehaviorCommand.Create(behaviorId);
+        var command = RemoveBehaviorResponseCommand.Create(behaviorId);
         _ = await command.ExecuteHandler(handler, context);
         return !context.HasErrors;
     }
@@ -36,7 +36,7 @@ public sealed class MutationRemoveResolvers
        Guid consequenceId,
        IResolverContext context)
     {
-        var command = RemoveConsequenceCommand.Create(consequenceId);
+        var command = RemoveConsequenceResponseCommand.Create(consequenceId);
         _ = await command.ExecuteHandler(handler, context);
         return !context.HasErrors;
     }
@@ -47,7 +47,7 @@ public sealed class MutationRemoveResolvers
        Guid childId,
        IResolverContext context)
     {
-        var command = RemoveChildCommand.Create(childId);
+        var command = RemoveChildResponseCommand.Create(childId);
         _ = await command.ExecuteHandler(handler, context);
         return !context.HasErrors;
     }

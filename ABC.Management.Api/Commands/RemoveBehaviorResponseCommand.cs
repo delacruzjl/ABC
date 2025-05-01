@@ -3,15 +3,15 @@ using Mediator;
 
 namespace ABC.Management.Api.Commands;
 
-public record RemoveBehaviorCommand(Behavior Entity)
+public record RemoveBehaviorResponseCommand(Behavior Entity)
 : IRequest<BaseResponseCommand<Behavior>>
 {
-    public static RemoveBehaviorCommand Create(Behavior behavior)
+    public static RemoveBehaviorResponseCommand Create(Behavior behavior)
     {
         return new(behavior);
     }
 
-    public static RemoveBehaviorCommand Create(Guid behaviorId)
+    public static RemoveBehaviorResponseCommand Create(Guid behaviorId)
     {
         return new(new Behavior(behaviorId));
     }

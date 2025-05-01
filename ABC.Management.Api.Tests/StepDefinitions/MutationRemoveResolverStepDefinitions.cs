@@ -40,7 +40,7 @@ public class MutationRemoveResolverStepDefinitions
     public void ThenIShouldSendARequestToTheRemoveAntecedentCommandHandler()
     {
         A.CallTo(() => _mediatorFake.Send(
-            A<RemoveAntecedentCommand>.That.Matches(a => a.Entity.Id.Equals(_existingGuid)),
+            A<RemoveAntecedentResponseCommand>.That.Matches(a => a.Entity.Id.Equals(_existingGuid)),
             A<CancellationToken>._))
         .MustHaveHappenedOnceExactly();
 
@@ -59,7 +59,7 @@ public class MutationRemoveResolverStepDefinitions
     public void ThenIShouldSendARequestToTheRemoveBehaviorCommandHandler()
     {
         A.CallTo(() => _mediatorFake.Send(
-           A<RemoveBehaviorCommand>.That.Matches(a => a.Entity.Id.Equals(_existingGuid)),
+           A<RemoveBehaviorResponseCommand>.That.Matches(a => a.Entity.Id.Equals(_existingGuid)),
            A<CancellationToken>._))
        .MustHaveHappenedOnceExactly();
 
@@ -78,7 +78,7 @@ public class MutationRemoveResolverStepDefinitions
     public void ThenIShouldSendARequestToTheRemoveConsequenceCommandHandler()
     {
         A.CallTo(() => _mediatorFake.Send(
-           A<RemoveConsequenceCommand>.That.Matches(a => a.Entity.Id.Equals(_existingGuid)),
+           A<RemoveConsequenceResponseCommand>.That.Matches(a => a.Entity.Id.Equals(_existingGuid)),
            A<CancellationToken>._))
        .MustHaveHappenedOnceExactly();
 
@@ -97,7 +97,7 @@ public class MutationRemoveResolverStepDefinitions
     public void ThenIShouldSendARequestToTheRemoveChildCommandHandler()
     {
         A.CallTo(() => _mediatorFake.Send(
-           A<RemoveChildCommand>.That.Matches(a => a.Entity.Id.Equals(_existingGuid)),
+           A<RemoveChildResponseCommand>.That.Matches(a => a.Entity.Id.Equals(_existingGuid)),
            A<CancellationToken>._))
        .MustHaveHappenedOnceExactly();
 

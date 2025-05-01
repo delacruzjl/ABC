@@ -3,10 +3,10 @@ using Mediator;
 
 namespace ABC.Management.Api.Commands;
 
-public record CreateConsequenceCommand(Consequence Value)
+public record CreateConsequenceResponseCommand(Consequence Value)
     : IRequest<BaseResponseCommand<Consequence>>
 {
-    public static CreateConsequenceCommand Create(string name, string description)
+    public static CreateConsequenceResponseCommand Create(string name, string description)
     {
         Consequence consequence = new()
         {
@@ -14,7 +14,7 @@ public record CreateConsequenceCommand(Consequence Value)
             Description = description
         };
 
-        CreateConsequenceCommand command = new(consequence);
+        CreateConsequenceResponseCommand command = new(consequence);
         return command;
     }
 }

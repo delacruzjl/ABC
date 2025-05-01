@@ -5,19 +5,19 @@ using Mediator;
 
 namespace ABC.Management.Api.Handlers;
 
-public class RemoveBehaviorHandler(
-    IUnitOfWork _uow) : IRequestHandler<RemoveBehaviorCommand, BaseResponseCommand<Behavior>>
+public class RemoveChildResponseHandler(
+    IUnitOfWork _uow) : IRequestHandler<RemoveChildResponseCommand, BaseResponseCommand<Child>>
 {
-    public async ValueTask<BaseResponseCommand<Behavior>> Handle(
-        RemoveBehaviorCommand request,
+    public async ValueTask<BaseResponseCommand<Child>> Handle(
+        RemoveChildResponseCommand request,
         CancellationToken cancellationToken)
     {
         var id = request.Entity.Id;
-        BaseResponseCommand<Behavior> response = new();
+        BaseResponseCommand<Child> response = new();
 
         try
         {
-            await _uow.Behaviors.RemoveAsync(id, cancellationToken);
+            await _uow.Children.RemoveAsync(id, cancellationToken);
             var count = await _uow.SaveChangesAsync();
             if (count == 0)
             {
@@ -28,8 +28,8 @@ public class RemoveBehaviorHandler(
         {
             response.Errors.Add(
                 ErrorBuilder.New()
-                .SetMessage("Error removing behavior")
-                .SetCode(nameof(RemoveBehaviorHandler))
+                .SetMessage("Error removing Child")
+                .SetCode(nameof(RemoveChildResponseHandler))
                 .SetException(ex)
                 .Build());
         }

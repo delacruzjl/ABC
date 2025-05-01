@@ -3,10 +3,10 @@ using Mediator;
 
 namespace ABC.Management.Api.Commands;
 
-public record CreateAntecedentCommand(Antecedent Value) 
+public record CreateAntecedentResponseCommand(Antecedent Value) 
     : IRequest<BaseResponseCommand<Antecedent>> {
 
-    public static CreateAntecedentCommand Create(string name, string description)
+    public static CreateAntecedentResponseCommand Create(string name, string description)
     {
         Antecedent antecedent = new()
         {

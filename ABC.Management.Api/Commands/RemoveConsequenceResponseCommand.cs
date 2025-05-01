@@ -3,15 +3,15 @@ using Mediator;
 
 namespace ABC.Management.Api.Commands;
 
-public record RemoveConsequenceCommand(Consequence Entity)
+public record RemoveConsequenceResponseCommand(Consequence Entity)
 : IRequest<BaseResponseCommand<Consequence>>
 {
-    public static RemoveConsequenceCommand Create(Consequence consequence)
+    public static RemoveConsequenceResponseCommand Create(Consequence consequence)
     {
         return new(consequence);
     }
 
-    public static RemoveConsequenceCommand Create(Guid consequenceId)
+    public static RemoveConsequenceResponseCommand Create(Guid consequenceId)
     {
         return new(new Consequence(consequenceId));
     }

@@ -17,16 +17,16 @@ namespace ABC.Management.Api.Tests.StepDefinitions
         private readonly Name _nameGenerator;
         private readonly IMediator _mediatorFake;
         private readonly IResolverContext _resolverContext;
-        private CreateAntecedentCommand? _antecedentCommand;
-        private CreateBehaviorCommand? _behaviorCommand;
-        private CreateConsequenceCommand? _consequenceCommand;
-        private CreateChildCommand? _childCommand;
+        private CreateAntecedentResponseCommand? _antecedentCommand;
+        private CreateBehaviorResponseCommand? _behaviorCommand;
+        private CreateConsequenceResponseCommand? _consequenceCommand;
+        private CreateChildResponseCommand? _childCommand;
 
         public MutationStepDefinitions(StartupFixture fixture)
         {
             _lorem = new Bogus.DataSets.Lorem(locale: "en");
             _nameGenerator = new Bogus.DataSets.Name();
-            
+
             _mediatorFake = fixture.Services.GetRequiredService<IMediator>();
             _resolverContext = fixture.Services.GetRequiredService<IResolverContext>();
         }
@@ -34,7 +34,7 @@ namespace ABC.Management.Api.Tests.StepDefinitions
         [Given("I have a valid CreateAntecedentCommand request")]
         public Task GivenIHaveAValidCreateAntecedentCommandRequest()
         {
-            _antecedentCommand = CreateAntecedentCommand.Create(
+            _antecedentCommand = CreateAntecedentResponseCommand.Create(
                _lorem.Word(),
                 _lorem.Sentence());
 
@@ -50,7 +50,7 @@ namespace ABC.Management.Api.Tests.StepDefinitions
                 _resolverContext);
 
         [Then("I should send a request to the CreateAntecedentCommand handler")]
-        public void ThenIShouldSendARequestToTheCreateAntecedentCommandHandler()=>
+        public void ThenIShouldSendARequestToTheCreateAntecedentCommandHandler() =>
             A.CallTo(() => _mediatorFake.Send(
                 A<IRequest<BaseResponseCommand<Antecedent>>>._,
                 A<CancellationToken>._))
@@ -59,7 +59,7 @@ namespace ABC.Management.Api.Tests.StepDefinitions
         [Given("I have a valid CreateBehaviorCommand request")]
         public void GivenIHaveAValidCreateBehaviorCommandRequest()
         {
-            _behaviorCommand = CreateBehaviorCommand.Create(
+            _behaviorCommand = CreateBehaviorResponseCommand.Create(
                 _lorem.Word(),
                 _lorem.Sentence());
         }
@@ -74,7 +74,7 @@ namespace ABC.Management.Api.Tests.StepDefinitions
         [Given("I have a valid CreateConsequenceCommand request")]
         public void GivenIHaveAValidCreateConsequenceCommandRequest()
         {
-            _consequenceCommand = CreateConsequenceCommand.Create(
+            _consequenceCommand = CreateConsequenceResponseCommand.Create(
                 _lorem.Word(),
                 _lorem.Sentence());
         }
@@ -89,7 +89,7 @@ namespace ABC.Management.Api.Tests.StepDefinitions
         [Given("I have a valid CreateChildCommand request")]
         public void GivenIHaveAValidCreateChildCommandRequest()
         {
-            _childCommand = CreateChildCommand.Create(
+            _childCommand = CreateChildResponseCommand.Create(
                 _nameGenerator.LastName(),
                 _nameGenerator.FirstName(),
                 10,
