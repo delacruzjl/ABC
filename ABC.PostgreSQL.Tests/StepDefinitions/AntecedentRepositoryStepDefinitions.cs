@@ -1,7 +1,7 @@
 using ABC.Management.Domain.Entities;
 using ABC.PostGreSQL;
 using Bogus.DataSets;
-using FluentAssertions;
+using Shouldly;
 using Microsoft.Extensions.DependencyInjection;
 using Reqnroll;
 using System;
@@ -64,7 +64,7 @@ public class AntecedentRepositoryStepDefinitions
     public async Task ThenIShouldReceiveTheAntecedentsByIdFromTheDatabase()
     {
         var antecedent = await _uow.Antecedents.FindAsync(_antecedentId);
-        antecedent.Should().NotBeNull();
+        antecedent.ShouldNotBeNull();
     }
 
     [When("I delete an antecedent from the database")]
@@ -77,7 +77,7 @@ public class AntecedentRepositoryStepDefinitions
     public async Task ThenIShouldReceiveAnExceptionIndicatingAntecedentsNotFoundWhenDeleting()
     {
         Func<Task> act = async () => await _uow.Antecedents.RemoveAsync(_antecedentId);
-        await act.Should().ThrowAsync<DataException>();
+        await act.ShouldThrowAsync<DataException>();
     }
 
 
@@ -91,7 +91,7 @@ public class AntecedentRepositoryStepDefinitions
     public void ThenIShouldNotFindTheAntecedentInTheDatabase()
     {
         Func<Task> act = async () => await _uow.Antecedents.FindAsync(_antecedentId);
-        act.Should().ThrowAsync<DataException>();
+        act.ShouldThrowAsync<DataException>();
     }
 
 
@@ -105,7 +105,7 @@ public class AntecedentRepositoryStepDefinitions
     public void ThenIShouldReceiveAnExceptionIndicatingAntecedentsNotFound()
     {
         Func<Task> act =async  () => await _uow.Antecedents.FindAsync(_antecedentId);
-        act.Should().ThrowAsync<DataException>();
+        act.ShouldThrowAsync<DataException>();
     }
 
 
@@ -119,7 +119,7 @@ public class AntecedentRepositoryStepDefinitions
     [Then("I should receive all the antecedents from the database")]
     public void ThenIShouldReceiveAllTheAntecedentsFromTheDatabase()
     {
-        _actual.Should().Be(_expected);
+        _actual.ShouldBe(_expected);
     }
 
     [When("I request antecedents by an existing name from the database")]
@@ -136,7 +136,7 @@ public class AntecedentRepositoryStepDefinitions
         var antecedents = await _uow.Antecedents
             .GetAsync(a => a.Name == _antecedentName);
             
-        antecedents.SingleOrDefault().Should().NotBeNull();
+        antecedents.SingleOrDefault().ShouldNotBeNull();
     }
 
 }

@@ -1,6 +1,6 @@
 using System;
 using ABC.Management.Domain.Entities;
-using FluentAssertions;
+using Shouldly;
 using Reqnroll;
 
 namespace ABC.Management.Domain.Tests.StepDefinitions;
@@ -33,7 +33,7 @@ public class AntecedentSpecsStepDefinitions
     [Then("Equals should be True")]
     public void ThenEqualsShouldBeTrue()
     {
-        _actual.Should().BeTrue();
+        _actual.ShouldBeTrue();
     }
 
     [When("Comparing objects with equals operator")]
@@ -51,6 +51,6 @@ public class AntecedentSpecsStepDefinitions
     [Then("Different should be True")]
     public void ThenDifferentShouldBeTrue()
     {
-        _actual.Should().BeTrue();
+        _actual.ShouldBeTrue();
     }
 }
