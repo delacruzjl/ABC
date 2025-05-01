@@ -1,6 +1,7 @@
 using ABC.Management.Domain.Entities;
 using ABC.PostGreSQL;
 using ABC.SharedKernel;
+using Bogus.DataSets;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using Reqnroll;
@@ -19,6 +20,12 @@ public class BehaviorServiceStepDefinitions
     private Behavior _actual;
     private string _behaviorName;
     private IEntityService<Behavior> _sut;
+    private readonly Lorem _lorem;
+
+    public BehaviorServiceStepDefinitions()
+    {
+        _lorem = new Bogus.DataSets.Lorem(locale: "en");
+    }
 
     [Given("I have a name found in the behavior table")]
     public async Task GivenIHaveANameFoundInTheBehaviorTable()
@@ -28,7 +35,7 @@ public class BehaviorServiceStepDefinitions
             .Select(i => new Behavior(
                 Guid.NewGuid(),
                 $"behavior{i}",
-                Faker.Lorem.Sentence(1 + i)))
+                _lorem.Sentence()))
             .ToList();
 
         var _uow = fixture.Services

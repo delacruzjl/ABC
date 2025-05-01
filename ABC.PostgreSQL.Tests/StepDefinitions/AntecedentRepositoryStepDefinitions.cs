@@ -1,5 +1,6 @@
 using ABC.Management.Domain.Entities;
 using ABC.PostGreSQL;
+using Bogus.DataSets;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using Reqnroll;
@@ -20,6 +21,12 @@ public class AntecedentRepositoryStepDefinitions
     private int _expected;
     private Guid _antecedentId;
     private string _antecedentName;
+    private readonly Lorem _lorem;
+
+    public AntecedentRepositoryStepDefinitions()
+    {
+        _lorem = new Bogus.DataSets.Lorem(locale: "en");
+    }
 
     [Given("I have a unit of work")]
     public void GivenIHaveAUnitOfWork()
@@ -38,8 +45,8 @@ public class AntecedentRepositoryStepDefinitions
         {
             var antecedent = new Antecedent(
                 Guid.NewGuid(),
-                Faker.Lorem.Sentence(1+i),
-                Faker.Lorem.Sentence(1 + i));
+                _lorem.Word(),
+                _lorem.Sentence());
             await _uow.Antecedents.AddAsync(antecedent);
         }
 

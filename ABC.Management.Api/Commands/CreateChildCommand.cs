@@ -6,7 +6,7 @@ namespace ABC.Management.Api.Commands;
 public record CreateChildCommand(Child Value)
     : IRequest<BaseResponseCommand<Child>>
 {
-    internal static CreateChildCommand Create(
+    public static CreateChildCommand Create(
         string lastName,
         string firstName,
         int birthYear,

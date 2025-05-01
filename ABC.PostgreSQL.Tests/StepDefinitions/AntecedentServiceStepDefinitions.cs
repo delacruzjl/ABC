@@ -23,7 +23,7 @@ public class AntecedentServiceStepDefinitions
         .Select(i => new Antecedent(
             Guid.NewGuid(),
             $"Antecedent{i}",
-            Faker.Lorem.Sentence(1)));
+            $"description for {i}"));
 
 
     public AntecedentServiceStepDefinitions()
