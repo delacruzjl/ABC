@@ -8,7 +8,8 @@ namespace ABC.Management.Api.Handlers;
 
 public class CreateAntecedentHandler(
     IUnitOfWork _uow,
-    IValidator<Antecedent> _antecedentValidator)
+    IValidator<Antecedent> _antecedentValidator,
+    ILogger<CreateAntecedentHandler> _logger)
     : IRequestHandler<CreateAntecedentCommand, BaseResponseCommand<Antecedent>>
 {
 
@@ -17,28 +18,11 @@ public class CreateAntecedentHandler(
         CancellationToken cancellationToken)
     {
         BaseResponseCommand<Antecedent> response = new();
-
-        var validationResult = await _antecedentValidator
-            .ValidateAsync(request.Value, cancellationToken);
-
-        var errors = validationResult
-            .Errors
-            .Select(e =>
-            ErrorBuilder
-            .New()
-            .SetMessage(e.ErrorMessage)
-            .SetCode(e.ErrorCode)
-            .Build());
-
-        response.Errors = [.. errors];
-
-        if (!validationResult.IsValid)
-        {
-            return response;
-        }
-
         try
         {
+            await _antecedentValidator
+            .ValidateAndThrowAsync(request.Value, cancellationToken: cancellationToken);
+
             response.Entity = await _uow.Antecedents.AddAsync(request.Value, cancellationToken);
             var count = await _uow.SaveChangesAsync();
             if (count == 0)
@@ -46,8 +30,24 @@ public class CreateAntecedentHandler(
                 throw new InvalidOperationException("Nothing saved to database");
             }
         }
+        catch (ValidationException ex)
+        {
+            _logger.LogWarning(ex, "Validation error creating antecedent: {Message}", ex.Message);
+
+            var errors = ex
+                .Errors
+                .Select(e =>
+                ErrorBuilder
+                .New()
+                .SetMessage(e.ErrorMessage)
+                .SetCode(e.ErrorCode)
+                .Build());
+
+            response.Errors = [.. errors];
+        }
         catch (Exception ex)
         {
+            _logger.LogError(ex, "Error creating antecedent: {Message}", ex.Message);
             response.Errors.Add(
                 ErrorBuilder.New()
                 .SetMessage("Error creating antecedent")
