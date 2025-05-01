@@ -3,15 +3,15 @@ using Mediator;
 
 namespace ABC.Management.Api.Commands;
 
-public record RemoveAntecedentCommand(Antecedent Entity)
+public record RemoveAntecedentResponseCommand(Antecedent Entity)
     : IRequest<BaseResponseCommand<Antecedent>>
 {
-    public static RemoveAntecedentCommand Create(Antecedent antecedent)
+    public static RemoveAntecedentResponseCommand Create(Antecedent antecedent)
     {
         return new(antecedent);
     }
 
-    public static RemoveAntecedentCommand Create(Guid antecedentId)
+    public static RemoveAntecedentResponseCommand Create(Guid antecedentId)
     {
         return new(new Antecedent(antecedentId));
     }

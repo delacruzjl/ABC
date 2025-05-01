@@ -16,7 +16,7 @@ public static class Mutation
         string description,
         IResolverContext context)
     {
-        var command = CreateAntecedentCommand.Create(name, description);
+        var command = CreateAntecedentResponseCommand.Create(name, description);
         return await command.ExecuteHandler(handler, context);
     }
 
@@ -27,7 +27,7 @@ public static class Mutation
         string description,
         IResolverContext context)
     {
-        var command = CreateBehaviorCommand.Create(name, description);
+        var command = CreateBehaviorResponseCommand.Create(name, description);
         return await command.ExecuteHandler(handler, context);
     }
 
@@ -38,7 +38,7 @@ public static class Mutation
         string description,
         IResolverContext context)
     {
-        var command = CreateConsequenceCommand.Create(name, description);
+        var command = CreateConsequenceResponseCommand.Create(name, description);
         return await command.ExecuteHandler(handler, context);
     }
 
@@ -51,7 +51,7 @@ public static class Mutation
         IEnumerable<string>? conditions,
         IResolverContext context)
     {
-        var command = CreateChildCommand.Create(lastName, firstName, birthYear, conditions);
+        var command = CreateChildResponseCommand.Create(lastName, firstName, birthYear, conditions);
         return await command.ExecuteHandler(handler, context);
     }
 }

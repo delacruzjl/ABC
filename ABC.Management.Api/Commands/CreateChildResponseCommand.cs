@@ -3,10 +3,10 @@ using Mediator;
 
 namespace ABC.Management.Api.Commands;
 
-public record CreateChildCommand(Child Value)
+public record CreateChildResponseCommand(Child Value)
     : IRequest<BaseResponseCommand<Child>>
 {
-    public static CreateChildCommand Create(
+    public static CreateChildResponseCommand Create(
         string lastName,
         string firstName,
         int birthYear,
@@ -20,7 +20,7 @@ public record CreateChildCommand(Child Value)
             Conditions = conditions?.ToList() ?? []
         };
 
-        CreateChildCommand command = new(child);
+        CreateChildResponseCommand command = new(child);
         return command;
     }
 }

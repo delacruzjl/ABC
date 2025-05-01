@@ -6,24 +6,23 @@ using Mediator;
 
 namespace ABC.Management.Api.Handlers;
 
-public class CreateAntecedentHandler(
+public class CreateConsequenceResponseHandler(
     IUnitOfWork _uow,
-    IValidator<Antecedent> _antecedentValidator,
-    ILogger<CreateAntecedentHandler> _logger)
-    : IRequestHandler<CreateAntecedentCommand, BaseResponseCommand<Antecedent>>
+    IValidator<Consequence> _consequenceValidator,
+    ILogger<CreateConsequenceResponseHandler> _logger)
+    : IRequestHandler<CreateConsequenceResponseCommand, BaseResponseCommand<Consequence>>
 {
-
-    public async ValueTask<BaseResponseCommand<Antecedent>> Handle(
-        CreateAntecedentCommand request,
+    public async ValueTask<BaseResponseCommand<Consequence>> Handle(
+        CreateConsequenceResponseCommand request,
         CancellationToken cancellationToken)
     {
-        BaseResponseCommand<Antecedent> response = new();
+        BaseResponseCommand<Consequence> response = new();
+
         try
         {
-            await _antecedentValidator
-            .ValidateAndThrowAsync(request.Value, cancellationToken: cancellationToken);
-
-            response.Entity = await _uow.Antecedents.AddAsync(request.Value, cancellationToken);
+            await _consequenceValidator
+                .ValidateAndThrowAsync(request.Value, cancellationToken);
+            response.Entity = await _uow.Consequences.AddAsync(request.Value, cancellationToken);
             var count = await _uow.SaveChangesAsync();
             if (count == 0)
             {
@@ -47,12 +46,13 @@ public class CreateAntecedentHandler(
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error creating antecedent: {Message}", ex.Message);
+            _logger.LogError(ex, "Error creating child: {Message}", ex.Message);
+
             response.Errors.Add(
                 ErrorBuilder.New()
-                .SetMessage("Error creating antecedent")
-                .SetCode("AntecedentCreateError")
                 .SetException(ex)
+                .SetMessage("Error creating consequence")
+                .SetCode("ConsequenceCreateError")
                 .Build());
         }
 
