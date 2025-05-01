@@ -38,7 +38,7 @@ public class BehaviorValidatorStepDefinitions : IClassFixture<StartupFixture>
     [Then("Should fail behavior validation")]
     public void ThenShouldFailBehaviorValidation()
     {
-        _actual!.IsValid.Should().BeFalse();
+        _actual!.IsValid.ShouldBeFalse();
         A.CallTo(() => _service.GetByName(_behavior!.Name, A<CancellationToken>.Ignored))
             .MustHaveHappenedOnceExactly();
     }

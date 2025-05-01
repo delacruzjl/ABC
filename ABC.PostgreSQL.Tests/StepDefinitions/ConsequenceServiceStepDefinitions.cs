@@ -2,7 +2,7 @@ using ABC.Management.Domain.Entities;
 using ABC.PostGreSQL;
 using ABC.SharedKernel;
 using Bogus.DataSets;
-using FluentAssertions;
+using Shouldly;
 using Microsoft.Extensions.DependencyInjection;
 using Reqnroll;
 using System;
@@ -58,5 +58,5 @@ public class ConsequenceServiceStepDefinitions
 
     [Then("I should receive the consequence object from the database")]
     public void ThenIShouldReceiveTheConsequenceObjectFromTheDatabase() =>
-        _actual.Should().NotBeNull();
+        _actual.ShouldNotBeNull();
 }

@@ -24,7 +24,7 @@ public class ChildSpecsStepDefinitions : IClassFixture<StartupFixture>
 
     [Then("validation should be false")]
     public void ThenValidationShouldBeFalse() =>
-        _validationResult?.IsValid.Should().BeFalse();
+        _validationResult?.IsValid.ShouldBeFalse();
 
     [Given("Last Name is {string}")]
     public void GivenLastNameIs(string lastName) =>
@@ -52,5 +52,5 @@ public class ChildSpecsStepDefinitions : IClassFixture<StartupFixture>
 
     [Then("validation should be true")]
     public void ThenValidationShouldBeTrue() =>
-        _validationResult!.IsValid.Should().BeTrue();
+        _validationResult!.IsValid.ShouldBeTrue();
 }

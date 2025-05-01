@@ -1,12 +1,3 @@
-using ABC.Management.Domain.Entities;
-using ABC.Management.Domain.Validators;
-using FluentAssertions;
-using FluentValidation.Results;
-using Microsoft.Extensions.DependencyInjection;
-using Reqnroll;
-using System;
-using Xunit;
-
 namespace ABC.Management.Domain.Tests.StepDefinitions
 {
     [Binding]
@@ -38,7 +29,7 @@ namespace ABC.Management.Domain.Tests.StepDefinitions
         [Then("Should throw validation exception")]
         public void ThenShouldThrowValidationException()
         {
-            _actual?.IsValid.Should().BeFalse();
+            _actual?.IsValid.ShouldBeFalse();
         }
 
         [Given("An antecedent with attributes {string} and empty description")]

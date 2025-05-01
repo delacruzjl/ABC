@@ -2,7 +2,7 @@ using ABC.Management.Domain.Entities;
 using ABC.PostGreSQL;
 using ABC.SharedKernel;
 using Bogus.DataSets;
-using FluentAssertions;
+using Shouldly;
 using Microsoft.Extensions.DependencyInjection;
 using Reqnroll;
 using System;
@@ -63,6 +63,6 @@ public class BehaviorServiceStepDefinitions
     [Then("I should receive the behavior object from the database")]
     public void ThenIShouldReceiveTheBehaviorObjectFromTheDatabase()
     {
-        _actual.Should().NotBeNull();
+        _actual.ShouldNotBeNull();
     }
 }
