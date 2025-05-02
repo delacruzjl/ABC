@@ -4,6 +4,8 @@
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
   </PropertyGroup>
   <ItemGroup>
+    <PackageVersion Include="Aspire.Hosting.Azure.ApplicationInsights" Version="9.2.1" />
+    <PackageVersion Include="Aspire.Hosting.Azure.PostgreSQL" Version="9.2.1" />
     <PackageVersion Include="Aspire.Hosting.NodeJs" Version="9.2.1" />
     <PackageVersion Include="Aspire.Hosting.PostgreSQL" Version="9.2.1" />
     <PackageVersion Include="Aspire.Npgsql" Version="9.2.1" />
