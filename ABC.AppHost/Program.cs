@@ -1,4 +1,12 @@
+using Microsoft.Extensions.Hosting;
+
 var builder = DistributedApplication.CreateBuilder(args);
+
+var insights = builder.Environment.IsDevelopment()
+    ? builder.AddConnectionString(
+        "AppInsConnectionString",
+        "APPLICATIONINSIGHTS_CONNECTION_STRING")
+    : builder.AddAzureApplicationInsights("insights");
 
 var postgres = builder
     .AddPostgres("postgres")
@@ -15,10 +23,12 @@ var db = postgres
 var managementApi = builder.AddProject<Projects.ABC_Management_Api>("abcmanagementapi")
     .WithEnvironment(dbNameKey, databaseNameParameter)
     .WithReference(db)
+    .WithReference(insights)
     .WaitFor(db);
 
 builder.AddNpmApp("react", "../ABC.React")
     .WithReference(managementApi)
+    .WithReference(insights)
     .WaitFor(managementApi)
     .WithEnvironment("BROWSER", "none") // Disable opening browser on npm start
     .WithHttpEndpoint(env: "PORT")

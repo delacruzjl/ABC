@@ -1,6 +1,7 @@
-﻿using ABC.Management.Domain.Entities;
+﻿using System.Text.Json;
+using ABC.Management.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
-using System.Text.Json;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace ABC.PostGreSQL;
 
@@ -17,7 +18,7 @@ public class ABCContext(DbContextOptions<ABCContext> options) : DbContext(option
 
         JsonSerializerOptions jsonOptions = new()
         {
-            PropertyNamingPolicy = JsonNamingPolicy.CamelCase            
+            PropertyNamingPolicy = JsonNamingPolicy.CamelCase
         };
 
         modelBuilder.Entity<Antecedent>().HasKey(e => e.Id);
@@ -29,7 +30,9 @@ public class ABCContext(DbContextOptions<ABCContext> options) : DbContext(option
             .HasColumnType("jsonb")
             .HasConversion(
                 l => JsonSerializer.Serialize(l, jsonOptions),
-                str => JsonSerializer.Deserialize<List<string>>(str, jsonOptions) ?? new List<string>()
-            );
+                str => JsonSerializer.Deserialize<List<string>>(str, jsonOptions) ?? new List<string>(),
+                new ValueComparer<List<string>>((c1, c2) => c1!.SequenceEqual(c2!),
+                c => c.Aggregate(0, (a, v) => HashCode.Combine(a, v.GetHashCode())),
+                c => c.ToList()));
     }
 }
