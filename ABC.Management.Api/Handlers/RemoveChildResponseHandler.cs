@@ -14,26 +14,12 @@ public class RemoveChildResponseHandler(
     {
         var id = request.Entity.Id;
         BaseResponseCommand<Child> response = new();
-
-        try
+        await _uow.Children.RemoveAsync(id, cancellationToken);
+        var count = await _uow.SaveChangesAsync();
+        if (count == 0)
         {
-            await _uow.Children.RemoveAsync(id, cancellationToken);
-            var count = await _uow.SaveChangesAsync();
-            if (count == 0)
-            {
-                throw new InvalidOperationException("Nothing saved to database");
-            }
+            throw new InvalidOperationException("Nothing saved to database");
         }
-        catch (Exception ex)
-        {
-            response.Errors.Add(
-                ErrorBuilder.New()
-                .SetMessage("Error removing Child")
-                .SetCode(nameof(RemoveChildResponseHandler))
-                .SetException(ex)
-                .Build());
-        }
-
         return response;
     }
 }

@@ -1,4 +1,5 @@
 using ABC.Management.Api.Decorators;
+using ABC.Management.Api.Handlers;
 using ABC.Management.Api.Types;
 using ABC.Management.Domain.Entities;
 using ABC.Management.Domain.Validators;
@@ -23,7 +24,16 @@ internal class Program
         services.AddMediator((MediatorOptions mediatorOptions) =>
         {
             mediatorOptions.ServiceLifetime = ServiceLifetime.Scoped;
-            mediatorOptions.PipelineBehaviors = [typeof(CreateAntecedentHandlerDecorator)];
+            mediatorOptions.PipelineBehaviors = [
+                typeof(CreateAntecedentHandlerDecorator),
+                typeof(CreateBehaviorHandlerDecorator),
+                typeof(CreateConsequenceHandlerDecorator),
+                typeof(CreateChildHandlerDecorator),
+                typeof(RemoveAntecedentHandlerDecorator),
+                typeof(RemoveBehaviorHandlerDecorator),
+                typeof(RemoveConsequenceHandlerDecorator), 
+                typeof(RemoveChildHandlerDecorator)
+            ];
         });
 
         services

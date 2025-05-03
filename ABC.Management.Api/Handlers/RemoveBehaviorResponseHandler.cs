@@ -6,7 +6,8 @@ using Mediator;
 namespace ABC.Management.Api.Handlers;
 
 public class RemoveBehaviorResponseHandler(
-    IUnitOfWork _uow) : IRequestHandler<RemoveBehaviorResponseCommand, BaseResponseCommand<Behavior>>
+    IUnitOfWork _uow) 
+    : IRequestHandler<RemoveBehaviorResponseCommand, BaseResponseCommand<Behavior>>
 {
     public async ValueTask<BaseResponseCommand<Behavior>> Handle(
         RemoveBehaviorResponseCommand request,
@@ -14,24 +15,11 @@ public class RemoveBehaviorResponseHandler(
     {
         var id = request.Entity.Id;
         BaseResponseCommand<Behavior> response = new();
-
-        try
+        await _uow.Behaviors.RemoveAsync(id, cancellationToken);
+        var count = await _uow.SaveChangesAsync();
+        if (count == 0)
         {
-            await _uow.Behaviors.RemoveAsync(id, cancellationToken);
-            var count = await _uow.SaveChangesAsync();
-            if (count == 0)
-            {
-                throw new InvalidOperationException("Nothing saved to database");
-            }
-        }
-        catch (Exception ex)
-        {
-            response.Errors.Add(
-                ErrorBuilder.New()
-                .SetMessage("Error removing behavior")
-                .SetCode(nameof(RemoveBehaviorResponseHandler))
-                .SetException(ex)
-                .Build());
+            throw new InvalidOperationException("Nothing saved to database");
         }
 
         return response;

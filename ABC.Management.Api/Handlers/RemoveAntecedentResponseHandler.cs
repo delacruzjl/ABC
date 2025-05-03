@@ -13,25 +13,14 @@ public class RemoveAntecedentHandler(
         CancellationToken cancellationToken)
     {
         var id = request.Entity.Id;
-        BaseResponseCommand<Antecedent> response = new();        
+        BaseResponseCommand<Antecedent> response = new();
+        
+        await _uow.Antecedents.RemoveAsync(id, cancellationToken);        
+        var count = await _uow.SaveChangesAsync();
 
-        try
+        if (count == 0)
         {
-            await _uow.Antecedents.RemoveAsync(id, cancellationToken);
-            var count = await _uow.SaveChangesAsync();
-            if (count == 0)
-            {
-                throw new InvalidOperationException("Nothing saved to database");
-            }
-        }
-        catch (Exception ex)
-        {
-            response.Errors.Add(
-                ErrorBuilder.New()
-                .SetMessage("Error removing antecedent")
-                .SetCode(nameof(RemoveAntecedentHandler))
-                .SetException(ex)
-                .Build());
+            throw new InvalidOperationException("Nothing saved to database");
         }
 
         return response;

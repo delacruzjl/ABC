@@ -30,7 +30,7 @@ namespace ABC.Management.Api.Tests.StepDefinitions
         {
             _uowFake = fixture.Services.GetRequiredService<IUnitOfWork>();
             var validator = fixture.Services.GetRequiredService<IValidator<Antecedent>>();
-            var logger = fixture.Services.GetRequiredService<ILogger<CreateAntecedentResponseHandler>>();
+            var logger = fixture.Services.GetRequiredService<ILogger<ErrorValidationDecorator>>();
             _antecedentService = fixture.Services.GetRequiredService<IEntityService<Antecedent>>();
             
             _sut = new(_uowFake);
