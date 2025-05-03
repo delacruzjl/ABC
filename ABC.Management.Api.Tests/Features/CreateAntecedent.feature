@@ -1,4 +1,4 @@
-﻿Feature: CreateAntecedentResponse
+﻿Feature: CreateAntecedent
 
 As an engineer
 I want to be able to send antecedent objects to the database 
