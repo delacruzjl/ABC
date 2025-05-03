@@ -1,7 +1,6 @@
 ﻿using ABC.Management.Api.Commands;
 using ABC.Management.Domain.Entities;
 using ABC.PostGreSQL;
-using FluentValidation;
 using Mediator;
 
 namespace ABC.Management.Api.Handlers;

@@ -4,15 +4,12 @@ using ABC.Management.Api.Handlers;
 using ABC.Management.Domain.Entities;
 using ABC.PostGreSQL;
 using ABC.SharedKernel;
-using Bogus.DataSets;
 using FakeItEasy;
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Reqnroll;
 using Shouldly;
-using System;
-using System.Threading.Tasks;
 
 namespace ABC.Management.Api.Tests.StepDefinitions
 {
