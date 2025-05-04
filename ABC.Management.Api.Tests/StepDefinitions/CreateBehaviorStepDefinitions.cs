@@ -79,7 +79,9 @@ public class CreateBehaviorStepDefinitions
 
 
     [Given(@"a behavior object with name: (\w+) and description: (\w+)")]
-    public void GivenABehaviorObjectWithNameJoseAndDescriptionTest(string name, string description) =>
+    public void GivenABehaviorObjectWithNameJoseAndDescriptionTest(
+        string name,
+        string description) =>
         CreateBehaviorResponseCommand.Create(name, description);
 
     [Then(@"behavior response should contain (\d+) error objects in array")]
