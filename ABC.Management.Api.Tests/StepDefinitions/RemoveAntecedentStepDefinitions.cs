@@ -3,12 +3,12 @@ using ABC.Management.Api.Decorators;
 using ABC.Management.Api.Handlers;
 using ABC.Management.Domain.Entities;
 using ABC.PostGreSQL;
-using ABC.PostGreSQL.ValidationServices;
-using ABC.SharedKernel;
-using FluentValidation;
+using FakeItEasy;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Reqnroll;
+using Shouldly;
+using System.Threading.Tasks;
 
 namespace ABC.Management.Api.Tests.StepDefinitions;
 
@@ -18,8 +18,9 @@ public class RemoveAntecedentStepDefinitions
     private readonly RemoveAntecedentHandler _sut;
     private readonly IUnitOfWork _uowFake;
     private List<RemoveAntecedentResponseCommand> _requestFakes;
-    private List<BaseResponseCommand<Antecedent>> _actual;
+    private BaseResponseCommand<Antecedent> _actual;
     private readonly RemoveAntecedentHandlerDecorator _decorator;
+    private Guid? _antecedentId;
 
     public RemoveAntecedentStepDefinitions(StartupFixture fixture)
     {
@@ -30,45 +31,41 @@ public class RemoveAntecedentStepDefinitions
         _decorator = new(logger);
     }
 
-    [Given("an antecedent Id of {float}ddd-d{float}ff{int}-a{int}-fb{float}ab")]
-    public void GivenAnAntecedentIdOfDdd_Dff_A_Fbab(Decimal p0, Decimal p1, int p2, int p3, Decimal p4)
-    {
-        throw new PendingStepException();
-    }
+    [Given("an antecedent Id of \"(.+)\"")]
+    public void GivenAnAntecedentIdOf(string antecedentId) =>
+        _antecedentId = Guid.TryParse(antecedentId, out var id) ? id : null;
 
     [Given("the antecedent with that Id exists in the database")]
-    public void GivenTheAntecedentWithThatIdExistsInTheDatabase()
-    {
-        throw new PendingStepException();
-    }
+    public void GivenTheAntecedentWithThatIdExistsInTheDatabase() =>
+        A.CallTo(() => _uowFake.SaveChangesAsync())
+            .Returns(1);
 
     [When("I send a request to Antecedent mutation for removal")]
-    public void WhenISendARequestToAntecedentMutationForRemoval()
+    public async Task WhenISendARequestToAntecedentMutationForRemoval()
     {
-        throw new PendingStepException();
+        var command = RemoveAntecedentResponseCommand.Create(
+            new Antecedent(_antecedentId!.Value));
+
+        _actual = await _decorator.Handle(
+            command!,
+            async (cmd, ct) => await _sut.Handle(cmd, ct),
+            CancellationToken.None);
     }
 
     [Then("handler should return true")]
-    public void ThenHandlerShouldReturnTrue()
-    {
-        throw new PendingStepException();
-    }
+    public void ThenHandlerShouldReturnTrue() =>
+        _actual.Errors.ShouldBeEmpty();
 
     [Then("Antecedent response should contain {int} error objects in array")]
-    public void ThenAntecedentResponseShouldContainErrorObjectsInArray(int p0)
-    {
-        throw new PendingStepException();
-    }
+    public void ThenAntecedentResponseShouldContainErrorObjectsInArray(int errorCount) =>
+        _actual.Errors.Count.ShouldBe(errorCount);
 
     [Given("the antecedent with that Id does not exist in the database")]
-    public void GivenTheAntecedentWithThatIdDoesNotExistInTheDatabase()
-    {
-        throw new PendingStepException();
-    }
+    public void GivenTheAntecedentWithThatIdDoesNotExistInTheDatabase() =>
+        A.CallTo(() => _uowFake.SaveChangesAsync())
+            .Returns(0);
 
     [Then("handler should return false")]
-    public void ThenHandlerShouldReturnFalse()
-    {
-        throw new PendingStepException();
-    }
+    public void ThenHandlerShouldReturnFalse() =>
+        _actual.Errors.ShouldNotBeEmpty();
 }
