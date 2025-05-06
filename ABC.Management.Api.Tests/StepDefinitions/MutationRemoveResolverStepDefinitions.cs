@@ -16,7 +16,6 @@ public class MutationRemoveResolverStepDefinitions
     private readonly IResolverContext _resolverContext;
 
     private Guid _existingGuid;
-    private readonly MutationRemoveResolvers _sut;
     private bool _actual = false;
 
     public MutationRemoveResolverStepDefinitions(StartupFixture fixture)
@@ -24,7 +23,6 @@ public class MutationRemoveResolverStepDefinitions
         _mediatorFake = fixture.Services.GetRequiredService<IMediator>();
         _resolverContext = fixture.Services.GetRequiredService<IResolverContext>();
         A.CallTo(() => _resolverContext.HasErrors).Returns(false);
-        _sut = new MutationRemoveResolvers();
     }
 
     [Given("I have a valid RemoveAntecedentCommand request")]
@@ -33,7 +31,11 @@ public class MutationRemoveResolverStepDefinitions
 
     [When("I send the request to delete the antecedent")]
     public async Task WhenISendTheRequestToDeleteTheAntecedent() =>
-        _actual = await _sut.RemoveAntecedent(_mediatorFake, _existingGuid, _resolverContext);
+        _actual = await Antecedents.RemoveAntecedent(
+            _mediatorFake,
+            _existingGuid,
+            _resolverContext,
+            CancellationToken.None);
 
 
     [Then("I should send a request to the RemoveAntecedentCommand handler")]
@@ -53,7 +55,11 @@ public class MutationRemoveResolverStepDefinitions
 
     [When("I send the request to delete the behavior")]
     public async Task WhenISendTheRequestToDeleteTheBehavior() =>
-        _actual = await _sut.RemoveBehavior(_mediatorFake, _existingGuid, _resolverContext);
+        _actual = await Types.Behaviors.RemoveBehavior(
+            _mediatorFake,
+            _existingGuid,
+            _resolverContext,
+            CancellationToken.None);
 
     [Then("I should send a request to the RemoveBehaviorCommand handler")]
     public void ThenIShouldSendARequestToTheRemoveBehaviorCommandHandler()
@@ -72,7 +78,11 @@ public class MutationRemoveResolverStepDefinitions
 
     [When("I send the request to delete the consequence")]
     public async Task WhenISendTheRequestToDeleteTheConsequence() =>
-        _actual = await _sut.RemoveConsequence(_mediatorFake, _existingGuid, _resolverContext);
+        _actual = await Consequences.RemoveConsequence(
+            _mediatorFake,
+            _existingGuid,
+            _resolverContext,
+            CancellationToken.None);
 
     [Then("I should send a request to the RemoveConsequenceCommand handler")]
     public void ThenIShouldSendARequestToTheRemoveConsequenceCommandHandler()
@@ -91,7 +101,11 @@ public class MutationRemoveResolverStepDefinitions
 
     [When("I send the request to delete the child")]
     public async Task WhenISendTheRequestToDeleteTheChild() =>
-        _actual = await _sut.RemoveChild(_mediatorFake, _existingGuid, _resolverContext);
+        _actual = await Children.RemoveChild(
+            _mediatorFake,
+            _existingGuid,
+            _resolverContext,
+            CancellationToken.None);
 
     [Then("I should send a request to the RemoveChildCommand handler")]
     public void ThenIShouldSendARequestToTheRemoveChildCommandHandler()
