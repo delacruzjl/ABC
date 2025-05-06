@@ -43,11 +43,12 @@ namespace ABC.Management.Api.Tests.StepDefinitions
 
         [When("I send the request to the antecedents API")]
         public async Task WhenISendTheRequestToTheAPI() =>
-            await Mutation.AddAntecedent(
+            await Antecedents.CreateAntecedentAsync(
                 _mediatorFake,
                 _antecedentCommand!.Value.Name,
                 _antecedentCommand!.Value.Description,
-                _resolverContext);
+                _resolverContext,
+                CancellationToken.None);
 
         [Then("I should send a request to the CreateAntecedentCommand handler")]
         public void ThenIShouldSendARequestToTheCreateAntecedentCommandHandler() =>
@@ -105,29 +106,32 @@ namespace ABC.Management.Api.Tests.StepDefinitions
 
         [When("I send the request to the behaviors API")]
         public async Task WhenISendTheRequestToTheBehaviorsAPI() =>
-            await Mutation.AddBehavior(
+            await Behaviors.CreateBehavior(
                 _mediatorFake,
                 _behaviorCommand!.Value.Name,
                 _behaviorCommand!.Value.Description,
-                _resolverContext);
+                _resolverContext,
+                CancellationToken.None);
 
         [When("I send the request to the consequences API")]
         public async Task WhenISendTheRequestToTheConsequencesAPI() =>
-            await Mutation.AddConsequence(
+            await Consequences.CreateConsequence(
                 _mediatorFake,
                 _consequenceCommand!.Value.Name,
                 _consequenceCommand!.Value.Description,
-                _resolverContext);
+                _resolverContext,
+                CancellationToken.None);
 
         [When("I send the request to the children API")]
         public async Task WhenISendTheRequestToTheChildrenAPI() =>
-            await Mutation.AddChild(
+            await Children.CreateChild(
                 _mediatorFake,
                 _childCommand!.Value.LastName,
                 _childCommand!.Value.FirstName,
                 _childCommand.Value.BirthYear,
                 _childCommand.Value.Conditions,
-                _resolverContext);
+                _resolverContext,
+                CancellationToken.None);
 
     }
 }

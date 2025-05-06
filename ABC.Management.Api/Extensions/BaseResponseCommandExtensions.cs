@@ -10,11 +10,20 @@ public static class BaseResponseCommandExtensions
     public static async Task<T?> ExecuteHandler<T>(
         this IRequest<BaseResponseCommand<T>> command,
         IMediator handler,
-        IResolverContext context) where T : Entity
+        IResolverContext context,
+        CancellationToken cancellationToken) where T : Entity
     {
         var response = await handler.Send(command);
         response.Errors.ForEach(context.ReportError);
 
         return response.Entity;
+    }
+
+    public static async Task<T?> ExecuteHandler<T>(
+    this IRequest<BaseResponseCommand<T>> command,
+    IMediator handler,
+    IResolverContext context) where T : Entity
+    {
+        return await command.ExecuteHandler(handler, context, new CancellationToken());
     }
 }

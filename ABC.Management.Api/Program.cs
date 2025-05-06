@@ -1,7 +1,4 @@
 using ABC.Management.Api.Decorators;
-using ABC.Management.Api.Handlers;
-using ABC.Management.Api.Types;
-using ABC.Management.Domain.Entities;
 using ABC.Management.Domain.Validators;
 using ABC.PostGreSQL;
 using ABC.PostGreSQL.Extensions;
@@ -41,7 +38,6 @@ internal class Program
             .ModifyRequestOptions(o =>
                 o.IncludeExceptionDetails = builder.Environment.IsDevelopment())
             .AddTypes()
-            .AddTypeExtension<MutationRemoveResolvers>()
             .AddFiltering()
             .AddSorting()
             .AddProjections();

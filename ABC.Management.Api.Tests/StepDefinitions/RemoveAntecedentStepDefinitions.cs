@@ -17,8 +17,7 @@ public class RemoveAntecedentStepDefinitions
 {
     private readonly RemoveAntecedentHandler _sut;
     private readonly IUnitOfWork _uowFake;
-    private List<RemoveAntecedentResponseCommand> _requestFakes;
-    private BaseResponseCommand<Antecedent> _actual;
+    private BaseResponseCommand<Antecedent>? _actual;
     private readonly RemoveAntecedentHandlerDecorator _decorator;
     private Guid? _antecedentId;
 
@@ -54,11 +53,11 @@ public class RemoveAntecedentStepDefinitions
 
     [Then("handler should return true")]
     public void ThenHandlerShouldReturnTrue() =>
-        _actual.Errors.ShouldBeEmpty();
+        _actual?.Errors.ShouldBeEmpty();
 
     [Then("Antecedent response should contain {int} error objects in array")]
     public void ThenAntecedentResponseShouldContainErrorObjectsInArray(int errorCount) =>
-        _actual.Errors.Count.ShouldBe(errorCount);
+        _actual?.Errors.Count.ShouldBe(errorCount);
 
     [Given("the antecedent with that Id does not exist in the database")]
     public void GivenTheAntecedentWithThatIdDoesNotExistInTheDatabase() =>
@@ -67,5 +66,5 @@ public class RemoveAntecedentStepDefinitions
 
     [Then("handler should return false")]
     public void ThenHandlerShouldReturnFalse() =>
-        _actual.Errors.ShouldNotBeEmpty();
+        _actual?.Errors.ShouldNotBeEmpty();
 }
