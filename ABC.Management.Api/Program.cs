@@ -5,7 +5,9 @@ using ABC.PostGreSQL.Extensions;
 using FluentValidation;
 using Mediator;
 using Microsoft.EntityFrameworkCore;
+using System.Diagnostics.CodeAnalysis;
 
+[ExcludeFromCodeCoverage]
 internal class Program
 {
     private static async Task Main(string[] args)
