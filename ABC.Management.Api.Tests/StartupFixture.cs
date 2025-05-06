@@ -1,4 +1,4 @@
-﻿using ABC.Management.Domain.Entities;
+using ABC.Management.Domain.Entities;
 using ABC.Management.Domain.Validators;
 using ABC.PostGreSQL;
 using ABC.SharedKernel;
