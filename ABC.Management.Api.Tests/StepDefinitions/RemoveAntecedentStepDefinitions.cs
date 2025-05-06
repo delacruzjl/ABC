@@ -8,7 +8,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Reqnroll;
 using Shouldly;
-using System.Threading.Tasks;
 
 namespace ABC.Management.Api.Tests.StepDefinitions;
 
