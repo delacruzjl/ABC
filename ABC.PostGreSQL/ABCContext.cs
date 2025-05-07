@@ -11,6 +11,7 @@ public class ABCContext(DbContextOptions<ABCContext> options) : DbContext(option
     public DbSet<Behavior> Behaviors => Set<Behavior>();
     public DbSet<Consequence> Consequences => Set<Consequence>();
     public DbSet<Child> Children => Set<Child>();
+    public DbSet<ChildCondition> ChildConditions => Set<ChildCondition>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -21,18 +22,13 @@ public class ABCContext(DbContextOptions<ABCContext> options) : DbContext(option
             PropertyNamingPolicy = JsonNamingPolicy.CamelCase
         };
 
+        modelBuilder.Entity<ChildCondition>().HasKey(x => x.Id);
         modelBuilder.Entity<Antecedent>().HasKey(e => e.Id);
         modelBuilder.Entity<Behavior>().HasKey(e => e.Id);
         modelBuilder.Entity<Consequence>().HasKey(e => e.Id);
         modelBuilder.Entity<Child>().HasKey(e => e.Id);
         modelBuilder.Entity<Child>()
-            .Property(c => c.Conditions)
-            .HasColumnType("jsonb")
-            .HasConversion(
-                l => JsonSerializer.Serialize(l, jsonOptions),
-                str => JsonSerializer.Deserialize<List<string>>(str, jsonOptions) ?? new List<string>(),
-                new ValueComparer<List<string>>((c1, c2) => c1!.SequenceEqual(c2!),
-                c => c.Aggregate(0, (a, v) => HashCode.Combine(a, v.GetHashCode())),
-                c => c.ToList()));
+            .HasMany(c => c.Conditions)
+            .WithMany(c => c.children);
     }
 }

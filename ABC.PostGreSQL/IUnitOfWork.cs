@@ -9,6 +9,7 @@ public interface IUnitOfWork : IDisposable
     IRepository<Behavior> Behaviors { get; }
     IRepository<Child> Children { get; }
     IRepository<Consequence> Consequences { get; }
+    IRepository<ChildCondition> ChildConditions { get; }
 
     Task<int> SaveChangesAsync();
 }

@@ -16,7 +16,7 @@ public class Children
         string lastName,
         string firstName,
         int birthYear,
-        IEnumerable<string>? conditions,
+        IEnumerable<ChildCondition>? conditions,
         IResolverContext context,
         CancellationToken cancellationToken)
     {

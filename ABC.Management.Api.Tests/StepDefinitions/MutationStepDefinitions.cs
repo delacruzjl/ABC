@@ -94,7 +94,7 @@ namespace ABC.Management.Api.Tests.StepDefinitions
                 _nameGenerator.LastName(),
                 _nameGenerator.FirstName(),
                 10,
-                _lorem.Word());
+                new ChildCondition( _lorem.Word()));
         }
 
         [Then("I should send a request to the CreateChildCommand handler")]
