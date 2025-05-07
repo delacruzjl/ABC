@@ -27,6 +27,7 @@ public class StartupFixture : IAsyncLifetime
         var behaviorService = CreateEntityService<Behavior>();
         var consequenceService = CreateEntityService<Consequence>();
         var childService = CreateEntityService<Child>();
+        var childConditionService = CreateEntityService<ChildCondition>();
 
         collection.AddLogging();
         collection.AddTransient(_ => uowFake);
@@ -36,6 +37,7 @@ public class StartupFixture : IAsyncLifetime
         collection.AddTransient(_ => behaviorService);
         collection.AddTransient(_ => consequenceService);
         collection.AddTransient(_ => childService);
+        collection.AddTransient(_ => childConditionService);
 
         collection
             .AddValidatorsFromAssemblyContaining<AntecedentValidator>(

@@ -14,17 +14,29 @@ Scenario: Child with empty last name should be invalid
 @child
 Scenario: Child with all required fields should be valid
 	Given I create a Child entity
-	And Last Name is "Fake Last"
-	And First name is "Fake First"
+	And Last Name is "Fake Last 1"
+	And First name is "Fake First 1"
 	And birth year is 2000
+	And all conditions are found
 	When Validating child
 	Then validation should be true
 
 @child
 Scenario: Child with negative value birth year should be invalid
 	Given I create a Child entity
-	And Last Name is "Fake Last Name"
-	And First name is "Fake First"
+	And Last Name is "Fake Last Name 2"
+	And First name is "Fake First 2"
 	And birth year is 1915
+	When Validating child
+	Then validation should be false
+
+@child
+Scenario: Child should fail if condition from list not found in db
+	Given I create a Child entity
+	And Last Name is "Fake Last 3"
+	And First name is "Fake First 3"
+	And birth year is 2000
+	And Child conditions contain: "Autism,IDD"
+	And condition from the list is not found
 	When Validating child
 	Then validation should be false

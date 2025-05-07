@@ -10,9 +10,11 @@ public class StartupFixture : IAsyncLifetime
 
         var antecedentsFake = CreateServiceFake<Antecedent>();
         var behaviorsFake = CreateServiceFake<Behavior>();
-        
+        var childConditionsFake = CreateServiceFake<ChildCondition>();
+
         collection.AddTransient(_ => antecedentsFake);
         collection.AddTransient(_ => behaviorsFake);
+        collection.AddTransient(_ => childConditionsFake);
 
         Services = collection.BuildServiceProvider();
     }

@@ -58,7 +58,9 @@ public class CreateAntecedentResponseStepDefinitions
             string.Join(", ", _actual?.Errors.Select(e => e.Message) ?? []));
 
     [Given("an antecedent object with name: (\\w+) and description: (\\w+)")]
-    public void GivenAnAntecedentObjectWithNameJoseAndDescriptionTest(string name, string description) =>
+    public void GivenAnAntecedentObjectWithNameJoseAndDescriptionTest(
+        string name,
+        string description) =>
         _requestFake = CreateAntecedentResponseCommand.Create(
             name, description);
 

@@ -1,7 +1,6 @@
 using ABC.Management.Api.Commands;
 using ABC.Management.Api.Decorators;
 using ABC.Management.Api.Handlers;
-using ABC.Management.Api.Types;
 using ABC.Management.Domain.Entities;
 using ABC.PostGreSQL;
 using FakeItEasy;
@@ -9,7 +8,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Reqnroll;
 using Shouldly;
-using System;
 
 namespace ABC.Management.Api.Tests.StepDefinitions;
 
