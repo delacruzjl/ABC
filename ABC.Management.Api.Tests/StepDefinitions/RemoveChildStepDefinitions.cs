@@ -48,6 +48,10 @@ public class RemoveChildStepDefinitions
             command!,
             async (cmd, ct) => await _sut.Handle(cmd, ct),
             CancellationToken.None);
+
+        A.CallTo(() => _uowFake.Children
+            .RemoveAsync(A<Guid>.Ignored, A<CancellationToken>.Ignored))
+            .MustHaveHappenedOnceExactly();
     }
 
     [Then("child handler should return true")]
