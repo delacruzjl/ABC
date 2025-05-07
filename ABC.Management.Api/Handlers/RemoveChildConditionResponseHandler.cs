@@ -15,7 +15,7 @@ public class RemoveChildConditionResponseHandler(IUnitOfWork _uow)
         var id = request.Entity.Id;
         BaseResponseCommand<ChildCondition> response = new();
 
-        await _uow.Antecedents.RemoveAsync(id, cancellationToken);
+        await _uow.ChildConditions.RemoveAsync(id, cancellationToken);
         var count = await _uow.SaveChangesAsync();
 
         if (count == 0)
