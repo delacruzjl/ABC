@@ -48,6 +48,10 @@ public class RemoveBehaviorStepDefinitions
             command!,
             async (cmd, ct) => await _sut.Handle(cmd, ct),
             CancellationToken.None);
+
+        A.CallTo(() => _uowFake.Behaviors
+            .RemoveAsync(A<Guid>.Ignored, A<CancellationToken>.Ignored))
+            .MustHaveHappenedOnceExactly();
     }
 
     [Then("behavior handler should return true")]

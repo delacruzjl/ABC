@@ -49,6 +49,10 @@ public class RemoveChildConditionStepDefinitions
             command!,
             async (cmd, ct) => await _sut.Handle(cmd, ct),
             CancellationToken.None);
+
+        A.CallTo(() => _uowFake.ChildConditions
+            .RemoveAsync(A<Guid>.Ignored, A<CancellationToken>.Ignored))
+            .MustHaveHappenedOnceExactly();
     }
 
     [Then("ChildCondition handler should return true")]

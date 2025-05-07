@@ -48,6 +48,10 @@ public class RemoveAntecedentStepDefinitions
             command!,
             async (cmd, ct) => await _sut.Handle(cmd, ct),
             CancellationToken.None);
+
+        A.CallTo(() => _uowFake.Antecedents
+            .RemoveAsync(A<Guid>.Ignored, A<CancellationToken>.Ignored))
+            .MustHaveHappenedOnceExactly();
     }
 
     [Then("handler should return true")]

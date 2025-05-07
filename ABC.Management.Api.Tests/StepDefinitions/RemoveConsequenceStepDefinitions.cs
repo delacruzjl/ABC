@@ -49,6 +49,10 @@ public class RemoveConsequenceStepDefinitions
             command!,
             async (cmd, ct) => await _sut.Handle(cmd, ct),
             CancellationToken.None);
+
+        A.CallTo(() => _uowFake.Consequences
+            .RemoveAsync(A<Guid>.Ignored, A<CancellationToken>.Ignored))
+            .MustHaveHappenedOnceExactly();
     }
 
     [Then("Consequence handler should return true")]
