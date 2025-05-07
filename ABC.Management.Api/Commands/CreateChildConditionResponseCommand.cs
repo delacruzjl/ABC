@@ -8,7 +8,7 @@ public record CreateChildConditionResponseCommand(ChildCondition Value)
 {
     public static CreateChildConditionResponseCommand Create(string name)
     {
-        ChildCondition childCondition = name;
+        ChildCondition childCondition = new ChildCondition(name);
         return new(childCondition);
     }
 }
