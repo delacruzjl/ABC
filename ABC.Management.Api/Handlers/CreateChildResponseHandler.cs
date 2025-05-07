@@ -2,6 +2,7 @@
 using ABC.Management.Domain.Entities;
 using ABC.PostGreSQL;
 using Mediator;
+using System.Collections;
 
 namespace ABC.Management.Api.Handlers;
 
@@ -12,8 +13,12 @@ public class CreateChildResponseHandler(IUnitOfWork _uow)
         CreateChildResponseCommand request,
         CancellationToken cancellationToken)
     {
+        var childConditions = await FetchChildConditions(request, cancellationToken);
+        EnsureChildConditionsExist(childConditions);
+        PopulateEntityConditions(request, childConditions);
+
         BaseResponseCommand<Child> response = new()
-        { 
+        {
             Entity = await _uow.Children.AddAsync(request.Value, cancellationToken)
         };
 
@@ -24,5 +29,45 @@ public class CreateChildResponseHandler(IUnitOfWork _uow)
         }
 
         return response;
+    }
+
+    private static void PopulateEntityConditions(CreateChildResponseCommand request, SortedList childConditions)
+    {
+        request.Value.Conditions.Clear();
+        foreach (var key in childConditions.Keys)
+        {
+            var childCondition = childConditions[key] as ChildCondition;
+            if (childCondition != null)
+            {
+                request.Value.Conditions.Add(childCondition);
+            }
+        }
+    }
+
+    private static void EnsureChildConditionsExist(SortedList childConditions)
+    {
+        if (childConditions.ContainsValue(null))
+        {
+            var notFound = childConditions
+                .OfType<DictionaryEntry>()
+                .Where(c => c.Value == null)
+                .Select(c => c.Key)
+                .ToList();
+
+            throw new InvalidOperationException(
+                $"Child conditions not found: {string.Join(", ", notFound)}");
+        }
+    }
+
+    private async Task<SortedList> FetchChildConditions(CreateChildResponseCommand request, CancellationToken cancellationToken)
+    {
+        SortedList childConditions = new();
+        foreach (var condition in request.Conditions)
+        {
+            var childCondition = await _uow.ChildConditions.GetAsync(c => c.Name == condition, cancellationToken);
+            childConditions[condition] = childCondition.SingleOrDefault();
+        }
+
+        return childConditions;
     }
 }

@@ -1,3 +1,5 @@
+using ABC.SharedKernel;
+
 namespace ABC.Management.Domain.Tests.StepDefinitions;
 
 [Binding]
@@ -5,10 +7,14 @@ public class ChildSpecsStepDefinitions : IClassFixture<StartupFixture>
 {
     private Child? _child;
     private ValidationResult? _validationResult;
+    private IEntityService<ChildCondition> _entityService;
     private readonly ChildValidator _childValidator;
 
-    public ChildSpecsStepDefinitions(StartupFixture fixture) =>
-        _childValidator = new();
+    public ChildSpecsStepDefinitions(StartupFixture fixture)
+    {
+        _entityService = fixture.Services.GetRequiredService<IEntityService<ChildCondition>>();
+        _childValidator = new(_entityService);
+    }
 
     [Given("I create a Child entity")]
     public void GivenICreateAChildEntity() =>
@@ -53,4 +59,25 @@ public class ChildSpecsStepDefinitions : IClassFixture<StartupFixture>
     [Then("validation should be true")]
     public void ThenValidationShouldBeTrue() =>
         _validationResult!.IsValid.ShouldBeTrue();
+
+    [Given("all conditions are found")]
+    public void GivenAllConditionsAreFound() =>
+        A.CallTo(() => _entityService.GetByName(A<string>.Ignored, A<CancellationToken>.Ignored))!
+            .Returns(Task.FromResult(new ChildCondition(Guid.NewGuid(), "Fake Condition")));
+
+    [Given("condition from the list is not found")]
+    public void GivenConditionFromTheListIsNotFound() =>
+        A.CallTo(() => _entityService.GetByName(A<string>.Ignored, A<CancellationToken>.Ignored))!
+            .Returns(Task.FromResult(default(ChildCondition)));
+
+    [Given("Child conditions contain: {string}")]
+    public void GivenChildConditionsContain(string conditions)
+    {
+        var childConditions = conditions.Split(",").Select(c => new ChildCondition(c));
+        foreach (var c in childConditions) 
+        {
+            _child!.Conditions.Add(c);
+        }
+    }
+
 }

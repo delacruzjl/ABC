@@ -19,7 +19,15 @@ public class ChildCondition(
     {
     }
 
+    public ChildCondition(Guid id) : this(id, string.Empty)
+    {
+    }
+
     public ChildCondition() : this(string.Empty)
     {
     }
+
+    public static implicit operator string(ChildCondition value) => value.Name;
+
+    public static implicit operator ChildCondition(string value) => new(value);
 }

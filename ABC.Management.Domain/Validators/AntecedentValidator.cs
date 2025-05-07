@@ -12,7 +12,7 @@ public class AntecedentValidator : AbstractValidator<Antecedent>
         _antecedentService = antecedentService;
         RuleFor(x => x).MustAsync(InvalidateIfNameAlreadyExists)
             .WithMessage("An entity with this name already exists")
-            .WithErrorCode("DuplicateNameValidator");
+            .WithErrorCode(nameof(InvalidateIfNameAlreadyExists));
     }
 
     private async Task<bool> InvalidateIfNameAlreadyExists(

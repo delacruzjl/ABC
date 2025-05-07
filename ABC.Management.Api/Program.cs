@@ -31,7 +31,9 @@ internal class Program
                 typeof(RemoveAntecedentHandlerDecorator),
                 typeof(RemoveBehaviorHandlerDecorator),
                 typeof(RemoveConsequenceHandlerDecorator), 
-                typeof(RemoveChildHandlerDecorator)
+                typeof(RemoveChildHandlerDecorator),
+                typeof(CreateChildConditionHandlerDecorator),
+                typeof(RemoveChildConditionHandlerDecorator)
             ];
         });
 

@@ -16,12 +16,17 @@ public class Children
         string lastName,
         string firstName,
         int birthYear,
-        IEnumerable<ChildCondition>? conditions,
+        IEnumerable<string>? conditions,
         IResolverContext context,
         CancellationToken cancellationToken)
     {
-        var command = CreateChildResponseCommand.Create(lastName, firstName, birthYear, conditions);
+        var command = CreateChildResponseCommand.Create(lastName, firstName, birthYear, conditions ?? []);
         return await command.ExecuteHandler(handler, context, cancellationToken);
+    }
+
+    private static ChildCondition FindChildConditionOnDb(string arg1, int arg2)
+    {
+        throw new NotImplementedException();
     }
 
     [Mutation]

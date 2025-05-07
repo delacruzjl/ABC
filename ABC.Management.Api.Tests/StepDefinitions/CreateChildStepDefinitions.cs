@@ -4,6 +4,7 @@ using ABC.Management.Api.Handlers;
 using ABC.Management.Domain.Entities;
 using ABC.PostGreSQL;
 using ABC.SharedKernel;
+using Bogus;
 using Bogus.DataSets;
 using FakeItEasy;
 using FluentValidation;
@@ -12,6 +13,7 @@ using Microsoft.Extensions.Logging;
 using Reqnroll;
 using Shouldly;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 
 namespace ABC.Management.Api.Tests.StepDefinitions;
 
@@ -21,12 +23,17 @@ public class CreateChildStepDefinitions
     private readonly IEntityService<Child> _entityService;
     private readonly CreateChildResponseHandler _sut;
     private readonly IUnitOfWork _uowFake;
+    private readonly Faker<ChildCondition> _childConditionFaker;
     private List<CreateChildResponseCommand> _requestFakes;
     private List<BaseResponseCommand<Child>> _actual;
     private readonly CreateChildHandlerDecorator _decorator;
 
     public CreateChildStepDefinitions(StartupFixture fixture)
     {
+        _childConditionFaker = new Faker<ChildCondition>()
+                .RuleFor(x => x.Id, f => Guid.NewGuid())
+                .RuleFor(x => x.Name, f => f.Lorem.Word());
+
         _requestFakes = new();
         _actual = new();
         _uowFake = fixture.Services.GetRequiredService<IUnitOfWork>();
@@ -45,8 +52,7 @@ public class CreateChildStepDefinitions
                 row["LastName"],
                 row["FirstName"],
                 int.TryParse(row["BirthYear"], out var result) ? result : 0,
-                row["Conditions"].Split(',')
-                    .Select(str => new ChildCondition(str)))));
+                row["Conditions"].Split(','))));
 
     [Given("calls to the Child service by name returns null")]
     public void GivenCallsToTheChildServiceByNameReturnsNull() =>
@@ -96,4 +102,12 @@ public class CreateChildStepDefinitions
         A.CallTo(() =>
            _uowFake.SaveChangesAsync())
         .Returns(Task.FromResult(0));
+
+    [Given("child Conditions exist in the database")]
+    public void GivenChildConditionsExistInTheDatabase() =>
+        A.CallTo(() => _uowFake.ChildConditions.GetAsync(
+            A<Expression<Func<ChildCondition, bool>>>.Ignored,
+            A<CancellationToken>.Ignored))
+        .Returns(Task.FromResult(_childConditionFaker.Generate(1).AsQueryable()));
+
 }
