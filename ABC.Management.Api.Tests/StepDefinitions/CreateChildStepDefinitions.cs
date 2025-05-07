@@ -45,7 +45,8 @@ public class CreateChildStepDefinitions
                 row["LastName"],
                 row["FirstName"],
                 int.TryParse(row["BirthYear"], out var result) ? result : 0,
-                row["Conditions"].Split(','))));
+                row["Conditions"].Split(',')
+                    .Select(str => new ChildCondition(str)))));
 
     [Given("calls to the Child service by name returns null")]
     public void GivenCallsToTheChildServiceByNameReturnsNull() =>

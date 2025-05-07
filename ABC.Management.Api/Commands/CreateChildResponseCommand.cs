@@ -10,7 +10,7 @@ public record CreateChildResponseCommand(Child Value)
         string lastName,
         string firstName,
         int birthYear,
-        params IEnumerable<string>? conditions)
+        params IEnumerable<ChildCondition>? conditions)
     {
         Child child = new()
         {

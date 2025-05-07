@@ -21,6 +21,8 @@ namespace ABC.PostGreSQL
 
         public IRepository<Consequence> Consequences =>
             MakeRepository<Consequence>();
+        public IRepository<ChildCondition> ChildConditions =>
+            MakeRepository<ChildCondition>();
 
         public async Task<int> SaveChangesAsync() =>
             await _dbContext.SaveChangesAsync();

@@ -4,13 +4,13 @@ public class Child(
     string lastName,
     string firstName,
     int birthYear,
-    List<string> conditions) : Entity(id)
+    List<ChildCondition> conditions) : Entity(id)
 {
 
     public string LastName { get; init; } = lastName;
     public string FirstName { get; init; } = firstName;
     public int BirthYear { get; init; } = birthYear;
-    public List<string> Conditions { get; init; } = conditions;
+    public ICollection<ChildCondition> Conditions { get; init; } = conditions;
 
     public Child(Guid id) : this(id, string.Empty, string.Empty, 0, [])
     {

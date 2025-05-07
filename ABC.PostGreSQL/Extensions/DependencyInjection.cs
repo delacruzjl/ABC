@@ -25,6 +25,7 @@ public static class DependencyInjection
         services.AddScoped<IEntityService<Antecedent>, AntecedentService>();
         services.AddScoped<IEntityService<Behavior>, BehaviorService>();
         services.AddScoped<IEntityService<Consequence>, ConsequenceService>();
+        services.AddScoped<IEntityService<ChildCondition>, ChildConditionService>();
 
         return builder;
     }
