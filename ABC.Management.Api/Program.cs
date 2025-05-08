@@ -5,6 +5,7 @@ using ABC.PostGreSQL.Extensions;
 using FluentValidation;
 using Mediator;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using System.Diagnostics.CodeAnalysis;
 
 [ExcludeFromCodeCoverage]
@@ -53,12 +54,24 @@ internal class Program
             using var scope = app.Services.CreateScope();
             var context = scope.ServiceProvider.GetRequiredService<ABCContext>();
 
-            await context.Database.MigrateAsync();
+            await RunMigrationAsync(context, CancellationToken.None);
         }
 
         // Configure the HTTP request pipeline.
         app.MapGraphQL();
 
         app.RunWithGraphQLCommands(args);
+    }
+
+    private static async Task RunMigrationAsync(ABCContext dbContext, CancellationToken cancellationToken)
+    {
+        var strategy = dbContext.Database.CreateExecutionStrategy();
+        await strategy.ExecuteAsync(async () =>
+        {
+            // Run migration in a transaction to avoid partial migration if it fails.
+            // await using var transaction = await dbContext.Database.BeginTransactionAsync(cancellationToken);
+            await dbContext.Database.MigrateAsync(cancellationToken);
+            // await transaction.CommitAsync(cancellationToken);
+        });
     }
 }
