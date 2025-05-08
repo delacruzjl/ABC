@@ -10,6 +10,7 @@
     <PackageVersion Include="Aspire.Hosting.PostgreSQL" Version="9.2.1" />
     <PackageVersion Include="Aspire.Npgsql" Version="9.2.1" />
     <PackageVersion Include="Aspire.Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.2.1" />
+    <PackageVersion Include="Azure.Monitor.OpenTelemetry.AspNetCore" Version="1.2.0" />
     <PackageVersion Include="Bogus" Version="35.6.3" />
     <PackageVersion Include="FakeIteasy" Version="8.3.0" />
     <PackageVersion Include="FluentValidation" Version="11.11.0" />
