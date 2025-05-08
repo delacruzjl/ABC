@@ -53,7 +53,6 @@ internal class Program
         {
             using var scope = app.Services.CreateScope();
             var context = scope.ServiceProvider.GetRequiredService<ABCContext>();
-
             await RunMigrationAsync(context, CancellationToken.None);
         }
 
@@ -68,10 +67,7 @@ internal class Program
         var strategy = dbContext.Database.CreateExecutionStrategy();
         await strategy.ExecuteAsync(async () =>
         {
-            // Run migration in a transaction to avoid partial migration if it fails.
-            // await using var transaction = await dbContext.Database.BeginTransactionAsync(cancellationToken);
             await dbContext.Database.MigrateAsync(cancellationToken);
-            // await transaction.CommitAsync(cancellationToken);
         });
     }
 }
