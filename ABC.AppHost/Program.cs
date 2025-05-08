@@ -5,7 +5,6 @@ var builder = DistributedApplication.CreateBuilder(args);
 var dbNameKey = "databaseName";
 var databaseName = builder.Configuration[$"Parameters:{dbNameKey}"];
 var databaseNameParameter = builder.AddParameter(dbNameKey);
-var databasePasswordParameter = builder.AddParameter("postgres-password");
 
 var postgres = builder
     .AddAzurePostgresFlexibleServer("postgres");

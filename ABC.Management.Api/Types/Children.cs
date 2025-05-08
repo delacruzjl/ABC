@@ -24,11 +24,6 @@ public class Children
         return await command.ExecuteHandler(handler, context, cancellationToken);
     }
 
-    private static ChildCondition FindChildConditionOnDb(string arg1, int arg2)
-    {
-        throw new NotImplementedException();
-    }
-
     [Mutation]
     [GraphQLDescription("Remove a child")]
     public static async Task<bool> RemoveChild(
