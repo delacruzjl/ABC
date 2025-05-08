@@ -2,29 +2,31 @@ using Microsoft.Extensions.Hosting;
 
 var builder = DistributedApplication.CreateBuilder(args);
 
-var insights = builder.ExecutionContext.IsPublishMode
-    ? builder.AddAzureApplicationInsights("insights")
-    : null;
+var dbNameKey = "databaseName";
+var databaseName = builder.Configuration[$"Parameters:{dbNameKey}"];
+var databaseNameParameter = builder.AddParameter(dbNameKey);
+var databasePasswordParameter = builder.AddParameter("postgres-password");
 
 var postgres = builder
-    .AddPostgres("postgres")
-    .WithPgWeb(pgWeb => pgWeb.WithHostPort(5050));
+    .AddAzurePostgresFlexibleServer("postgres");
 
-var dbNameKey = "databaseName";
-var databaseNameParameter = builder.AddParameter(dbNameKey);
+if (!builder.ExecutionContext.IsPublishMode)
+{
+    postgres.RunAsContainer();
+}
 
-var databaseName = builder.Configuration[$"Parameters:{dbNameKey}"];
-
-var db = postgres
-    .AddDatabase(databaseName!);
-
-var managementApi = builder.AddProject<Projects.ABC_Management_Api>("abcmanagementapi")
+var db = postgres.AddDatabase(databaseName!);
+    
+var managementApi = builder
+    .AddProject<Projects.ABC_Management_Api>("abcmanagementapi")
     .WithEnvironment(dbNameKey, databaseNameParameter)
     .WithReference(db)
     .WaitFor(db);
 
 if (builder.ExecutionContext.IsPublishMode)
 {
+    var insights = builder.AddAzureApplicationInsights("insights");
+
     managementApi
         .WithReference(insights!)
         .WaitFor(insights!);
