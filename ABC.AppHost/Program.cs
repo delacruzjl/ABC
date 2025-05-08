@@ -2,33 +2,37 @@ using Microsoft.Extensions.Hosting;
 
 var builder = DistributedApplication.CreateBuilder(args);
 
-var insights = builder.Environment.IsDevelopment()
-    ? builder.AddConnectionString(
-        "AppInsConnectionString",
-        "APPLICATIONINSIGHTS_CONNECTION_STRING")
-    : builder.AddAzureApplicationInsights("insights");
-
-var postgres = builder
-    .AddPostgres("postgres")
-    .WithPgWeb(pgWeb => pgWeb.WithHostPort(5050));
-
 var dbNameKey = "databaseName";
+var databaseName = builder.Configuration[$"Parameters:{dbNameKey}"];
 var databaseNameParameter = builder.AddParameter(dbNameKey);
 
-var databaseName = builder.Configuration[$"Parameters:{dbNameKey}"];
+var postgres = builder
+    .AddAzurePostgresFlexibleServer("postgres");
 
-var db = postgres
-    .AddDatabase(databaseName!);
+if (!builder.ExecutionContext.IsPublishMode)
+{
+    postgres.RunAsContainer();
+}
 
-var managementApi = builder.AddProject<Projects.ABC_Management_Api>("abcmanagementapi")
+var db = postgres.AddDatabase(databaseName!);
+    
+var managementApi = builder
+    .AddProject<Projects.ABC_Management_Api>("abcmanagementapi")
     .WithEnvironment(dbNameKey, databaseNameParameter)
     .WithReference(db)
-    .WithReference(insights)
     .WaitFor(db);
+
+if (builder.ExecutionContext.IsPublishMode)
+{
+    var insights = builder.AddAzureApplicationInsights("insights");
+
+    managementApi
+        .WithReference(insights!)
+        .WaitFor(insights!);
+}
 
 builder.AddNpmApp("react", "../ABC.React")
     .WithReference(managementApi)
-    .WithReference(insights)
     .WaitFor(managementApi)
     .WithEnvironment("BROWSER", "none") // Disable opening browser on npm start
     .WithHttpEndpoint(env: "PORT")

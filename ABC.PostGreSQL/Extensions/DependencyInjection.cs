@@ -19,7 +19,9 @@ public static class DependencyInjection
 
         var connectionName = builder.Configuration["databaseName"];
         services.AddDbContextFactory<ABCContext>(options =>
-            options.UseNpgsql(builder.Configuration.GetConnectionString(connectionName!)));
+            options.UseNpgsql(builder.Configuration.GetConnectionString(connectionName!), npgsql =>
+            npgsql.MigrationsAssembly("ABC.PostGreSQL")));
+        builder.EnrichNpgsqlDbContext<ABCContext>();
 
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddScoped<IEntityService<Antecedent>, AntecedentService>();
