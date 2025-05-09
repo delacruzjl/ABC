@@ -16,7 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ABC.Management.Domain\ABC.Management.Domain.csproj" />
+    <ProjectReference Include="..\ABC.SharedEntityFramework\ABC.SharedEntityFramework.csproj" />
   </ItemGroup>
 
 </Project>

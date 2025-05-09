@@ -1,13 +1,12 @@
 using ABC.Management.Domain.Entities;
 using ABC.Management.Domain.Validators;
-using ABC.PostGreSQL;
+using ABC.SharedEntityFramework;
 using ABC.SharedKernel;
 using FakeItEasy;
 using FluentValidation;
 using HotChocolate.Resolvers;
 using Mediator;
 using Microsoft.Extensions.DependencyInjection;
-using Reqnroll.Assist;
 using Xunit;
 
 namespace ABC.Management.Api.Tests;

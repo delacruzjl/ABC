@@ -2,7 +2,7 @@ using ABC.Management.Api.Commands;
 using ABC.Management.Api.Decorators;
 using ABC.Management.Api.Handlers;
 using ABC.Management.Domain.Entities;
-using ABC.PostGreSQL;
+using ABC.SharedEntityFramework;
 using FakeItEasy;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;

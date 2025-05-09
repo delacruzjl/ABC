@@ -1,4 +1,5 @@
 ﻿using ABC.Management.Domain.Entities;
+using ABC.SharedEntityFramework;
 using ABC.SharedKernel;
 
 namespace ABC.PostGreSQL.ValidationServices;

@@ -6,27 +6,32 @@ var dbNameKey = "databaseName";
 var databaseName = builder.Configuration[$"Parameters:{dbNameKey}"];
 var databaseNameParameter = builder.AddParameter(dbNameKey);
 
-var postgres = builder
-    .AddAzurePostgresFlexibleServer("postgres");
 
+IResourceBuilder<ProjectResource> managementApi;
 if (!builder.ExecutionContext.IsPublishMode)
 {
-    postgres.RunAsContainer();
-}
+    var db = builder.AddPostgres("postgres")
+        .WithPgWeb(pgWeb => pgWeb.WithHostPort(5050))
+        .AddDatabase(databaseName!);
 
-var db = postgres.AddDatabase(databaseName!);
-    
-var managementApi = builder
+    managementApi = builder
     .AddProject<Projects.ABC_Management_Api>("abcmanagementapi")
     .WithEnvironment(dbNameKey, databaseNameParameter)
     .WithReference(db)
     .WaitFor(db);
-
-if (builder.ExecutionContext.IsPublishMode)
+}
+else
 {
+    var dbFlex = builder.AddAzurePostgresFlexibleServer("postgres")
+            .AddDatabase(databaseName!);
+
     var insights = builder.AddAzureApplicationInsights("insights");
 
-    managementApi
+    managementApi = builder
+        .AddProject<Projects.ABC_Management_Api>("abcmanagementapi")
+        .WithEnvironment(dbNameKey, databaseNameParameter)
+        .WithReference(dbFlex)
+        .WaitFor(dbFlex)
         .WithReference(insights!)
         .WaitFor(insights!);
 }

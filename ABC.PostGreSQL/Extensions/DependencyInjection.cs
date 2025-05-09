@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using ABC.Management.Domain.Entities;
 using ABC.PostGreSQL.ValidationServices;
+using ABC.SharedEntityFramework;
 using ABC.SharedKernel;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;

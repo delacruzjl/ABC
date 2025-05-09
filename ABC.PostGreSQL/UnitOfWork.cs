@@ -1,4 +1,5 @@
-﻿using ABC.Management.Domain.Entities;
+﻿using ABC.SharedEntityFramework;
+using ABC.Management.Domain.Entities;
 using ABC.SharedKernel;
 using Microsoft.EntityFrameworkCore;
 

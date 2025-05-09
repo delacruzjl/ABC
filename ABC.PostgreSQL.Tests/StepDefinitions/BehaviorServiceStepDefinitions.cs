@@ -1,5 +1,4 @@
 using ABC.Management.Domain.Entities;
-using ABC.PostGreSQL;
 using ABC.SharedKernel;
 using Bogus.DataSets;
 using Shouldly;
@@ -9,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ABC.SharedEntityFramework;
 
 namespace ABC.PostgreSQL.Tests.StepDefinitions;
 
