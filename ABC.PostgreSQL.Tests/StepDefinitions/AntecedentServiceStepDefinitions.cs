@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ABC.Management.Domain.Entities;
-using ABC.PostGreSQL;
 using ABC.PostGreSQL.ValidationServices;
 using Shouldly;
 using Microsoft.Extensions.DependencyInjection;
 using Reqnroll;
+using ABC.SharedEntityFramework;
 
 namespace ABC.PostgreSQL.Tests.StepDefinitions;
 

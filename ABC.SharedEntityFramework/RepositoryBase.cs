@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Data;
 using System.Linq.Expressions;
 
-namespace ABC.PostGreSQL;
+namespace ABC.SharedEntityFramework;
 public class RepositoryBase<TContext,TEntity> : IRepository<TEntity> 
     where TEntity : Entity
     where TContext : DbContext

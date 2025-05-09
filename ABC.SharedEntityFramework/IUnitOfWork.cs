@@ -1,7 +1,7 @@
 ﻿using ABC.Management.Domain.Entities;
 using ABC.SharedKernel;
 
-namespace ABC.PostGreSQL;
+namespace ABC.SharedEntityFramework;
 
 public interface IUnitOfWork : IDisposable
 {
