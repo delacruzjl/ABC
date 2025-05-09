@@ -8,6 +8,8 @@ var databaseNameParameter = builder.AddParameter(dbNameKey);
 
 
 IResourceBuilder<ProjectResource> managementApi;
+// In non-publish mode (e.g., local development), use a direct PostgreSQL configuration.
+// This setup allows developers to run the application locally with a lightweight database.
 if (!builder.ExecutionContext.IsPublishMode)
 {
     var db = builder.AddPostgres("postgres")
