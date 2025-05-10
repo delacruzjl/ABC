@@ -23,3 +23,13 @@ Scenario: Should error saving Child if the database is down
 	And the SaveChanges method does not affect any Child rows
 	When I send a request to Child mutation
 	Then Child response should contain 1 error objects in array
+
+
+@child
+Scenario: Child should fail if condition from list not found in db
+	Given the following Child data:
+		| LastName     | FirstName          | BirthYear | Conditions |
+		| Test Child   | Test Description   | 2020      | condition1,condition2 |
+	And condition from the list is not found
+	When I send a request to Child mutation
+	Then Child response should contain 1 error objects in array

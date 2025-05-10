@@ -19,6 +19,7 @@
     <Project Path="ABC.Management.Domain.Tests/ABC.Management.Domain.Tests.csproj" />
     <Project Path="ABC.PostGreSQL.Tests/ABC.PostgreSQL.Tests.csproj" />
   </Folder>
+  <Project Path="ABC.Events.Api/ABC.Events.Api.csproj" />
   <Project Path="ABC.Management.Api/ABC.Management.Api.csproj" />
   <Project Path="ABC.Management.Domain/ABC.Management.Domain.csproj" />
   <Project Path="ABC.PostGreSQL/ABC.PostGreSQL.csproj" />

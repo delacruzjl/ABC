@@ -8,6 +8,7 @@ var databaseNameParameter = builder.AddParameter(dbNameKey);
 
 
 IResourceBuilder<ProjectResource> managementApi;
+IResourceBuilder<ProjectResource> eventsApi;
 // In non-publish mode (e.g., local development), use a direct PostgreSQL configuration.
 // This setup allows developers to run the application locally with a lightweight database.
 if (!builder.ExecutionContext.IsPublishMode)
@@ -21,6 +22,12 @@ if (!builder.ExecutionContext.IsPublishMode)
     .WithEnvironment(dbNameKey, databaseNameParameter)
     .WithReference(db)
     .WaitFor(db);
+
+    eventsApi = builder
+        .AddProject<Projects.ABC_Events_Api>("abceventsapi")
+        .WithEnvironment(dbNameKey, databaseNameParameter)
+        .WithReference(db)
+        .WaitFor(db);
 }
 else
 {
@@ -36,11 +43,19 @@ else
         .WaitFor(dbFlex)
         .WithReference(insights!)
         .WaitFor(insights!);
+
+    eventsApi = builder
+        .AddProject<Projects.ABC_Events_Api>("abceventsapi")
+        .WithEnvironment(dbNameKey, databaseNameParameter)
+        .WithReference(dbFlex)
+        .WaitFor(dbFlex);
 }
 
 builder.AddNpmApp("react", "../ABC.React")
     .WithReference(managementApi)
     .WaitFor(managementApi)
+    .WithReference(eventsApi)
+    .WaitFor(eventsApi)
     .WithEnvironment("BROWSER", "none") // Disable opening browser on npm start
     .WithHttpEndpoint(env: "PORT")
     .WithExternalHttpEndpoints()

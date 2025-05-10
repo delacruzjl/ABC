@@ -1,73 +1,33 @@
 ﻿using ABC.Management.Api.Commands;
 using ABC.Management.Domain.Entities;
+using ABC.PostGreSQL.ValidationServices;
 using ABC.SharedEntityFramework;
+using ABC.SharedKernel;
 using Mediator;
 using System.Collections;
 
 namespace ABC.Management.Api.Handlers;
 
-public class CreateChildResponseHandler(IUnitOfWork _uow)
+public class CreateChildResponseHandler(
+    IUnitOfWork _uow)
     : IRequestHandler<CreateChildResponseCommand, BaseResponseCommand<Child>>
 {
     public async ValueTask<BaseResponseCommand<Child>> Handle(
         CreateChildResponseCommand request,
         CancellationToken cancellationToken)
     {
-        var childConditions = await FetchChildConditions(request, cancellationToken);
-        EnsureChildConditionsExist(childConditions);
-        PopulateEntityConditions(request, childConditions);
+        Child entity = new(
+            request.Value.Id,
+            request.Value.LastName,
+            request.Value.FirstName,
+            request.Value.BirthYear);
 
-        BaseResponseCommand<Child> response = new()
-        {
-            Entity = await _uow.Children.AddAsync(request.Value, cancellationToken)
-        };
+        ChildConditionService customService = new(_uow);
+        await entity.SetChildConditions(
+            customService, request.Conditions, cancellationToken);
+        await _uow.Children.AddAsync(entity, cancellationToken);
 
-        var count = await _uow.SaveChangesAsync();
-        if (count == 0)
-        {
-            throw new InvalidOperationException("Nothing saved to database");
-        }
-
-        return response;
-    }
-
-    private static void PopulateEntityConditions(CreateChildResponseCommand request, SortedList childConditions)
-    {
-        request.Value.Conditions.Clear();
-        foreach (var key in childConditions.Keys)
-        {
-            var childCondition = childConditions[key] as ChildCondition;
-            if (childCondition != null)
-            {
-                request.Value.Conditions.Add(childCondition);
-            }
-        }
-    }
-
-    private static void EnsureChildConditionsExist(SortedList childConditions)
-    {
-        if (childConditions.ContainsValue(null))
-        {
-            var notFound = childConditions
-                .OfType<DictionaryEntry>()
-                .Where(c => c.Value == null)
-                .Select(c => c.Key)
-                .ToList();
-
-            throw new InvalidOperationException(
-                $"Child conditions not found: {string.Join(", ", notFound)}");
-        }
-    }
-
-    private async Task<SortedList> FetchChildConditions(CreateChildResponseCommand request, CancellationToken cancellationToken)
-    {
-        SortedList childConditions = new();
-        foreach (var condition in request.Conditions)
-        {
-            var childCondition = await _uow.ChildConditions.GetAsync(c => c.Name == condition, cancellationToken);
-            childConditions[condition] = childCondition.SingleOrDefault();
-        }
-
-        return childConditions;
+        await _uow.SaveChangesAsync();
+        return new(entity);
     }
 }

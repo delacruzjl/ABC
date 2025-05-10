@@ -5,7 +5,6 @@ using ABC.PostGreSQL.Extensions;
 using FluentValidation;
 using Mediator;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage;
 using System.Diagnostics.CodeAnalysis;
 
 [ExcludeFromCodeCoverage]
@@ -51,9 +50,7 @@ internal class Program
 
         if (app.Environment.IsDevelopment())
         {
-            using var scope = app.Services.CreateScope();
-            var context = scope.ServiceProvider.GetRequiredService<ABCContext>();
-            await RunMigrationAsync(context, CancellationToken.None);
+            await ApplyMigrationsAsync(app.Services);
         }
 
         // Configure the HTTP request pipeline.
@@ -62,12 +59,15 @@ internal class Program
         app.RunWithGraphQLCommands(args);
     }
 
-    private static async Task RunMigrationAsync(ABCContext dbContext, CancellationToken cancellationToken)
+    private static async Task ApplyMigrationsAsync(IServiceProvider serviceProvider)
     {
-        var strategy = dbContext.Database.CreateExecutionStrategy();
+        using var scope = serviceProvider.CreateScope();
+        var context = scope.ServiceProvider.GetRequiredService<ABCContext>();
+        var strategy = context.Database.CreateExecutionStrategy();
         await strategy.ExecuteAsync(async () =>
         {
-            await dbContext.Database.MigrateAsync(cancellationToken);
+            await context.Database.MigrateAsync();
+            await context.Database.CloseConnectionAsync();
         });
     }
 }

@@ -2,13 +2,29 @@
 
 namespace ABC.Management.Api.Commands;
 
-public class BaseResponseCommand<T>(List<IError> errors)  where T : Entity
+public record BaseResponseCommand<T>  where T : Entity
 {
-    public T? Entity { get; set; }
-    public List<IError> Errors { get; set; } = errors;
+    public BaseResponseCommand(List<IError> errors, T? entity)
+    {
+        Errors = errors ?? [];
+        Entity = entity;
+    }
+
+    public BaseResponseCommand(List<IError> errors) : this(errors, null)
+    {
+
+    }
+
+    public BaseResponseCommand(T? entity) : this([], entity)
+    {
+    }
 
     public BaseResponseCommand() : this([])
     {
         
     }
+
+    public List<IError> Errors { get; set; }
+
+    public T? Entity { get; set; }
 }
