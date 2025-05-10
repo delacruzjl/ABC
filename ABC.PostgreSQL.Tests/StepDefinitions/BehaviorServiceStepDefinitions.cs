@@ -15,15 +15,23 @@ namespace ABC.PostgreSQL.Tests.StepDefinitions;
 [Binding]
 public class BehaviorServiceStepDefinitions
 {
-    private StartupFixture fixture = StartupFixture.Instance;
+    
 
     private Behavior _actual;
     private string _behaviorName;
     private IEntityService<Behavior> _sut;
+    private readonly IUnitOfWork _uow;
+    private readonly IEntityService<Behavior> _behaviorService;
     private readonly Lorem _lorem;
 
     public BehaviorServiceStepDefinitions()
     {
+        var fixture = StartupFixture.Instance;
+
+        _uow = fixture.Services
+            .GetRequiredService<IUnitOfWork>();
+        _behaviorService = fixture.Services
+            .GetRequiredService<IEntityService<Behavior>>();
         _lorem = new Bogus.DataSets.Lorem(locale: "en");
     }
 
@@ -36,10 +44,7 @@ public class BehaviorServiceStepDefinitions
                 Guid.NewGuid(),
                 $"behavior{i}",
                 _lorem.Sentence()))
-            .ToList();
-
-        var _uow = fixture.Services
-            .GetRequiredService<IUnitOfWork>();
+            .ToList();        
 
         await _uow.Behaviors.AddRangeAsync(behaviors);
         await _uow.SaveChangesAsync();
@@ -50,8 +55,7 @@ public class BehaviorServiceStepDefinitions
     [Given("I make a call to the behavior service")]
     public void GivenIMakeACallToTheBehaviorService()
     {
-        _sut = fixture.Services
-            .GetRequiredService<IEntityService<Behavior>>();
+        _sut = _behaviorService;
     }
 
     [When("Get behavior by name")]

@@ -14,6 +14,7 @@ public class ChildSpecsStepDefinitions : IClassFixture<StartupFixture>
     {
         _entityService = fixture.Services.GetRequiredService<IEntityService<ChildCondition>>();
         _childValidator = new(_entityService);
+
     }
 
     [Given("I create a Child entity")]
@@ -71,13 +72,6 @@ public class ChildSpecsStepDefinitions : IClassFixture<StartupFixture>
             .Returns(Task.FromResult(default(ChildCondition)));
 
     [Given("Child conditions contain: {string}")]
-    public void GivenChildConditionsContain(string conditions)
-    {
-        var childConditions = conditions.Split(",").Select(c => new ChildCondition(c));
-        foreach (var c in childConditions) 
-        {
-            _child!.Conditions.Add(c);
-        }
-    }
-
+    public async Task GivenChildConditionsContain(string conditions) =>
+        await _child!.SetChildConditions(_entityService, conditions.Split(","), CancellationToken.None);
 }

@@ -25,8 +25,16 @@ namespace ABC.PostGreSQL
         public IRepository<ChildCondition> ChildConditions =>
             MakeRepository<ChildCondition>();
 
-        public async Task<int> SaveChangesAsync() =>
-            await _dbContext.SaveChangesAsync();
+        public async Task<int> SaveChangesAsync()
+        {
+            var count = await _dbContext.SaveChangesAsync();
+            //if (count <= 0)
+            //{
+            //    throw new InvalidOperationException("Nothing saved to database");
+            //}
+
+            return count;
+        }
 
         private RepositoryBase<ABCContext, T> MakeRepository<T>() where T : Entity =>
              new(_dbContext);

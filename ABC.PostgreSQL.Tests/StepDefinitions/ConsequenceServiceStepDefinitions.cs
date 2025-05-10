@@ -14,8 +14,8 @@ namespace ABC.PostgreSQL.Tests.StepDefinitions;
 [Binding]
 public class ConsequenceServiceStepDefinitions
 {
-    private StartupFixture fixture = StartupFixture.Instance;
-
+    private readonly IUnitOfWork _uowFake;
+    private readonly IEntityService<Consequence> _consequenceService;
     private Consequence _actual;
     private string _consequenceName;
     private IEntityService<Consequence> _sut;
@@ -23,6 +23,12 @@ public class ConsequenceServiceStepDefinitions
 
     public ConsequenceServiceStepDefinitions()
     {
+        StartupFixture fixture = StartupFixture.Instance;
+
+        _uowFake = fixture.Services.GetRequiredService<IUnitOfWork>();
+        _consequenceService = fixture.Services
+            .GetRequiredService<IEntityService<Consequence>>();
+
         _lorem = new Bogus.DataSets.Lorem(locale: "en");
     }
 
@@ -37,8 +43,7 @@ public class ConsequenceServiceStepDefinitions
                 _lorem.Sentence()))
             .ToList();
 
-        var _uow = fixture.Services
-            .GetRequiredService<IUnitOfWork>();
+        var _uow = _uowFake;
 
         await _uow.Consequences.AddRangeAsync(consequences);
         await _uow.SaveChangesAsync();
@@ -48,8 +53,7 @@ public class ConsequenceServiceStepDefinitions
 
     [Given("I make a call to the consequence service")]
     public void GivenIMakeACallToTheConsequenceService() =>
-         _sut = fixture.Services
-            .GetRequiredService<IEntityService<Consequence>>();
+         _sut = _consequenceService;
 
     [When("getting consequence by name")]
     public async Task WhenGettingConsequenceByName() =>

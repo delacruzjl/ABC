@@ -27,7 +27,7 @@ public class StartupFixture
             .Build();
 
         collection.AddDbContextFactory<ABCContext>(options =>
-            options.UseNpgsql(_container.GetConnectionString()));
+            options.UseNpgsql(_container.GetConnectionString(),(opt) => opt.EnableRetryOnFailure()), ServiceLifetime.Transient);
 
         collection.AddTransient<IUnitOfWork, UnitOfWork>();
         collection.AddTransient<IEntityService<Antecedent>, AntecedentService>();

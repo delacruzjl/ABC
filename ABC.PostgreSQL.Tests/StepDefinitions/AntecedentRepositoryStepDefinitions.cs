@@ -14,8 +14,7 @@ namespace ABC.PostgreSQL.Tests.StepDefinitions;
 [Binding]
 public class AntecedentRepositoryStepDefinitions
 {
-    private StartupFixture fixture = StartupFixture.Instance;
-
+    private readonly IUnitOfWork _uowFake;
     private IUnitOfWork _uow;
     private int _actual;
     private int _expected;
@@ -25,14 +24,17 @@ public class AntecedentRepositoryStepDefinitions
 
     public AntecedentRepositoryStepDefinitions()
     {
+            StartupFixture fixture = StartupFixture.Instance;
+
+        _uowFake = fixture.Services.GetRequiredService<IUnitOfWork>();
+
         _lorem = new Bogus.DataSets.Lorem(locale: "en");
     }
 
     [Given("I have a unit of work")]
     public void GivenIHaveAUnitOfWork()
     {
-        _uow = fixture.Services
-            .GetRequiredService<IUnitOfWork>();
+        _uow = _uowFake;
     }
 
     [Given("{int} rows in the antecedent table")]

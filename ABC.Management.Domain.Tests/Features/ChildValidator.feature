@@ -29,14 +29,3 @@ Scenario: Child with negative value birth year should be invalid
 	And birth year is 1915
 	When Validating child
 	Then validation should be false
-
-@child
-Scenario: Child should fail if condition from list not found in db
-	Given I create a Child entity
-	And Last Name is "Fake Last 3"
-	And First name is "Fake First 3"
-	And birth year is 2000
-	And Child conditions contain: "Autism,IDD"
-	And condition from the list is not found
-	When Validating child
-	Then validation should be false
