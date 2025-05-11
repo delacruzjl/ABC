@@ -12,7 +12,7 @@ using ABC.SharedEntityFramework;
 namespace ABC.PostgreSQL.Tests.StepDefinitions;
 
 [Binding]
-public class AntecedentRepositoryStepDefinitions
+public class AntecedentRepositoryStepDefinitions 
 {
     private readonly IUnitOfWork _uowFake;
     private IUnitOfWork _uow;
@@ -22,14 +22,15 @@ public class AntecedentRepositoryStepDefinitions
     private string _antecedentName;
     private readonly Lorem _lorem;
 
-    public AntecedentRepositoryStepDefinitions()
+    public AntecedentRepositoryStepDefinitions(StartupFixture fixture)
     {
-            StartupFixture fixture = StartupFixture.Instance;
-
+        fixture.InitializeAsync().Wait();
         _uowFake = fixture.Services.GetRequiredService<IUnitOfWork>();
 
         _lorem = new Bogus.DataSets.Lorem(locale: "en");
     }
+
+
 
     [Given("I have a unit of work")]
     public void GivenIHaveAUnitOfWork()

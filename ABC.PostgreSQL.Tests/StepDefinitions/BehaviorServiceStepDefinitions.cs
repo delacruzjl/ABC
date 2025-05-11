@@ -24,9 +24,9 @@ public class BehaviorServiceStepDefinitions
     private readonly IEntityService<Behavior> _behaviorService;
     private readonly Lorem _lorem;
 
-    public BehaviorServiceStepDefinitions()
+    public BehaviorServiceStepDefinitions(StartupFixture fixture)
     {
-        var fixture = StartupFixture.Instance;
+        fixture.InitializeAsync().Wait();
 
         _uow = fixture.Services
             .GetRequiredService<IUnitOfWork>();

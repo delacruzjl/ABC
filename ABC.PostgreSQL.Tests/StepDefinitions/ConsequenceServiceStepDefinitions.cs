@@ -21,9 +21,9 @@ public class ConsequenceServiceStepDefinitions
     private IEntityService<Consequence> _sut;
     private readonly Lorem _lorem;
 
-    public ConsequenceServiceStepDefinitions()
+    public ConsequenceServiceStepDefinitions(StartupFixture fixture)
     {
-        StartupFixture fixture = StartupFixture.Instance;
+        fixture.InitializeAsync().Wait();
 
         _uowFake = fixture.Services.GetRequiredService<IUnitOfWork>();
         _consequenceService = fixture.Services
