@@ -5,29 +5,54 @@ using ABC.SharedEntityFramework;
 using ABC.SharedKernel;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Npgsql;
 using System;
+using System.Data.Common;
 using System.Threading.Tasks;
 using Testcontainers.PostgreSql;
+using Testcontainers.Xunit;
+using Xunit;
+using Xunit.Abstractions;
 
 namespace ABC.PostgreSQL.Tests;
 
-public class StartupFixture 
+public sealed partial class PostgreSqlContainerFixture(ITestOutputHelper testOutputHelper)
+    : DbContainerTest<PostgreSqlBuilder, PostgreSqlContainer>(testOutputHelper)
 {
-    public static StartupFixture Instance { get; } = new StartupFixture();
+    public override DbProviderFactory DbProviderFactory => NpgsqlFactory.Instance;
+
+    protected override PostgreSqlBuilder Configure(PostgreSqlBuilder builder)
+    {
+        return builder
+            .WithImage("postgres:15.1");
+//            .WithResourceMapping("Chinook_PostgreSql_AutoIncrementPKs.sql", "/docker-entrypoint-initdb.d/");
+    }
+}
+
+
+
+public class StartupFixture
+    : IClassFixture<PostgreSqlContainerFixture>
+{
+    //public static StartupFixture Instance { get; } = new StartupFixture();
 
     public IServiceProvider Services;
 
     private readonly PostgreSqlContainer _container;
 
-    public StartupFixture()
+    public StartupFixture(PostgreSqlContainerFixture fixture)
     {
         var collection = new ServiceCollection();
 
-        _container = new PostgreSqlBuilder()
-            .Build();
+        //_container = new PostgreSqlBuilder()
+        //    .Build();
+
+        _container = fixture.Container;
 
         collection.AddDbContextFactory<ABCContext>(options =>
-            options.UseNpgsql(_container.GetConnectionString(),(opt) => opt.EnableRetryOnFailure()), ServiceLifetime.Transient);
+            options.UseNpgsql(
+                _container.GetConnectionString(),(opt) => opt.EnableRetryOnFailure()),
+                ServiceLifetime.Singleton);
 
         collection.AddTransient<IUnitOfWork, UnitOfWork>();
         collection.AddTransient<IEntityService<Antecedent>, AntecedentService>();

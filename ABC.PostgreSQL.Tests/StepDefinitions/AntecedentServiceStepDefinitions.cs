@@ -26,15 +26,17 @@ public class AntecedentServiceStepDefinitions
             $"description for {i}"));
 
 
-    public AntecedentServiceStepDefinitions()
+    public AntecedentServiceStepDefinitions(StartupFixture fixture)
     {
-        var uow = StartupFixture.Instance.Services
+        fixture.InitializeAsync().Wait();
+
+        var uow = fixture.Services
             .GetRequiredService<IUnitOfWork>();
 
-        Action action = async () =>
+        Action action = () =>
         {
-            await uow.Antecedents.AddRangeAsync(_antecedents);
-            _ = await uow.SaveChangesAsync();
+            uow.Antecedents.AddRangeAsync(_antecedents).Wait();
+            uow.SaveChangesAsync().Wait();
         };
 
         action.Invoke();
@@ -44,6 +46,13 @@ public class AntecedentServiceStepDefinitions
     [Given("I have a name found in the antecedent table")]
     public void GivenIHaveANameFoundInTheAntecedentTable() =>
         _expectedName = _antecedents.First().Name;
+
+    [Given("I search for the same name in upper case")]
+    public void GivenISearchForTheSameNameInUpperCase()
+    {
+        _expectedName = _expectedName.ToUpperInvariant();
+    }
+
 
     [Given("I make a call to the antecedent service")]
     public async Task GivenIMakeACallToTheAntecedentService() =>

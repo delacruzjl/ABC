@@ -10,6 +10,7 @@
     <PackageReference Include="Reqnroll.xUnit" />
     <PackageReference Include="Shouldly" />
     <PackageReference Include="Testcontainers.PostgreSql" />
+    <PackageReference Include="Testcontainers.Xunit" />
     <PackageReference Include="xunit" />
     <PackageReference Include="xunit.runner.visualstudio">
     <PrivateAssets>all</PrivateAssets>
