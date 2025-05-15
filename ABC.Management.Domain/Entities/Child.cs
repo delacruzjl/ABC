@@ -7,7 +7,8 @@ public class Child(
     string lastName,
     string firstName,
     int birthYear,
-    params List<ChildCondition> childConditions) : Entity(id)
+    List<ChildCondition> childConditions,
+    List<Observation> _observations) : Entity(id)
 {
     private readonly List<ChildCondition> _childConditions = childConditions;
 
@@ -16,8 +17,31 @@ public class Child(
     public int BirthYear { get; init; } = birthYear;
     public IReadOnlyCollection<ChildCondition> Conditions =>
         _childConditions.AsReadOnly();
+    public IReadOnlyCollection<Observation> Observations =>
+        _observations.AsReadOnly();
 
-    public Child(Guid id) : this(id, string.Empty, string.Empty, 0, [])
+    public Child(
+    Guid id,
+    string lastName,
+    string firstName,
+    int birthYear,
+    params List<ChildCondition> childConditions) 
+        : this(
+              id,
+              lastName,
+              firstName,
+              birthYear,
+              childConditions,
+              [])
+    { }
+
+    public Child(Guid id) 
+        : this(
+              id,
+              string.Empty,
+              string.Empty,
+              0,
+              [])
     {
 
     }

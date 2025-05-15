@@ -1,7 +1,6 @@
 ﻿using System.Text.Json;
 using ABC.Management.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace ABC.PostGreSQL;
 
@@ -30,5 +29,23 @@ public class ABCContext(DbContextOptions<ABCContext> options) : DbContext(option
         modelBuilder.Entity<Child>()
             .HasMany(c => c.Conditions)
             .WithMany(c => c.children);
+
+        modelBuilder.Entity<Observation>().HasKey(e => e.Id);
+        modelBuilder.Entity<Observation>()
+            .HasMany(o => o.Antecedents)
+            .WithMany(a => a.Observations);
+
+        modelBuilder.Entity<Observation>()
+            .HasOne(o => o.Child)
+            .WithMany(c => c.Observations);
+
+        modelBuilder.Entity<Observation>()
+            .HasMany(o => o.Behaviors)
+            .WithMany(a => a.Observations);
+
+        modelBuilder.Entity<Observation>()
+            .HasMany(o => o.Consequences)
+            .WithMany(a => a.Observations);
+
     }
 }
