@@ -4,6 +4,7 @@ using ABC.Management.Domain.ValueObjects;
 using ABC.PostGreSQL;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -12,9 +13,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace ABC.PostGreSQL.Migrations
 {
     [DbContext(typeof(ABCContext))]
-    partial class ABCContextModelSnapshot : ModelSnapshot
+    [Migration("20250518225027_UpdateObservationDomainEvents")]
+    partial class UpdateObservationDomainEvents
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

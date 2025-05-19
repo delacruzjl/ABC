@@ -43,6 +43,8 @@ public class Children
     [UseFiltering]
     [UseSorting]
     [GraphQLDescription("Retrieve available children")]
-    public static async Task<IQueryable<Child>> GetChildren(IUnitOfWork uow, CancellationToken ct)
+    public static async Task<IQueryable<Child>> GetChildren(
+        IUnitOfWork uow,
+        CancellationToken ct)
          => await uow.Children.GetAsync(ct);
 }
