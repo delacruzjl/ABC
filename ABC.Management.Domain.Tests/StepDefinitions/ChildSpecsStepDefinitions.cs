@@ -39,9 +39,8 @@ public class ChildSpecsStepDefinitions : IClassFixture<StartupFixture>
 
     [Given("First name is {string}")]
     public void GivenFirstNameIs(string firstName) =>
-        _child = new()
+        _child = new(_child!.Id)
         {
-            Id = _child!.Id,
             FirstName = firstName,
             LastName = _child.LastName,
             BirthYear = _child.BirthYear
@@ -49,9 +48,8 @@ public class ChildSpecsStepDefinitions : IClassFixture<StartupFixture>
 
     [Given("birth year is {int}")]
     public void GivenBirthYearIs(int birthYear) =>
-        _child = new()
+        _child = new(_child!.Id)
         {
-            Id = _child!.Id,
             FirstName = _child.FirstName,
             LastName = _child.LastName,
             BirthYear = birthYear

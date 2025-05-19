@@ -1,5 +1,6 @@
 ﻿using System.Text.Json;
 using ABC.Management.Domain.Entities;
+using ABC.Management.Domain.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 
 namespace ABC.PostGreSQL;
@@ -46,6 +47,10 @@ public class ABCContext(DbContextOptions<ABCContext> options) : DbContext(option
         modelBuilder.Entity<Observation>()
             .HasMany(o => o.Consequences)
             .WithMany(a => a.Observations);
+
+        modelBuilder.Entity<Observation>()
+            .Property(o => o.When)
+            .HasColumnType("jsonb");
 
     }
 }
