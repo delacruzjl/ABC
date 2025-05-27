@@ -36,12 +36,6 @@ public record DateTimeRange
         }
     }
 
-
-    public static implicit operator DateTimeRange(DateTime startedAt)
-    {
-        return new DateTimeRange(startedAt);
-    }
-
     private void ValidateRange(DateTime startedAt, DateTime? endedAt)
     {
         if (endedAt == null)
@@ -55,7 +49,8 @@ public record DateTimeRange
                 "Invalid date and time range", 
                 [
                     new ValidationFailure(
-                        nameof(EndedAt), "Ending cannot be greater than started date")
+                        nameof(EndedAt), 
+                        "Ending cannot be greater than started date")
                 ]);
         }
     }

@@ -33,7 +33,8 @@ internal class Program
                 typeof(RemoveConsequenceHandlerDecorator), 
                 typeof(RemoveChildHandlerDecorator),
                 typeof(CreateChildConditionHandlerDecorator),
-                typeof(RemoveChildConditionHandlerDecorator)
+                typeof(RemoveChildConditionHandlerDecorator),
+                typeof(StartObservationHandlerDecorator)
             ];
         });
 
@@ -59,15 +60,20 @@ internal class Program
         app.RunWithGraphQLCommands(args);
     }
 
-    private static async Task ApplyMigrationsAsync(IServiceProvider serviceProvider)
+    private static async Task ApplyMigrationsAsync(
+        IServiceProvider serviceProvider)
     {
         using var scope = serviceProvider.CreateScope();
+        
         var context = scope.ServiceProvider.GetRequiredService<ABCContext>();
         var strategy = context.Database.CreateExecutionStrategy();
         await strategy.ExecuteAsync(async () =>
         {
+            // await context.Database.EnsureCreatedAsync();
             await context.Database.MigrateAsync();
-            await context.Database.CloseConnectionAsync();
         });
+
+        await context.Database.CloseConnectionAsync();
+
     }
 }

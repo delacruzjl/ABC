@@ -4,6 +4,7 @@ using ABC.Management.Domain.ValueObjects;
 using ABC.PostGreSQL;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -12,9 +13,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace ABC.PostGreSQL.Migrations
 {
     [DbContext(typeof(ABCContext))]
-    partial class ABCContextModelSnapshot : ModelSnapshot
+    [Migration("20250526003309_SetObservationReadWrite")]
+    partial class SetObservationReadWrite
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -173,7 +176,7 @@ namespace ABC.PostGreSQL.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<Guid?>("ChildId")
+                    b.Property<Guid>("ChildId")
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreatedAt")
@@ -271,7 +274,9 @@ namespace ABC.PostGreSQL.Migrations
                 {
                     b.HasOne("ABC.Management.Domain.Entities.Child", "Child")
                         .WithMany("Observations")
-                        .HasForeignKey("ChildId");
+                        .HasForeignKey("ChildId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Child");
                 });
