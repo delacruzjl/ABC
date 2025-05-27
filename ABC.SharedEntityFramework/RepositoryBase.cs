@@ -25,7 +25,7 @@ public class RepositoryBase<TContext,TEntity> : IRepository<TEntity>
         CancellationToken cancellationToken = default)
     {
         var entity = await _dbSet.FindAsync(id, cancellationToken) 
-            ?? throw new DataException($"Entity with Id: {id} not found.");
+            ?? throw new DataException($"{typeof(TEntity).Name} with Id: {id} not found.");
         
         _dbContext.Entry(entity).State = EntityState.Unchanged;
 
@@ -71,6 +71,20 @@ public class RepositoryBase<TContext,TEntity> : IRepository<TEntity>
         _dbSet.Attach(entity);
         _dbSet.Remove(entity);    
 
+    }
+
+    public Task<TEntity> Update(TEntity entity)
+    {
+        entity.SetUpdatedAt();
+
+        var updatedEntry = _dbContext.Entry(entity);
+        if (updatedEntry.State == EntityState.Detached)
+        {
+            _dbSet.Attach(entity);
+        }
+
+        updatedEntry.State = EntityState.Modified;
+        return Task.FromResult(updatedEntry.Entity);
     }
 
     public void Dispose()

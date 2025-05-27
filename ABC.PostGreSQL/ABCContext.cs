@@ -1,6 +1,5 @@
 ﻿using System.Text.Json;
 using ABC.Management.Domain.Entities;
-using ABC.Management.Domain.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 
 namespace ABC.PostGreSQL;
@@ -12,15 +11,11 @@ public class ABCContext(DbContextOptions<ABCContext> options) : DbContext(option
     public DbSet<Consequence> Consequences => Set<Consequence>();
     public DbSet<Child> Children => Set<Child>();
     public DbSet<ChildCondition> ChildConditions => Set<ChildCondition>();
+    public DbSet<Observation> Observations => Set<Observation>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
-
-        JsonSerializerOptions jsonOptions = new()
-        {
-            PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-        };
 
         modelBuilder.Entity<ChildCondition>().HasKey(x => x.Id);
         modelBuilder.Entity<Antecedent>().HasKey(e => e.Id);
@@ -49,8 +44,10 @@ public class ABCContext(DbContextOptions<ABCContext> options) : DbContext(option
             .WithMany(a => a.Observations);
 
         modelBuilder.Entity<Observation>()
-            .Property(o => o.When)
-            .HasColumnType("jsonb");
+            .OwnsOne(o => o.When, d =>
+            {
+                d.ToJson();
+            });
 
     }
 }

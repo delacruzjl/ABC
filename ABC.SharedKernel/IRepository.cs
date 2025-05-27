@@ -9,5 +9,6 @@ public interface IRepository<TEntity> : IDisposable where TEntity : Entity
     Task<IQueryable<TEntity>> GetAsync(CancellationToken cancellationToken = default);
     Task<TEntity> AddAsync(TEntity entity, CancellationToken cancellationToken = default);
     Task AddRangeAsync(IEnumerable<TEntity> entities);
+    Task<TEntity> Update(TEntity entity);
     Task RemoveAsync(Guid id, CancellationToken cancellationToken = default);
 }

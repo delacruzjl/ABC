@@ -15,10 +15,8 @@ public class Child(
     public string LastName { get; init; } = lastName;
     public string FirstName { get; init; } = firstName;
     public int BirthYear { get; init; } = birthYear;
-    public IReadOnlyCollection<ChildCondition> Conditions =>
-        _childConditions.AsReadOnly();
-    public IReadOnlyCollection<Observation> Observations =>
-        _observations.AsReadOnly();
+    public ICollection<ChildCondition> Conditions { get; set; } = childConditions;
+    public ICollection<Observation> Observations { get; set; } = _observations;
 
     public Child(
     Guid id,

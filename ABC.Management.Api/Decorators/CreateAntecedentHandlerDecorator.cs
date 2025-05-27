@@ -1,5 +1,6 @@
 ﻿using ABC.Management.Api.Commands;
 using ABC.Management.Domain.Entities;
+using ABC.Management.Domain.Validators;
 using FluentValidation;
 using Mediator;
 
@@ -23,4 +24,3 @@ public class CreateAntecedentHandlerDecorator(
             cancellationToken);
     
 }
-

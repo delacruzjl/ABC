@@ -1,6 +1,6 @@
 ﻿namespace ABC.SharedKernel.Events;
 
-public record ObservationStarted(Guid Id, Guid ChildId, DateTime StartedAt) : IDomainEvent;
+public record ObservationStarted(Guid Id, Guid? ChildId, DateTime StartedAt) : IDomainEvent;
 
 // public record AntecedentsUpdated(Guid Id, Guid AntecedentId, EntryType EntryType) : IDomainEvent;
 

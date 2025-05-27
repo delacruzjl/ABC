@@ -69,7 +69,7 @@ public class ErrorValidationDecorator
                 .SetCode(e.ErrorCode)
                 .Build());
 
-            response.Errors = [.. errors];
+            response.AddErrors([.. errors]);
         }
         catch (Exception ex)
         {
@@ -84,9 +84,9 @@ public class ErrorValidationDecorator
         where TEntity : Entity
     {
         _logger.LogError(ex, "Error during pipeline: {Message}", ex.Message);
-        response.Errors.Add(
+        response.AddErrors(
             ErrorBuilder.New()
-            .SetMessage($"Error creating entity of type {typeof(TEntity).Name}")
+            .SetMessage(ex.Message)
             .SetCode(typeof(TCommand).Name)
             .SetException(ex)
             .Build());
