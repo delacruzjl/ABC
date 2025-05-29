@@ -35,7 +35,6 @@ public class RemoveAntecedentHandler(
             throw new InvalidOperationException("Nothing saved to database");
         }
 
-        BaseResponseCommand<Antecedent> response = new();
-        return response;
+        return new BaseResponseCommand<Antecedent>();
     }
 }
