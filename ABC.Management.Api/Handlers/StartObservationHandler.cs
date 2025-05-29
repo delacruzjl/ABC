@@ -1,6 +1,7 @@
 ﻿using ABC.Management.Api.Commands;
 using ABC.Management.Domain.Entities;
 using ABC.SharedEntityFramework;
+using ABC.SharedKernel.Events;
 using FluentValidation;
 using FluentValidation.Results;
 using Mediator;
@@ -28,6 +29,9 @@ public class StartObservationHandler(IUnitOfWork _uow)
             Guid.NewGuid(),
             child,
             string.Empty);
+
+        observation.Load(
+            new ObservationStarted(observation.Id, child?.Id, DateTime.UtcNow));
 
         await _uow.Observations.AddAsync(observation, cancellationToken);
         

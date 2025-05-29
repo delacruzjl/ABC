@@ -21,6 +21,29 @@ public class Observations
         return await command.ExecuteHandler(handler, context, cancellationToken);
     }
 
+    [Mutation]
+    [GraphQLDescription("End an observation")]
+    public static async Task<Observation?> EndObservation(
+        IMediator handler,
+        Guid observationId,
+        IResolverContext context,
+        CancellationToken cancellationToken)
+    {
+        EndObservationCommand command = new(observationId);
+        return await command.ExecuteHandler(handler, context, cancellationToken);
+    }
+
+    [Mutation]
+    [GraphQLDescription("Update an observation")]
+    public static async Task<Observation?> UpdateObservation(
+        IMediator handler,
+        UpdateObservationCommand command,
+        IResolverContext context,
+        CancellationToken cancellationToken)
+    {
+        return await command.ExecuteHandler(handler, context, cancellationToken);
+    }
+
     [Query]
     [GraphQLDescription("Query observations")]
     [UsePaging]

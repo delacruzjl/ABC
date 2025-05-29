@@ -15,8 +15,8 @@ public class Observation : AggregateRoot
     public ICollection<Consequence> Consequences { get; set; } = [];
 
     public Child? Child { get; private set; } 
-    public string Notes { get; private set; } 
-    public DateTimeRange When { get; private set; }
+    public string Notes { get; private set; }
+    public DateTimeRange When { get; private set; } = new();
     public ObservationStatus Status { get; private set; }
 
     public Observation(
@@ -26,10 +26,6 @@ public class Observation : AggregateRoot
     {
         Child = child;
         Notes = notes;
-
-        When = new DateTimeRange();
-        ApplyDomainEvent(
-            new ObservationStarted(id, child?.Id, DateTime.UtcNow) );
     }
 
     public Observation()
@@ -77,6 +73,7 @@ public class Observation : AggregateRoot
             case ObservationStarted e:
                 Id = e.Id;
                 Status = ObservationStatus.Open;
+                When = new DateTimeRange(e.StartedAt, null);
                 break;
             case NotesUpdated e:
                 ValidateObservationStatus();
@@ -89,13 +86,34 @@ public class Observation : AggregateRoot
                     || (Consequences).Count == 0)
                 {
                     throw new ValidationException(
-                        "The consultation cannot be ended.",
+                        "The observation cannot be ended.",
                         [
-                            new ValidationFailure(nameof(Status), "The consultation cannot be ended.")
+                            new ValidationFailure(nameof(Status), "The observation cannot be ended.")
                         ]);
                 }
                 Status = ObservationStatus.Closed;
-                When = new DateTimeRange(When.StartedAt, DateTime.UtcNow);
+                When = new DateTimeRange(When.StartedAt, e.EndedAt);
+                break;
+            case AntecedentsUpdated e:
+                ValidateObservationStatus();
+                e.Antecedents.ToList()
+                    .OfType<Antecedent>()
+                    .ToList()
+                    .ForEach(Antecedents.Add);
+                break;
+            case BehaviorsUpdated e:
+                ValidateObservationStatus();
+                e.Behaviors.ToList()
+                    .OfType<Behavior>()
+                    .ToList()
+                    .ForEach(Behaviors.Add);
+                break;
+            case ConsequencesUpdated e:
+                ValidateObservationStatus();
+                e.Consequences.ToList()
+                    .OfType<Consequence>()
+                    .ToList()
+                    .ForEach(Consequences.Add);
                 break;
         }
     }

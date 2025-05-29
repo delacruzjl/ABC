@@ -8,8 +8,7 @@ public class Antecedent(
 {
     public string Name { get; init; } = name;
     public string Description { get; init; } = description;
-    public IReadOnlyCollection<Observation> Observations =>
-        observations.AsReadOnly();
+    public ICollection<Observation>? Observations { get; set; } = observations;
 
     public Antecedent(
     Guid id,

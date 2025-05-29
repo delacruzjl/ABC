@@ -9,8 +9,7 @@ public class Consequence(
 {
     public string Name { get; init; } = name;
     public string Description { get; init; } = description;
-    public IReadOnlyCollection<Observation> Observations =>
-        observations.AsReadOnly();
+    public ICollection<Observation>? Observations { get; set; } = observations;
 
     public Consequence(
     Guid id,

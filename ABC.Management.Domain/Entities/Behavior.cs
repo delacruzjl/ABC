@@ -9,8 +9,7 @@ public class Behavior(
 {
     public string Name { get; init; } = name;
     public string Description { get; init; } = description;
-    public IReadOnlyCollection<Observation> Observations =>
-        observations.AsReadOnly();
+    public ICollection<Observation>? Observations { get; set; } = observations;
 
     public Behavior(
     Guid id,
