@@ -35,7 +35,6 @@ public class RemoveConsequenceResponseHandler(
             throw new InvalidOperationException("Nothing saved to database");
         }
 
-        BaseResponseCommand<Consequence> response = new();
-        return response;
+        return new BaseResponseCommand<Consequence>();
     }
 }
