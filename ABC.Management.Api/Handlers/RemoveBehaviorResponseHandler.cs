@@ -35,7 +35,6 @@ public class RemoveBehaviorResponseHandler(
             throw new InvalidOperationException("Nothing saved to database");
         }
 
-        BaseResponseCommand<Behavior> response = new();
-        return response;
+        return new BaseResponseCommand<Behavior>();
     }
 }
