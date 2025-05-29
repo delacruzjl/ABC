@@ -2,6 +2,7 @@
 using ABC.Management.Domain.Entities;
 using ABC.SharedEntityFramework;
 using Mediator;
+using Microsoft.EntityFrameworkCore;
 
 namespace ABC.Management.Api.Handlers;
 
@@ -13,8 +14,19 @@ public class RemoveAntecedentHandler(
         CancellationToken cancellationToken)
     {
         var id = request.Entity.Id;
-        BaseResponseCommand<Antecedent> response = new();
-        
+
+        var antecedentQry = await _uow.Antecedents
+            .GetAsync(a => a.Id == id, cancellationToken);
+
+        var antecedent = antecedentQry.Include(a => a.Observations)
+            .Single();
+
+        if ((antecedent.Observations ?? []).Count != 0)
+        {
+            throw new InvalidOperationException(
+                "Cannot remove antecedent that is associated with an observation");
+        }
+
         await _uow.Antecedents.RemoveAsync(id, cancellationToken);        
         var count = await _uow.SaveChangesAsync();
 
@@ -23,6 +35,7 @@ public class RemoveAntecedentHandler(
             throw new InvalidOperationException("Nothing saved to database");
         }
 
+        BaseResponseCommand<Antecedent> response = new();
         return response;
     }
 }

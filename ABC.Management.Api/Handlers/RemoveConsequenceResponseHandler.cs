@@ -2,6 +2,7 @@
 using ABC.Management.Domain.Entities;
 using ABC.SharedEntityFramework;
 using Mediator;
+using Microsoft.EntityFrameworkCore;
 
 namespace ABC.Management.Api.Handlers;
 
@@ -14,7 +15,19 @@ public class RemoveConsequenceResponseHandler(
         CancellationToken cancellationToken)
     {
         var id = request.Entity.Id;
-        BaseResponseCommand<Consequence> response = new();
+
+        var consequenceQry = await _uow.Consequences
+            .GetAsync(a => a.Id == id, cancellationToken);
+
+        var consequence = consequenceQry.Include(a => a.Observations)
+            .Single();
+
+        if ((consequence.Observations ?? []).Count != 0)
+        {
+            throw new InvalidOperationException(
+                "Cannot remove consequence that is associated with an observation");
+        }
+
         await _uow.Consequences.RemoveAsync(id, cancellationToken);
         var count = await _uow.SaveChangesAsync();
         if (count == 0)
@@ -22,6 +35,7 @@ public class RemoveConsequenceResponseHandler(
             throw new InvalidOperationException("Nothing saved to database");
         }
 
+        BaseResponseCommand<Consequence> response = new();
         return response;
     }
 }
