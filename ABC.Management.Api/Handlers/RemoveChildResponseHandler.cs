@@ -34,8 +34,6 @@ public class RemoveChildResponseHandler(
             throw new InvalidOperationException("Nothing saved to database");
         }
 
-        BaseResponseCommand<Child> response = new();
-
-        return response;
+        return new BaseResponseCommand<Child>();
     }
 }
