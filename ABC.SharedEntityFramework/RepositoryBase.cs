@@ -73,7 +73,7 @@ public class RepositoryBase<TContext,TEntity> : IRepository<TEntity>
 
     }
 
-    public Task<TEntity> Update(TEntity entity)
+    public Task<TEntity> Update(TEntity entity, CancellationToken cancellationToken = default)
     {
         entity.SetUpdatedAt();
 

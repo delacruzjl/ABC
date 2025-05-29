@@ -19,7 +19,7 @@ public abstract class AggregateRoot(Guid id) : Entity(id)
         Version++;
     }
 
-    public void Load(IEnumerable<IDomainEvent> history)
+    public void Load(params IEnumerable<IDomainEvent> history)
     {
         foreach (var e in history)
         {
