@@ -2,6 +2,7 @@
 using ABC.Management.Domain.Entities;
 using ABC.SharedEntityFramework;
 using Mediator;
+using Microsoft.EntityFrameworkCore;
 
 namespace ABC.Management.Api.Handlers;
 
@@ -14,7 +15,19 @@ public class RemoveBehaviorResponseHandler(
         CancellationToken cancellationToken)
     {
         var id = request.Entity.Id;
-        BaseResponseCommand<Behavior> response = new();
+
+        var behaviorQry = await _uow.Behaviors
+            .GetAsync(a => a.Id == id, cancellationToken);
+
+        var behavior = behaviorQry.Include(a => a.Observations)
+            .Single();
+
+        if ((behavior.Observations ?? []).Count != 0)
+        {
+            throw new InvalidOperationException(
+                "Cannot remove behavior that is associated with an observation");
+        }
+
         await _uow.Behaviors.RemoveAsync(id, cancellationToken);
         var count = await _uow.SaveChangesAsync();
         if (count == 0)
@@ -22,6 +35,7 @@ public class RemoveBehaviorResponseHandler(
             throw new InvalidOperationException("Nothing saved to database");
         }
 
+        BaseResponseCommand<Behavior> response = new();
         return response;
     }
 }
