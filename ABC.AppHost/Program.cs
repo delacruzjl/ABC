@@ -38,7 +38,7 @@ else
         .WaitFor(insights!);
 }
 
-builder.AddNpmApp("react", "../ABC.React")
+builder.AddNpmApp("react", "../ABC.React", "dev")
     .WithReference(managementApi)
     .WaitFor(managementApi)
     .WithEnvironment("BROWSER", "none") // Disable opening browser on npm start
