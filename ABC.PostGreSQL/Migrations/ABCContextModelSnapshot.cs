@@ -17,7 +17,7 @@ namespace ABC.PostGreSQL.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.4")
+                .HasAnnotation("ProductVersion", "10.0.1")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -26,267 +26,327 @@ namespace ABC.PostGreSQL.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("createdAt");
 
                     b.Property<string>("CreatedBy")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("createdBy");
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("description");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("name");
 
                     b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("updatedAt");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pK_antecedents");
 
-                    b.ToTable("Antecedents");
+                    b.ToTable("antecedents", (string)null);
                 });
 
             modelBuilder.Entity("ABC.Management.Domain.Entities.Behavior", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("createdAt");
 
                     b.Property<string>("CreatedBy")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("createdBy");
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("description");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("name");
 
                     b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("updatedAt");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pK_behaviors");
 
-                    b.ToTable("Behaviors");
+                    b.ToTable("behaviors", (string)null);
                 });
 
             modelBuilder.Entity("ABC.Management.Domain.Entities.Child", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
 
                     b.Property<int>("BirthYear")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("birthYear");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("createdAt");
 
                     b.Property<string>("CreatedBy")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("createdBy");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("firstName");
 
                     b.Property<string>("LastName")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("lastName");
 
                     b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("updatedAt");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pK_children");
 
-                    b.ToTable("Children");
+                    b.ToTable("children", (string)null);
                 });
 
             modelBuilder.Entity("ABC.Management.Domain.Entities.ChildCondition", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("createdAt");
 
                     b.Property<string>("CreatedBy")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("createdBy");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("name");
 
                     b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("updatedAt");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pK_childConditions");
 
-                    b.ToTable("ChildConditions");
+                    b.ToTable("childConditions", (string)null);
                 });
 
             modelBuilder.Entity("ABC.Management.Domain.Entities.Consequence", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("createdAt");
 
                     b.Property<string>("CreatedBy")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("createdBy");
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("description");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("name");
 
                     b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("updatedAt");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pK_consequences");
 
-                    b.ToTable("Consequences");
+                    b.ToTable("consequences", (string)null);
                 });
 
             modelBuilder.Entity("ABC.Management.Domain.Entities.Observation", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
 
                     b.Property<Guid?>("ChildId")
-                        .HasColumnType("uuid");
+                        .HasColumnType("uuid")
+                        .HasColumnName("childId");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("createdAt");
 
                     b.Property<string>("CreatedBy")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("createdBy");
 
                     b.Property<string>("Notes")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("notes");
 
                     b.Property<int>("Status")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("status");
 
                     b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("updatedAt");
 
                     b.Property<int>("Version")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("version");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pK_observations");
 
-                    b.HasIndex("ChildId");
+                    b.HasIndex("ChildId")
+                        .HasDatabaseName("iX_observations_childId");
 
-                    b.ToTable("Observations");
+                    b.ToTable("observations", (string)null);
                 });
 
             modelBuilder.Entity("AntecedentObservation", b =>
                 {
                     b.Property<Guid>("AntecedentsId")
-                        .HasColumnType("uuid");
+                        .HasColumnType("uuid")
+                        .HasColumnName("antecedentsId");
 
                     b.Property<Guid>("ObservationsId")
-                        .HasColumnType("uuid");
+                        .HasColumnType("uuid")
+                        .HasColumnName("observationsId");
 
-                    b.HasKey("AntecedentsId", "ObservationsId");
+                    b.HasKey("AntecedentsId", "ObservationsId")
+                        .HasName("pK_antecedentObservation");
 
-                    b.HasIndex("ObservationsId");
+                    b.HasIndex("ObservationsId")
+                        .HasDatabaseName("iX_antecedentObservation_observationsId");
 
-                    b.ToTable("AntecedentObservation");
+                    b.ToTable("antecedentObservation", (string)null);
                 });
 
             modelBuilder.Entity("BehaviorObservation", b =>
                 {
                     b.Property<Guid>("BehaviorsId")
-                        .HasColumnType("uuid");
+                        .HasColumnType("uuid")
+                        .HasColumnName("behaviorsId");
 
                     b.Property<Guid>("ObservationsId")
-                        .HasColumnType("uuid");
+                        .HasColumnType("uuid")
+                        .HasColumnName("observationsId");
 
-                    b.HasKey("BehaviorsId", "ObservationsId");
+                    b.HasKey("BehaviorsId", "ObservationsId")
+                        .HasName("pK_behaviorObservation");
 
-                    b.HasIndex("ObservationsId");
+                    b.HasIndex("ObservationsId")
+                        .HasDatabaseName("iX_behaviorObservation_observationsId");
 
-                    b.ToTable("BehaviorObservation");
+                    b.ToTable("behaviorObservation", (string)null);
                 });
 
             modelBuilder.Entity("ChildChildCondition", b =>
                 {
                     b.Property<Guid>("ConditionsId")
-                        .HasColumnType("uuid");
+                        .HasColumnType("uuid")
+                        .HasColumnName("conditionsId");
 
                     b.Property<Guid>("childrenId")
-                        .HasColumnType("uuid");
+                        .HasColumnType("uuid")
+                        .HasColumnName("childrenId");
 
-                    b.HasKey("ConditionsId", "childrenId");
+                    b.HasKey("ConditionsId", "childrenId")
+                        .HasName("pK_childChildCondition");
 
-                    b.HasIndex("childrenId");
+                    b.HasIndex("childrenId")
+                        .HasDatabaseName("iX_childChildCondition_childrenId");
 
-                    b.ToTable("ChildChildCondition");
+                    b.ToTable("childChildCondition", (string)null);
                 });
 
             modelBuilder.Entity("ConsequenceObservation", b =>
                 {
                     b.Property<Guid>("ConsequencesId")
-                        .HasColumnType("uuid");
+                        .HasColumnType("uuid")
+                        .HasColumnName("consequencesId");
 
                     b.Property<Guid>("ObservationsId")
-                        .HasColumnType("uuid");
+                        .HasColumnType("uuid")
+                        .HasColumnName("observationsId");
 
-                    b.HasKey("ConsequencesId", "ObservationsId");
+                    b.HasKey("ConsequencesId", "ObservationsId")
+                        .HasName("pK_consequenceObservation");
 
-                    b.HasIndex("ObservationsId");
+                    b.HasIndex("ObservationsId")
+                        .HasDatabaseName("iX_consequenceObservation_observationsId");
 
-                    b.ToTable("ConsequenceObservation");
+                    b.ToTable("consequenceObservation", (string)null);
                 });
 
             modelBuilder.Entity("ABC.Management.Domain.Entities.Observation", b =>
                 {
                     b.HasOne("ABC.Management.Domain.Entities.Child", "Child")
                         .WithMany("Observations")
-                        .HasForeignKey("ChildId");
+                        .HasForeignKey("ChildId")
+                        .HasConstraintName("fK_observations_children_childId");
 
                     b.OwnsOne("ABC.Management.Domain.ValueObjects.DateTimeRange", "When", b1 =>
                         {
-                            b1.Property<Guid>("ObservationId")
-                                .HasColumnType("uuid");
+                            b1.Property<Guid>("ObservationId");
 
-                            b1.Property<DateTime?>("EndedAt")
-                                .HasColumnType("timestamp with time zone");
+                            b1.Property<DateTime?>("EndedAt");
 
-                            b1.Property<DateTime>("StartedAt")
-                                .HasColumnType("timestamp with time zone");
+                            b1.Property<DateTime>("StartedAt");
 
                             b1.HasKey("ObservationId");
 
-                            b1.ToTable("Observations");
+                            b1.ToTable("observations");
 
-                            b1.ToJson("When");
+                            b1.ToJson("when");
 
                             b1.WithOwner()
-                                .HasForeignKey("ObservationId");
+                                .HasForeignKey("ObservationId")
+                                .HasConstraintName("fK_observations_observations_id");
                         });
 
                     b.Navigation("Child");
@@ -301,13 +361,15 @@ namespace ABC.PostGreSQL.Migrations
                         .WithMany()
                         .HasForeignKey("AntecedentsId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fK_antecedentObservation_antecedents_antecedentsId");
 
                     b.HasOne("ABC.Management.Domain.Entities.Observation", null)
                         .WithMany()
                         .HasForeignKey("ObservationsId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fK_antecedentObservation_observations_observationsId");
                 });
 
             modelBuilder.Entity("BehaviorObservation", b =>
@@ -316,13 +378,15 @@ namespace ABC.PostGreSQL.Migrations
                         .WithMany()
                         .HasForeignKey("BehaviorsId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fK_behaviorObservation_behaviors_behaviorsId");
 
                     b.HasOne("ABC.Management.Domain.Entities.Observation", null)
                         .WithMany()
                         .HasForeignKey("ObservationsId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fK_behaviorObservation_observations_observationsId");
                 });
 
             modelBuilder.Entity("ChildChildCondition", b =>
@@ -331,13 +395,15 @@ namespace ABC.PostGreSQL.Migrations
                         .WithMany()
                         .HasForeignKey("ConditionsId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fK_childChildCondition_childConditions_conditionsId");
 
                     b.HasOne("ABC.Management.Domain.Entities.Child", null)
                         .WithMany()
                         .HasForeignKey("childrenId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fK_childChildCondition_children_childrenId");
                 });
 
             modelBuilder.Entity("ConsequenceObservation", b =>
@@ -346,13 +412,15 @@ namespace ABC.PostGreSQL.Migrations
                         .WithMany()
                         .HasForeignKey("ConsequencesId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fK_consequenceObservation_consequences_consequencesId");
 
                     b.HasOne("ABC.Management.Domain.Entities.Observation", null)
                         .WithMany()
                         .HasForeignKey("ObservationsId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fK_consequenceObservation_observations_observationsId");
                 });
 
             modelBuilder.Entity("ABC.Management.Domain.Entities.Child", b =>

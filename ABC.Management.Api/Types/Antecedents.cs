@@ -4,6 +4,7 @@ using ABC.Management.Domain.Entities;
 using ABC.SharedEntityFramework;
 using HotChocolate.Resolvers;
 using Mediator;
+using System.Diagnostics.CodeAnalysis;
 
 namespace ABC.Management.Api.Types;
 
@@ -14,7 +15,7 @@ public class Antecedents
     public static async Task<Antecedent?> CreateAntecedentAsync(
        IMediator handler,
        string name,
-       string description,
+       [StringSyntax(StringSyntaxAttribute.CompositeFormat)] string description,
        IResolverContext context,
        CancellationToken cancellationToken)
     {

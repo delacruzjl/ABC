@@ -21,7 +21,7 @@ public static class DependencyInjection
         var connectionName = builder.Configuration["databaseName"];
         services.AddDbContextFactory<ABCContext>(options =>
             options.UseNpgsql(builder.Configuration.GetConnectionString(connectionName!), npgsql =>
-            npgsql.MigrationsAssembly("ABC.PostGreSQL")));
+            npgsql.MigrationsAssembly("ABC.PostGreSQL")).UseCamelCaseNamingConvention());
         builder.EnrichNpgsqlDbContext<ABCContext>();
 
         services.AddScoped<IUnitOfWork, UnitOfWork>();
