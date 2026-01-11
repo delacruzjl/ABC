@@ -1,5 +1,6 @@
 ﻿using ABC.Management.Domain.Entities;
 using Mediator;
+using System.Diagnostics.CodeAnalysis;
 
 namespace ABC.Management.Api.Commands;
 
@@ -20,7 +21,7 @@ public record class UpdateObservationCommand(
     List<Guid>? Antecedents,
     List<Guid>? Behaviors,
     List<Guid>? Consequences,
-    string? Notes)
+    [StringSyntax(StringSyntaxAttribute.CompositeFormat)] string? Notes)
     : IRequest<BaseResponseCommand<Observation>>
 {
 }
