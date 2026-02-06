@@ -1,3 +1,4 @@
+using System.Linq.Expressions;
 using ABC.Management.Api.Commands;
 using ABC.Management.Api.Decorators;
 using ABC.Management.Api.Handlers;
@@ -34,9 +35,18 @@ public class RemoveAntecedentStepDefinitions
         _antecedentId = Guid.TryParse(antecedentId, out var id) ? id : null;
 
     [Given("the antecedent with that Id exists in the database")]
-    public void GivenTheAntecedentWithThatIdExistsInTheDatabase() =>
+    public void GivenTheAntecedentWithThatIdExistsInTheDatabase()
+    {
+        A.CallTo(() => _uowFake.Antecedents.GetAsync(
+            A<Expression<Func<Antecedent, bool>>>.Ignored, A<CancellationToken>.Ignored))
+        .Returns(new[]
+        {
+            new Antecedent(_antecedentId!.Value)
+        }.AsQueryable());
+
         A.CallTo(() => _uowFake.SaveChangesAsync())
             .Returns(1);
+    }
 
     [When("I send a request to Antecedent mutation for removal")]
     public async Task WhenISendARequestToAntecedentMutationForRemoval()
@@ -48,26 +58,35 @@ public class RemoveAntecedentStepDefinitions
             command!,
             async (cmd, ct) => await _sut.Handle(cmd, ct),
             CancellationToken.None);
+    }
+
+    [Then("handler should happened")]
+    public void ThenHandlerShouldHappened()
+    {
 
         A.CallTo(() => _uowFake.Antecedents
             .RemoveAsync(A<Guid>.Ignored, A<CancellationToken>.Ignored))
             .MustHaveHappenedOnceExactly();
-    }
 
-    [Then("handler should return true")]
-    public void ThenHandlerShouldReturnTrue() =>
         _actual?.Errors.ShouldBeEmpty();
+    }
 
     [Then("Antecedent response should contain {int} error objects in array")]
     public void ThenAntecedentResponseShouldContainErrorObjectsInArray(int errorCount) =>
         _actual?.Errors.Count.ShouldBe(errorCount);
 
     [Given("the antecedent with that Id does not exist in the database")]
-    public void GivenTheAntecedentWithThatIdDoesNotExistInTheDatabase() =>
+    public void GivenTheAntecedentWithThatIdDoesNotExistInTheDatabase()
+    {
+        A.CallTo(() => _uowFake.Antecedents.GetAsync(
+            A<Expression<Func<Antecedent, bool>>>.Ignored, A<CancellationToken>.Ignored))
+        .Returns(Array.Empty<Antecedent>().AsQueryable());
+
         A.CallTo(() => _uowFake.SaveChangesAsync())
             .Returns(0);
+    }
 
-    [Then("handler should return false")]
-    public void ThenHandlerShouldReturnFalse() =>
+    [Then("handler should NOT have happened")]
+    public void ThenHandlerShouldNotHaveHappened() =>
         _actual?.Errors.ShouldNotBeEmpty();
 }
