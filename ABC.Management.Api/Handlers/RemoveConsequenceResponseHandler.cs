@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 namespace ABC.Management.Api.Handlers;
 
 public class RemoveConsequenceResponseHandler(
-    IUnitOfWork _uow) 
+    IUnitOfWork _uow)
     : IRequestHandler<RemoveConsequenceResponseCommand, BaseResponseCommand<Consequence>>
 {
     public async ValueTask<BaseResponseCommand<Consequence>> Handle(

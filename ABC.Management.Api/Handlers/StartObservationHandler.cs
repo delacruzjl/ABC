@@ -34,10 +34,10 @@ public class StartObservationHandler(IUnitOfWork _uow)
             new ObservationStarted(observation.Id, child?.Id, DateTime.UtcNow));
 
         await _uow.Observations.AddAsync(observation, cancellationToken);
-        
+
         BaseResponseCommand<Observation> response = new(observation);
         var count = await _uow.SaveChangesAsync();
-        
+
         if (count == 0)
         {
             throw new InvalidOperationException("Nothing saved to database");

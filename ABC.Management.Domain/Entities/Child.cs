@@ -2,6 +2,7 @@
 using System.Collections;
 
 namespace ABC.Management.Domain.Entities;
+
 public class Child(
     Guid id,
     string lastName,
@@ -23,7 +24,7 @@ public class Child(
     string lastName,
     string firstName,
     int birthYear,
-    params List<ChildCondition> childConditions) 
+    params List<ChildCondition> childConditions)
         : this(
               id,
               lastName,
@@ -33,7 +34,7 @@ public class Child(
               [])
     { }
 
-    public Child(Guid id) 
+    public Child(Guid id)
         : this(
               id,
               string.Empty,
@@ -61,7 +62,7 @@ public class Child(
             results[condition] = exists;
         }
 
-        if (!results.ContainsValue(null)) 
+        if (!results.ContainsValue(null))
         {
             _childConditions.AddRange(results.Values.OfType<ChildCondition>());
             return;

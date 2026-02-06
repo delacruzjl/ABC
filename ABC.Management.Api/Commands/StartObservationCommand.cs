@@ -7,7 +7,7 @@ namespace ABC.Management.Api.Commands;
 public record StartObservationCommand(Guid ChildId)
     : IRequest<BaseResponseCommand<Observation>>
 {
-    
+
 }
 
 public record EndObservationCommand(Guid ObservationId)

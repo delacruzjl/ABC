@@ -10,7 +10,7 @@ public record DateTimeRange
     public DateTimeRange()
         : this(DateTime.UtcNow, null)
     {
-        
+
     }
 
     public DateTimeRange(DateTime startedAt, DateTime? endedAt)
@@ -46,10 +46,10 @@ public record DateTimeRange
         if (endedAt < startedAt)
         {
             throw new ValidationException(
-                "Invalid date and time range", 
+                "Invalid date and time range",
                 [
                     new ValidationFailure(
-                        nameof(EndedAt), 
+                        nameof(EndedAt),
                         "Ending cannot be greater than started date")
                 ]);
         }

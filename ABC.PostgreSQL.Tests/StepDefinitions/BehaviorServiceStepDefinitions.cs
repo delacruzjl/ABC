@@ -15,7 +15,7 @@ namespace ABC.PostgreSQL.Tests.StepDefinitions;
 [Binding]
 public class BehaviorServiceStepDefinitions
 {
-    
+
 
     private Behavior _actual;
     private string _behaviorName;
@@ -44,7 +44,7 @@ public class BehaviorServiceStepDefinitions
                 Guid.NewGuid(),
                 $"behavior{i}",
                 _lorem.Sentence()))
-            .ToList();        
+            .ToList();
 
         await _uow.Behaviors.AddRangeAsync(behaviors);
         await _uow.SaveChangesAsync();

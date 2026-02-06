@@ -16,10 +16,10 @@ public class UpdateObservationHandler(IUnitOfWork _uow)
     {
         var observation = await _uow.Observations
             .FindAsync(request.ObservationId, cancellationToken);
-        
+
         var antecedents = await AttachEntities<Antecedent>(
             request.Antecedents,
-            observation, 
+            observation,
             cancellationToken);
 
         var behaviors = await AttachEntities<Behavior>(
@@ -52,14 +52,14 @@ public class UpdateObservationHandler(IUnitOfWork _uow)
     }
 
     private async Task<TEntity[]> AttachEntities<TEntity>(
-        IEnumerable<Guid>? entityIds, 
+        IEnumerable<Guid>? entityIds,
         Observation observation,
         CancellationToken cancellationToken) where TEntity : Entity
     {
-        
+
         if (entityIds is null || !entityIds.Any())
         {
-            return [];  
+            return [];
         }
 
         switch (typeof(TEntity).Name)
@@ -78,7 +78,7 @@ public class UpdateObservationHandler(IUnitOfWork _uow)
                 return await Task.WhenAll(bTasks);
             case nameof(Consequence):
                 var cTask = entityIds
-                       .Select(async entity => 
+                       .Select(async entity =>
                             (TEntity)(object)(await _uow.Consequences.FindAsync(entity, cancellationToken)))
                        .Where(a => a is not null);
                 return await Task.WhenAll(cTask);

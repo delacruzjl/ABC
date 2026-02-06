@@ -20,12 +20,12 @@ public class Antecedent(
     }
 
     public Antecedent(Guid id)
-        :this(id, string.Empty, string.Empty)
+        : this(id, string.Empty, string.Empty)
     {
-        
+
     }
 
-    public Antecedent() 
+    public Antecedent()
         : this(Guid.NewGuid())
     {
 

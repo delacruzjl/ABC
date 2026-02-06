@@ -112,7 +112,7 @@ public class CreateChildStepDefinitions
 
     [Given("condition from the list is not found")]
     public void GivenConditionFromTheListIsNotFound() =>
-        A.CallTo(() => 
+        A.CallTo(() =>
             _uowFake.ChildConditions.GetAsync(A<Expression<Func<ChildCondition, bool>>>.Ignored, A<CancellationToken>.Ignored))
             .Returns(Task.FromResult((IQueryable<ChildCondition>)null!));
 

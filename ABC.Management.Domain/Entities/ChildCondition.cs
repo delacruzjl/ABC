@@ -3,13 +3,13 @@
 public class ChildCondition(
     Guid id,
     string name,
-    List<Child> children) 
+    List<Child> children)
     : Entity(id)
 {
     public string Name { get; init; } = name;
     public ICollection<Child> children { get; init; } = children;
 
-    public ChildCondition(Guid id, string name) 
+    public ChildCondition(Guid id, string name)
         : this(id, name, [])
     {
 

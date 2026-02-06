@@ -34,7 +34,7 @@ public class EndObservationHandler(IUnitOfWork _uow)
         observation.Load(
             new ObservationEnded(observation.Id, DateTime.UtcNow));
 
-        
+
         observation = await _uow.Observations.Update(observation, cancellationToken);
         var count = await _uow.SaveChangesAsync();
 

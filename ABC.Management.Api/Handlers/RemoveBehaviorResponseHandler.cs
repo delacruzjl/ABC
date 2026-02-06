@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 namespace ABC.Management.Api.Handlers;
 
 public class RemoveBehaviorResponseHandler(
-    IUnitOfWork _uow) 
+    IUnitOfWork _uow)
     : IRequestHandler<RemoveBehaviorResponseCommand, BaseResponseCommand<Behavior>>
 {
     public async ValueTask<BaseResponseCommand<Behavior>> Handle(

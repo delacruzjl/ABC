@@ -6,7 +6,7 @@ using Reqnroll;
 namespace ABC.Management.Api.Tests.StepDefinitions
 {
     [Binding]
-    public class QueryStepDefinitions 
+    public class QueryStepDefinitions
     {
         private readonly IUnitOfWork _uowFake;
         public QueryStepDefinitions(StartupFixture fixture) =>

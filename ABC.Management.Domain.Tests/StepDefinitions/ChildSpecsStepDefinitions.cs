@@ -22,7 +22,7 @@ public class ChildSpecsStepDefinitions : IClassFixture<StartupFixture>
         _child = new();
 
     [Given("Last Name is empty")]
-    public void GivenLastNameIsEmpty() => 
+    public void GivenLastNameIsEmpty() =>
         _child = new(Guid.NewGuid(), null!, "Fake Last", 13, []);
 
     [When("Validating child")]

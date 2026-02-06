@@ -17,5 +17,5 @@ public class RemoveBehaviorHandlerDecorator(
             message,
             next,
             cancellationToken);
-    
+
 }

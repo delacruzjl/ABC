@@ -8,7 +8,7 @@ public class AntecedentValidator : AbstractValidator<Antecedent>
     {
         RuleFor(x => x.Name).NotEmpty();
         RuleFor(x => x.Description).NotEmpty();
-        
+
         _antecedentService = antecedentService;
         RuleFor(x => x).MustAsync(InvalidateIfNameAlreadyExists)
             .WithMessage("An entity with this name already exists")

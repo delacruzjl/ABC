@@ -66,7 +66,7 @@ public class CreateConsequenceStepDefinitions
 
             _actual.Add(response);
         }
-    }         
+    }
 
     [Then("the consequence should call the handler the same amount of times as the data I sent")]
     public void ThenTheConsequenceShouldCallTheHandlerTheSameAmountOfTimesAsTheDataISent() =>

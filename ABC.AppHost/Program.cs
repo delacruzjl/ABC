@@ -31,7 +31,7 @@ if (useAzurePostgres)
 
     var insights = builder.AddAzureApplicationInsights("insights");
 
-    managementApi = managementApi        
+    managementApi = managementApi
         .WithReference(dbFlex)
         .WaitFor(dbFlex)
         .WithReference(insights!)
