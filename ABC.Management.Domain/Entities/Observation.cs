@@ -14,7 +14,7 @@ public class Observation : AggregateRoot
     public ICollection<Behavior> Behaviors { get; set; } = [];
     public ICollection<Consequence> Consequences { get; set; } = [];
 
-    public Child? Child { get; private set; } 
+    public Child? Child { get; private set; }
     public string Notes { get; private set; }
     public DateTimeRange When { get; private set; } = new();
     public ObservationStatus Status { get; private set; }
@@ -77,12 +77,12 @@ public class Observation : AggregateRoot
                 break;
             case NotesUpdated e:
                 ValidateObservationStatus();
-                Notes= e.Notes;
+                Notes = e.Notes;
                 break;
             case ObservationEnded e:
                 ValidateObservationStatus();
-                if ((Antecedents).Count == 0 
-                    || (Behaviors).Count == 0 
+                if ((Antecedents).Count == 0
+                    || (Behaviors).Count == 0
                     || (Consequences).Count == 0)
                 {
                     throw new ValidationException(

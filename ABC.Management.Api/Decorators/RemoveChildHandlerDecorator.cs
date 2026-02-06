@@ -17,5 +17,5 @@ public class RemoveConsequenceHandlerDecorator(
             message,
             next,
             cancellationToken);
-    
+
 }

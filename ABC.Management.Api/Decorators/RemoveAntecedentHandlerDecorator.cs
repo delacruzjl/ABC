@@ -17,6 +17,6 @@ public class RemoveAntecedentHandlerDecorator(
             message,
             next,
             cancellationToken);
-    
+
 }
 

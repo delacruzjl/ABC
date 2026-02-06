@@ -30,7 +30,7 @@ internal class Program
                 typeof(CreateChildHandlerDecorator),
                 typeof(RemoveAntecedentHandlerDecorator),
                 typeof(RemoveBehaviorHandlerDecorator),
-                typeof(RemoveConsequenceHandlerDecorator), 
+                typeof(RemoveConsequenceHandlerDecorator),
                 typeof(RemoveChildHandlerDecorator),
                 typeof(CreateChildConditionHandlerDecorator),
                 typeof(RemoveChildConditionHandlerDecorator),
@@ -64,7 +64,7 @@ internal class Program
         IServiceProvider serviceProvider)
     {
         using var scope = serviceProvider.CreateScope();
-        
+
         var context = scope.ServiceProvider.GetRequiredService<ABCContext>();
         var strategy = context.Database.CreateExecutionStrategy();
         await strategy.ExecuteAsync(async () =>

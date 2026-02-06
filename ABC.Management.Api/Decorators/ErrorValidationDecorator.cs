@@ -37,7 +37,7 @@ public class ErrorValidationDecorator
         MessageHandlerDelegate<TCommand, BaseResponseCommand<TEntity>> inner,
         CancellationToken cancellationToken = default)
         where TCommand : notnull, IMessage
-        where  TEntity : Entity
+        where TEntity : Entity
     {
         BaseResponseCommand<TEntity> response = new();
         try

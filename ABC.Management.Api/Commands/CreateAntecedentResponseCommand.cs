@@ -4,8 +4,9 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace ABC.Management.Api.Commands;
 
-public record CreateAntecedentResponseCommand(Antecedent Value) 
-    : IRequest<BaseResponseCommand<Antecedent>> {
+public record CreateAntecedentResponseCommand(Antecedent Value)
+    : IRequest<BaseResponseCommand<Antecedent>>
+{
 
     public static CreateAntecedentResponseCommand Create(
         string name,

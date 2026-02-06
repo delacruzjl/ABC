@@ -52,7 +52,7 @@ public class CreateBehaviorStepDefinitions
     [When("I send a request to behavior mutation")]
     public async Task WhenISendAPOSTRequestToBehaviorMutation()
     {
-        foreach(var r in _requestFakes)
+        foreach (var r in _requestFakes)
         {
             var response = await _decorator.Handle(
                 r,
@@ -86,7 +86,7 @@ public class CreateBehaviorStepDefinitions
 
     [Then(@"behavior response should contain (\d+) error objects in array")]
     public void ThenThereShouldBeNoErrors(int errorCount) =>
-        _actual.ShouldAllBe(x => x.Errors.Count == errorCount, 
+        _actual.ShouldAllBe(x => x.Errors.Count == errorCount,
             string.Join(", ", _actual.SelectMany(e => e.Errors).Select(e => e.Message)));
 
 

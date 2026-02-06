@@ -21,8 +21,8 @@ public class StartupFixture : IAsyncLifetime
 
     private static IEntityService<T> CreateServiceFake<T>() where T : Entity =>
         A.Fake<IEntityService<T>>();
-    
-    public Task DisposeAsync()=>
+
+    public Task DisposeAsync() =>
         Task.CompletedTask;
 
     public Task InitializeAsync() =>

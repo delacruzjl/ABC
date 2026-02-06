@@ -20,6 +20,6 @@ public class CreateConsequenceHandlerDecorator(
             message,
             next,
             cancellationToken);
-    
+
 }
 

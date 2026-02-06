@@ -25,7 +25,7 @@ namespace ABC.PostGreSQL
         public IRepository<ChildCondition> ChildConditions =>
             MakeRepository<ChildCondition>();
 
-        public IRepository<Observation> Observations => 
+        public IRepository<Observation> Observations =>
             MakeRepository<Observation>();
 
         public async Task<int> SaveChangesAsync()

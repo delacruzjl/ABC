@@ -14,12 +14,12 @@ public class CreateBehaviorHandlerDecorator(
         CreateBehaviorResponseCommand message,
         MessageHandlerDelegate<CreateBehaviorResponseCommand, BaseResponseCommand<Behavior>> next,
         CancellationToken cancellationToken) =>
-    
+
         await ErrorValidationDecorator.Handle(
             _validator,
             _logger,
             message,
             next,
             cancellationToken);
-    
+
 }

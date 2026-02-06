@@ -7,7 +7,7 @@ public abstract class AggregateRoot(Guid id) : Entity(id)
 
     //public virtual IReadOnlyList<IDomainEvent> GetChanges()=>
     //    changes.AsReadOnly();
-    
+
     public void ClearChanges()
     {
         _changes.Clear();

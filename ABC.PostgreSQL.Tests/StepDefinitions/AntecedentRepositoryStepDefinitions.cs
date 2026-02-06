@@ -12,7 +12,7 @@ using ABC.SharedEntityFramework;
 namespace ABC.PostgreSQL.Tests.StepDefinitions;
 
 [Binding]
-public class AntecedentRepositoryStepDefinitions 
+public class AntecedentRepositoryStepDefinitions
 {
     private readonly IUnitOfWork _uowFake;
     private IUnitOfWork _uow;
@@ -107,7 +107,7 @@ public class AntecedentRepositoryStepDefinitions
     [Then("I should receive an exception indicating antecedents not found")]
     public void ThenIShouldReceiveAnExceptionIndicatingAntecedentsNotFound()
     {
-        Func<Task> act =async  () => await _uow.Antecedents.FindAsync(_antecedentId);
+        Func<Task> act = async () => await _uow.Antecedents.FindAsync(_antecedentId);
         act.ShouldThrowAsync<DataException>();
     }
 
@@ -138,7 +138,7 @@ public class AntecedentRepositoryStepDefinitions
     {
         var antecedents = await _uow.Antecedents
             .GetAsync(a => a.Name == _antecedentName);
-            
+
         antecedents.SingleOrDefault().ShouldNotBeNull();
     }
 

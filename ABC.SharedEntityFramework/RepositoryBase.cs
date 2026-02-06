@@ -4,7 +4,8 @@ using System.Data;
 using System.Linq.Expressions;
 
 namespace ABC.SharedEntityFramework;
-public class RepositoryBase<TContext,TEntity> : IRepository<TEntity> 
+
+public class RepositoryBase<TContext, TEntity> : IRepository<TEntity>
     where TEntity : Entity
     where TContext : DbContext
 {
@@ -24,9 +25,9 @@ public class RepositoryBase<TContext,TEntity> : IRepository<TEntity>
         Guid id,
         CancellationToken cancellationToken = default)
     {
-        var entity = await _dbSet.FindAsync(id, cancellationToken) 
+        var entity = await _dbSet.FindAsync(id, cancellationToken)
             ?? throw new DataException($"{typeof(TEntity).Name} with Id: {id} not found.");
-        
+
         _dbContext.Entry(entity).State = EntityState.Unchanged;
 
         return entity;
@@ -69,7 +70,7 @@ public class RepositoryBase<TContext,TEntity> : IRepository<TEntity>
         }
 
         _dbSet.Attach(entity);
-        _dbSet.Remove(entity);    
+        _dbSet.Remove(entity);
 
     }
 

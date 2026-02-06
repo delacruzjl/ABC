@@ -17,5 +17,5 @@ public class RemoveChildHandlerDecorator(
             message,
             next,
             cancellationToken);
-    
+
 }

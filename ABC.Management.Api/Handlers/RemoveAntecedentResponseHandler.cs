@@ -27,7 +27,7 @@ public class RemoveAntecedentHandler(
                 "Cannot remove antecedent that is associated with an observation");
         }
 
-        await _uow.Antecedents.RemoveAsync(id, cancellationToken);        
+        await _uow.Antecedents.RemoveAsync(id, cancellationToken);
         var count = await _uow.SaveChangesAsync();
 
         if (count == 0)

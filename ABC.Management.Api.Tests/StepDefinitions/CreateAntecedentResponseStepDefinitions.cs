@@ -29,9 +29,9 @@ public class CreateAntecedentResponseStepDefinitions
         var validator = fixture.Services.GetRequiredService<IValidator<Antecedent>>();
         var logger = fixture.Services.GetRequiredService<ILogger<ErrorValidationDecorator>>();
         _antecedentService = fixture.Services.GetRequiredService<IEntityService<Antecedent>>();
-        
+
         _sut = new(_uowFake);
-        _decorator = new(validator, logger);            
+        _decorator = new(validator, logger);
     }
 
     [Given("An antecedent object with an empty name and description")]
@@ -53,8 +53,8 @@ public class CreateAntecedentResponseStepDefinitions
             CancellationToken.None);
 
     [Then("response should contain {int} error objects in array")]
-    public void ThenResponseShouldContainErrorObjectsInArray(int expected)=>
-        _actual?.Errors.Count.ShouldBe(expected, 
+    public void ThenResponseShouldContainErrorObjectsInArray(int expected) =>
+        _actual?.Errors.Count.ShouldBe(expected,
             string.Join(", ", _actual?.Errors.Select(e => e.Message) ?? []));
 
     [Given("an antecedent object with name: (\\w+) and description: (\\w+)")]
