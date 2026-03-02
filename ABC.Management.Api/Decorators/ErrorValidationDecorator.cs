@@ -15,12 +15,16 @@ public class ErrorValidationDecorator
         where TCommand : notnull, IMessage
         where TEntity : Entity
     {
+        _logger.LogTrace("Handling {CommandName} with {HandlerName}", typeof(TCommand).Name, nameof(ErrorValidationDecorator));
+
         BaseResponseCommand<TEntity> response = new();
 
         try
         {
             response = await inner
                 .Invoke(message, cancellationToken);
+
+            _logger.LogTrace("Handled {CommandName} with {HandlerName}", typeof(TCommand).Name, nameof(ErrorValidationDecorator));
         }
         catch (Exception ex)
         {
@@ -39,6 +43,8 @@ public class ErrorValidationDecorator
         where TCommand : notnull, IMessage
         where TEntity : Entity
     {
+        _logger.LogTrace("Handling {CommandName} with {HandlerName}", typeof(TCommand).Name, nameof(ErrorValidationDecorator));
+
         BaseResponseCommand<TEntity> response = new();
         try
         {
@@ -52,6 +58,8 @@ public class ErrorValidationDecorator
 
             response = await inner
                 .Invoke(message, cancellationToken);
+            
+            _logger.LogTrace("Handled {CommandName} with {HandlerName}", typeof(TCommand).Name, nameof(ErrorValidationDecorator));
         }
         catch (ValidationException ex)
         {

@@ -13,7 +13,8 @@ builder.Services.AddFeatureManagement();
 
 IResourceBuilder<ProjectResource> managementApi = builder
         .AddProject<Projects.ABC_Management_Api>("abcmanagementapi")
-        .WithEnvironment(dbNameKey, databaseNameParameter);
+        .WithEnvironment(dbNameKey, databaseNameParameter)
+        .WithHttpsEndpoint();
 
 var featureManager = builder.Services.BuildServiceProvider().GetRequiredService<IFeatureManager>();
 

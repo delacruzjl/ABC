@@ -14,13 +14,18 @@ public class CreateAntecedentHandlerDecorator(
     public async ValueTask<BaseResponseCommand<Antecedent>> Handle(
         CreateAntecedentResponseCommand message,
         MessageHandlerDelegate<CreateAntecedentResponseCommand, BaseResponseCommand<Antecedent>> next,
-        CancellationToken cancellationToken) =>
+        CancellationToken cancellationToken)
+    {
 
-         await ErrorValidationDecorator.Handle(
+        _logger.LogTrace(
+            "Handling {CommandName} with {HandlerName}",
+            nameof(CreateAntecedentResponseCommand), nameof(CreateAntecedentHandlerDecorator));
+
+        return await ErrorValidationDecorator.Handle(
             _antecedentValidator,
             _logger,
             message,
             next,
             cancellationToken);
-
+    }
 }

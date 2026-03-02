@@ -13,13 +13,18 @@ public class CreateConsequenceHandlerDecorator(
     public async ValueTask<BaseResponseCommand<Consequence>> Handle(
         CreateConsequenceResponseCommand message,
         MessageHandlerDelegate<CreateConsequenceResponseCommand, BaseResponseCommand<Consequence>> next,
-        CancellationToken cancellationToken) =>
-    await ErrorValidationDecorator.Handle(
-            _validator,
-            _logger,
-            message,
-            next,
-            cancellationToken);
+        CancellationToken cancellationToken)
+    {
+        {
+            _logger.LogTrace("Handling {CommandName} with {HandlerName}", nameof(CreateConsequenceResponseCommand),
+                nameof(CreateConsequenceHandlerDecorator));
 
+            return await ErrorValidationDecorator.Handle(
+                _validator,
+                _logger,
+                message,
+                next,
+                cancellationToken);
+        }
+    }
 }
-
