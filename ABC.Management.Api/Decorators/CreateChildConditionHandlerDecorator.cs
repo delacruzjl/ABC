@@ -13,14 +13,18 @@ public class CreateChildConditionHandlerDecorator(
     public async ValueTask<BaseResponseCommand<ChildCondition>> Handle(
         CreateChildConditionResponseCommand message,
         MessageHandlerDelegate<CreateChildConditionResponseCommand, BaseResponseCommand<ChildCondition>> next,
-        CancellationToken cancellationToken) =>
+        CancellationToken cancellationToken)
+    {
 
-         await ErrorValidationDecorator.Handle(
+        _logger.LogTrace("Handling {CommandName} with {HandlerName}", nameof(CreateChildConditionResponseCommand),
+            nameof(CreateChildConditionHandlerDecorator));
+
+        return await ErrorValidationDecorator.Handle(
             _validator,
             _logger,
             message,
             next,
             cancellationToken);
 
+    }
 }
-

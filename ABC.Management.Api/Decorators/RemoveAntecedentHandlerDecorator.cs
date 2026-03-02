@@ -11,12 +11,17 @@ public class RemoveAntecedentHandlerDecorator(
     public async ValueTask<BaseResponseCommand<Antecedent>> Handle(
         RemoveAntecedentResponseCommand message,
         MessageHandlerDelegate<RemoveAntecedentResponseCommand, BaseResponseCommand<Antecedent>> next,
-        CancellationToken cancellationToken) =>
-     await ErrorValidationDecorator.Handle(
+        CancellationToken cancellationToken)
+    {
+
+        _logger.LogTrace("Handling {CommandName} with {HandlerName}", nameof(RemoveAntecedentResponseCommand),
+            nameof(RemoveAntecedentHandlerDecorator));
+
+        return await ErrorValidationDecorator.Handle(
             _logger,
             message,
             next,
             cancellationToken);
-
+    }
 }
 

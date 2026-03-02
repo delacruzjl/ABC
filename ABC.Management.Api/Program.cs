@@ -53,8 +53,15 @@ internal class Program
         {
             await ApplyMigrationsAsync(app.Services);
         }
+        else
+        {
+            app.UseHsts();
+        }
+
+        app.UseHttpsRedirection();
 
         // Configure the HTTP request pipeline.
+        app.MapDefaultEndpoints();
         app.MapGraphQL();
 
         app.RunWithGraphQLCommands(args);

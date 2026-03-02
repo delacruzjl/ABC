@@ -11,11 +11,16 @@ public class RemoveBehaviorHandlerDecorator(
     public async ValueTask<BaseResponseCommand<Behavior>> Handle(
         RemoveBehaviorResponseCommand message,
         MessageHandlerDelegate<RemoveBehaviorResponseCommand, BaseResponseCommand<Behavior>> next,
-        CancellationToken cancellationToken) =>
-        await ErrorValidationDecorator.Handle(
+        CancellationToken cancellationToken)
+    {
+
+        _logger.LogTrace("Handling {CommandName} with {HandlerName}", nameof(RemoveBehaviorResponseCommand),
+            nameof(RemoveBehaviorHandlerDecorator));
+
+        return await ErrorValidationDecorator.Handle(
             _logger,
             message,
             next,
             cancellationToken);
-
+    }
 }

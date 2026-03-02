@@ -15,6 +15,7 @@ public class CreateChildHandlerDecorator(
         MessageHandlerDelegate<CreateChildResponseCommand, BaseResponseCommand<Child>> next,
         CancellationToken cancellationToken)
     {
+        _logger.LogTrace("Handling {CommandName} with {HandlerName}", nameof(CreateChildResponseCommand), nameof(CreateChildHandlerDecorator));
         return await ErrorValidationDecorator.Handle(
             _validator,
             _logger,

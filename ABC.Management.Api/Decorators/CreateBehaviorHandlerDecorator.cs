@@ -13,13 +13,17 @@ public class CreateBehaviorHandlerDecorator(
     public async ValueTask<BaseResponseCommand<Behavior>> Handle(
         CreateBehaviorResponseCommand message,
         MessageHandlerDelegate<CreateBehaviorResponseCommand, BaseResponseCommand<Behavior>> next,
-        CancellationToken cancellationToken) =>
+        CancellationToken cancellationToken)
+    {
 
-        await ErrorValidationDecorator.Handle(
+        _logger.LogTrace("Handling {CommandName} with {HandlerName}", nameof(CreateBehaviorResponseCommand),
+            nameof(CreateBehaviorHandlerDecorator));
+
+        return await ErrorValidationDecorator.Handle(
             _validator,
             _logger,
             message,
             next,
             cancellationToken);
-
+    }
 }
