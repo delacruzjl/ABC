@@ -3,7 +3,7 @@ import type { Behavior } from "../types/behavior"
 
 interface Props {
   behavior: Behavior | null | undefined
-  onSave: (beh: Behavior) => void
+  onSave: (beh: Behavior) => Promise<void> | void
   onCancel: () => void
   saving?: boolean
 }
@@ -18,6 +18,7 @@ export const BehaviorManager: React.FC<Props> = ({
     name: "",
     description: "",
   })
+  const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
     if (behavior) {
@@ -33,8 +34,9 @@ export const BehaviorManager: React.FC<Props> = ({
     setForm({ ...form, [e.target.name]: e.target.value })
   }
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!form.name || saving) return
+    setError(null)
     const beh: Behavior = {
       ...(behavior || {}),
       id: behavior?.id || "",
@@ -42,7 +44,11 @@ export const BehaviorManager: React.FC<Props> = ({
       description: form.description || "",
       observations: behavior?.observations || [],
     }
-    onSave(beh)
+    try {
+      await onSave(beh)
+    } catch (err: any) {
+      setError(err?.message ?? "An unexpected error occurred.")
+    }
   }
 
   return (
@@ -50,6 +56,11 @@ export const BehaviorManager: React.FC<Props> = ({
       <h2 className="text-xl font-bold mb-4 text-cyan-400">
         {behavior ? "Edit Behavior" : "Add Behavior"}
       </h2>
+      {error && (
+        <div className="bg-red-900/50 border border-red-700 rounded-lg p-3 mb-4">
+          <p className="text-red-300 text-sm">{error}</p>
+        </div>
+      )}
       <div className="mb-4 flex flex-col gap-2">
         <input
           name="name"

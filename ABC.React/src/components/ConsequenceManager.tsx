@@ -3,7 +3,7 @@ import type { Consequence } from "../types/consequence"
 
 interface Props {
   consequence: Consequence | null | undefined
-  onSave: (cons: Consequence) => void
+  onSave: (cons: Consequence) => Promise<void> | void
   onCancel: () => void
   saving?: boolean
 }
@@ -18,6 +18,7 @@ export const ConsequenceManager: React.FC<Props> = ({
     name: "",
     description: "",
   })
+  const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
     if (consequence) {
@@ -33,8 +34,9 @@ export const ConsequenceManager: React.FC<Props> = ({
     setForm({ ...form, [e.target.name]: e.target.value })
   }
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!form.name || saving) return
+    setError(null)
     const cons: Consequence = {
       ...(consequence || {}),
       id: consequence?.id || "",
@@ -42,7 +44,11 @@ export const ConsequenceManager: React.FC<Props> = ({
       description: form.description || "",
       observations: consequence?.observations || [],
     }
-    onSave(cons)
+    try {
+      await onSave(cons)
+    } catch (err: any) {
+      setError(err?.message ?? "An unexpected error occurred.")
+    }
   }
 
   return (
@@ -50,6 +56,11 @@ export const ConsequenceManager: React.FC<Props> = ({
       <h2 className="text-xl font-bold mb-4 text-cyan-400">
         {consequence ? "Edit Consequence" : "Add Consequence"}
       </h2>
+      {error && (
+        <div className="bg-red-900/50 border border-red-700 rounded-lg p-3 mb-4">
+          <p className="text-red-300 text-sm">{error}</p>
+        </div>
+      )}
       <div className="mb-4 flex flex-col gap-2">
         <input
           name="name"
