@@ -2,6 +2,7 @@
 using ABC.Management.Api.Extensions;
 using ABC.Management.Domain.Entities;
 using ABC.SharedEntityFramework;
+using HotChocolate.Authorization;
 using HotChocolate.Resolvers;
 using Mediator;
 using System.Diagnostics.CodeAnalysis;
@@ -11,6 +12,7 @@ namespace ABC.Management.Api.Types;
 public class Antecedents
 {
     [Mutation]
+    [Authorize(Roles = ["Admin"])]
     [GraphQLDescription("Add a new antecedent")]
     public static async Task<Antecedent?> CreateAntecedentAsync(
        IMediator handler,
@@ -24,6 +26,7 @@ public class Antecedents
     }
 
     [Mutation]
+    [Authorize(Roles = ["Admin"])]
     [GraphQLDescription("Remove an antecedent")]
     public static async Task<bool> RemoveAntecedent(
         IMediator handler,
@@ -37,6 +40,7 @@ public class Antecedents
     }
 
     [Query]
+    [Authorize]
     [UsePaging]
     [UseProjection]
     [UseFiltering]

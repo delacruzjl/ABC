@@ -2,6 +2,7 @@
 using ABC.Management.Api.Extensions;
 using ABC.Management.Domain.Entities;
 using ABC.SharedEntityFramework;
+using HotChocolate.Authorization;
 using HotChocolate.Resolvers;
 using Mediator;
 using System.Diagnostics.CodeAnalysis;
@@ -11,6 +12,7 @@ namespace ABC.Management.Api.Types;
 public class Consequences
 {
     [Mutation]
+    [Authorize(Roles = ["Admin"])]
     [GraphQLDescription("Add a new consequence")]
     public static async Task<Consequence?> CreateConsequence(
        IMediator handler,
@@ -24,6 +26,7 @@ public class Consequences
     }
 
     [Query]
+    [Authorize]
     [UsePaging]
     [UseProjection]
     [UseFiltering]
@@ -35,6 +38,7 @@ public class Consequences
          => await uow.Consequences.GetAsync(ct);
 
     [Mutation]
+    [Authorize(Roles = ["Admin"])]
     [GraphQLDescription("Remove a consequence")]
     public static async Task<bool> RemoveConsequence(
        IMediator handler,

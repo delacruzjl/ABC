@@ -2,6 +2,7 @@
 using ABC.Management.Api.Extensions;
 using ABC.Management.Domain.Entities;
 using ABC.SharedEntityFramework;
+using HotChocolate.Authorization;
 using HotChocolate.Resolvers;
 using Mediator;
 
@@ -10,6 +11,7 @@ namespace ABC.Management.Api.Types;
 public class Observations
 {
     [Mutation]
+    [Authorize]
     [GraphQLDescription("Start an observation")]
     public static async Task<Observation?> StartObservation(
         IMediator handler,
@@ -22,6 +24,7 @@ public class Observations
     }
 
     [Mutation]
+    [Authorize]
     [GraphQLDescription("End an observation")]
     public static async Task<Observation?> EndObservation(
         IMediator handler,
@@ -34,6 +37,7 @@ public class Observations
     }
 
     [Mutation]
+    [Authorize]
     [GraphQLDescription("Update an observation")]
     public static async Task<Observation?> UpdateObservation(
         IMediator handler,
@@ -45,6 +49,7 @@ public class Observations
     }
 
     [Query]
+    [Authorize]
     [GraphQLDescription("Query observations")]
     [UsePaging]
     [UseProjection]

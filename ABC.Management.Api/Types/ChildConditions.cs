@@ -2,6 +2,7 @@
 using ABC.Management.Api.Extensions;
 using ABC.Management.Domain.Entities;
 using ABC.SharedEntityFramework;
+using HotChocolate.Authorization;
 using HotChocolate.Resolvers;
 using Mediator;
 
@@ -10,6 +11,7 @@ namespace ABC.Management.Api.Types;
 public class ChildConditions
 {
     [Mutation]
+    [Authorize(Roles = ["Admin"])]
     [GraphQLDescription("Add a new ChildCondition")]
     public static async Task<ChildCondition?> CreateChildCondition(
         IMediator handler,
@@ -22,6 +24,7 @@ public class ChildConditions
     }
 
     [Mutation]
+    [Authorize(Roles = ["Admin"])]
     [GraphQLDescription("Remove a ChildCondition")]
     public static async Task<bool> RemoveChildCondition(
        IMediator handler,
@@ -35,6 +38,7 @@ public class ChildConditions
     }
 
     [Query]
+    [Authorize]
     [UsePaging]
     [UseProjection]
     [UseFiltering]

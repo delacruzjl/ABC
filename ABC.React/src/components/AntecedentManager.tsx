@@ -5,12 +5,14 @@ interface Props {
   antecedent: Antecedent | null | undefined
   onSave: (ant: Antecedent) => void
   onCancel: () => void
+  saving?: boolean
 }
 
 export const AntecedentManager: React.FC<Props> = ({
   antecedent,
   onSave,
   onCancel,
+  saving = false,
 }) => {
   const [form, setForm] = useState<Partial<Antecedent>>({
     name: "",
@@ -32,10 +34,10 @@ export const AntecedentManager: React.FC<Props> = ({
   }
 
   const handleSubmit = () => {
-    if (!form.name) return
+    if (!form.name || saving) return
     const ant: Antecedent = {
       ...(antecedent || {}),
-      id: antecedent?.id || Date.now().toString(),
+      id: antecedent?.id || "",
       name: form.name!,
       description: form.description || "",
       observations: antecedent?.observations || [],
@@ -68,9 +70,10 @@ export const AntecedentManager: React.FC<Props> = ({
         <div className="flex gap-2">
           <button
             onClick={handleSubmit}
-            className="bg-cyan-400 hover:bg-cyan-500 text-slate-900 font-semibold px-4 py-2 rounded shadow"
+            disabled={saving}
+            className="bg-cyan-400 hover:bg-cyan-500 text-slate-900 font-semibold px-4 py-2 rounded shadow disabled:opacity-50"
           >
-            {antecedent ? "Update" : "Add"}
+            {saving ? "Saving…" : antecedent ? "Update" : "Add"}
           </button>
           <button
             onClick={onCancel}

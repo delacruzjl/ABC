@@ -2,6 +2,7 @@
 using ABC.Management.Api.Extensions;
 using ABC.Management.Domain.Entities;
 using ABC.SharedEntityFramework;
+using HotChocolate.Authorization;
 using HotChocolate.Resolvers;
 using Mediator;
 using System.Diagnostics.CodeAnalysis;
@@ -11,6 +12,7 @@ namespace ABC.Management.Api.Types;
 public class Behaviors
 {
     [Mutation]
+    [Authorize(Roles = ["Admin"])]
     [GraphQLDescription("Add a new behavior")]
     public static async Task<Behavior?> CreateBehavior(
         IMediator handler,
@@ -24,6 +26,7 @@ public class Behaviors
     }
 
     [Mutation]
+    [Authorize(Roles = ["Admin"])]
     [GraphQLDescription("Remove a behavior")]
     public static async Task<bool> RemoveBehavior(
        IMediator handler,
@@ -37,6 +40,7 @@ public class Behaviors
     }
 
     [Query]
+    [Authorize]
     [UsePaging]
     [UseProjection]
     [UseFiltering]

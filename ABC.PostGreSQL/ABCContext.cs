@@ -1,10 +1,11 @@
 ﻿using System.Text.Json;
 using ABC.Management.Domain.Entities;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace ABC.PostGreSQL;
 
-public class ABCContext(DbContextOptions<ABCContext> options) : DbContext(options)
+public class ABCContext(DbContextOptions<ABCContext> options) : IdentityDbContext<ApplicationUser>(options)
 {
     public DbSet<Antecedent> Antecedents => Set<Antecedent>();
     public DbSet<Behavior> Behaviors => Set<Behavior>();
@@ -25,6 +26,8 @@ public class ABCContext(DbContextOptions<ABCContext> options) : DbContext(option
         modelBuilder.Entity<Child>()
             .HasMany(c => c.Conditions)
             .WithMany(c => c.children);
+        modelBuilder.Entity<Child>()
+            .HasIndex(c => c.UserId);
 
         modelBuilder.Entity<Observation>().HasKey(e => e.Id);
         modelBuilder.Entity<Observation>()
