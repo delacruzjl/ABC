@@ -1,12 +1,10 @@
 import React from "react"
 import { useNavigate } from "react-router-dom"
 import { useChildren } from "../hooks/useChildren"
-import { useAuth } from "../context/AuthContext"
 import { ChildList } from "../components/ChildList"
 
 export const ChildrenPage: React.FC = () => {
   const { children, loading, error, removeChild } = useChildren()
-  const { isAdmin } = useAuth()
   const navigate = useNavigate()
 
   if (loading) {
@@ -29,7 +27,7 @@ export const ChildrenPage: React.FC = () => {
     <ChildList
       children={children}
       onAdd={() => navigate("/child/manage")}
-      onEdit={isAdmin ? (id) => navigate(`/child/edit/${id}`) : undefined}
+      onEdit={(id) => navigate(`/child/edit/${id}`)}
       onDelete={(id) => removeChild(id)}
     />
   )
