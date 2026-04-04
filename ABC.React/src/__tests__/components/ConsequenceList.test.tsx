@@ -79,6 +79,9 @@ describe("ConsequenceList", () => {
       />
     )
     fireEvent.click(screen.getAllByText("Delete")[1])
+    // Confirm the deletion in the dialog
+    const allDeleteBtns = screen.getAllByRole("button", { name: "Delete" })
+    fireEvent.click(allDeleteBtns[allDeleteBtns.length - 1])
     expect(onDelete).toHaveBeenCalledWith("2")
   })
 })
