@@ -15,4 +15,17 @@ public class ChildConditionService(IUnitOfWork _uow) : IEntityService<ChildCondi
             .GetAsync(a => EF.Functions.ILike(a.Name, name), cancellationToken);
         return condition.SingleOrDefault();
     }
+
+    public async Task<ChildCondition> GetOrCreateByName(
+        string name,
+        CancellationToken cancellationToken = default)
+    {
+        var existing = await GetByName(name, cancellationToken);
+        if (existing is not null)
+            return existing;
+
+        var newCondition = new ChildCondition { Name = name.Trim() };
+        await _uow.ChildConditions.AddAsync(newCondition, cancellationToken);
+        return newCondition;
+    }
 }

@@ -1,7 +1,4 @@
-﻿using FluentValidation.Results;
-using System.Collections;
-
-namespace ABC.Management.Domain.Entities;
+﻿namespace ABC.Management.Domain.Entities;
 
 public class Child(
     Guid id,
@@ -56,29 +53,10 @@ public class Child(
         IEnumerable<string> conditions,
         CancellationToken token)
     {
-        SortedList results = new();
         foreach (var condition in conditions)
         {
-            var exists = await entityService.GetByName(condition, token);
-            results[condition] = exists;
+            var entity = await entityService.GetOrCreateByName(condition, token);
+            _childConditions.Add(entity);
         }
-
-        if (!results.ContainsValue(null))
-        {
-            _childConditions.AddRange(results.Values.OfType<ChildCondition>());
-            return;
-        }
-
-        List<ValidationFailure> failures = new();
-        foreach (var key in results.Keys)
-        {
-            if (results[key] is null)
-            {
-                var failure = new ValidationFailure(nameof(ChildCondition), $"Child condition not found:{key}", key);
-                failures.Add(failure);
-            }
-        }
-
-        throw new ValidationException("One or more child conditions do not exist in the database", failures);
     }
 }
