@@ -10,13 +10,15 @@ public record CreateChildResponseCommand(Child Value, IEnumerable<string> Condit
         string lastName,
         string firstName,
         int birthYear,
-        IEnumerable<string> conditions)
+        IEnumerable<string> conditions,
+        string userId)
     {
         Child child = new()
         {
             LastName = lastName,
             FirstName = firstName,
-            BirthYear = birthYear
+            BirthYear = birthYear,
+            UserId = userId
         };
 
         CreateChildResponseCommand command = new(child, conditions);

@@ -5,12 +5,14 @@ interface Props {
   behavior: Behavior | null | undefined
   onSave: (beh: Behavior) => void
   onCancel: () => void
+  saving?: boolean
 }
 
 export const BehaviorManager: React.FC<Props> = ({
   behavior,
   onSave,
   onCancel,
+  saving = false,
 }) => {
   const [form, setForm] = useState<Partial<Behavior>>({
     name: "",
@@ -32,10 +34,10 @@ export const BehaviorManager: React.FC<Props> = ({
   }
 
   const handleSubmit = () => {
-    if (!form.name) return
+    if (!form.name || saving) return
     const beh: Behavior = {
       ...(behavior || {}),
-      id: behavior?.id || Date.now().toString(),
+      id: behavior?.id || "",
       name: form.name!,
       description: form.description || "",
       observations: behavior?.observations || [],
@@ -68,9 +70,10 @@ export const BehaviorManager: React.FC<Props> = ({
         <div className="flex gap-2">
           <button
             onClick={handleSubmit}
-            className="bg-cyan-400 hover:bg-cyan-500 text-slate-900 font-semibold px-4 py-2 rounded shadow"
+            disabled={saving}
+            className="bg-cyan-400 hover:bg-cyan-500 text-slate-900 font-semibold px-4 py-2 rounded shadow disabled:opacity-50"
           >
-            {behavior ? "Update" : "Add"}
+            {saving ? "Saving…" : behavior ? "Update" : "Add"}
           </button>
           <button
             onClick={onCancel}

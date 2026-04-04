@@ -1,9 +1,0 @@
-﻿global using ABC.Management.Domain.Entities;
-global using ABC.SharedKernel;
-global using FakeItEasy;
-global using Microsoft.Extensions.DependencyInjection;
-global using Xunit;
-global using ABC.Management.Domain.Validators;
-global using Shouldly;
-global using FluentValidation.Results;
-global using Reqnroll;

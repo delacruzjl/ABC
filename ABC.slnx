@@ -15,9 +15,7 @@
     <File Path="README.md" />
   </Folder>
   <Folder Name="/Tests/" Id="02ea681e-c7d8-13c7-8484-4ac65e1b71e8">
-    <Project Path="ABC.Management.Api.Tests/ABC.Management.Api.Tests.csproj" />
-    <Project Path="ABC.Management.Domain.Tests/ABC.Management.Domain.Tests.csproj" />
-    <Project Path="ABC.PostGreSQL.Tests/ABC.PostgreSQL.Tests.csproj" />
+    <Project Path="ABC.Tests/ABC.Tests.csproj" />
   </Folder>
   <Project Path="ABC.Management.Api/ABC.Management.Api.csproj" />
   <Project Path="ABC.Management.Domain/ABC.Management.Domain.csproj" />

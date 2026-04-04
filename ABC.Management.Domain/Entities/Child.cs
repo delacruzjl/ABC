@@ -16,6 +16,7 @@ public class Child(
     public string LastName { get; init; } = lastName;
     public string FirstName { get; init; } = firstName;
     public int BirthYear { get; init; } = birthYear;
+    public string UserId { get; set; } = string.Empty;
     public ICollection<ChildCondition> Conditions { get; set; } = childConditions;
     public ICollection<Observation> Observations { get; set; } = _observations;
 

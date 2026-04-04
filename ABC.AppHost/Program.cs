@@ -13,8 +13,7 @@ builder.Services.AddFeatureManagement();
 
 IResourceBuilder<ProjectResource> managementApi = builder
         .AddProject<Projects.ABC_Management_Api>("abcmanagementapi")
-        .WithEnvironment(dbNameKey, databaseNameParameter)
-        .WithHttpsEndpoint();
+        .WithEnvironment(dbNameKey, databaseNameParameter);
 
 var featureManager = builder.Services.BuildServiceProvider().GetRequiredService<IFeatureManager>();
 
@@ -50,7 +49,7 @@ if (useDockerPostgres)
     .WaitFor(db);
 }
 
-builder.AddNpmApp("react", "../ABC.React")
+builder.AddJavaScriptApp("react", "../ABC.React", "start")
     .WithReference(managementApi)
     .WaitFor(managementApi)
     .WithEnvironment("BROWSER", "none") // Disable opening browser on npm start

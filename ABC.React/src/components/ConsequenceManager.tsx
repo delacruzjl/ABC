@@ -5,12 +5,14 @@ interface Props {
   consequence: Consequence | null | undefined
   onSave: (cons: Consequence) => void
   onCancel: () => void
+  saving?: boolean
 }
 
 export const ConsequenceManager: React.FC<Props> = ({
   consequence,
   onSave,
   onCancel,
+  saving = false,
 }) => {
   const [form, setForm] = useState<Partial<Consequence>>({
     name: "",
@@ -32,10 +34,10 @@ export const ConsequenceManager: React.FC<Props> = ({
   }
 
   const handleSubmit = () => {
-    if (!form.name) return
+    if (!form.name || saving) return
     const cons: Consequence = {
       ...(consequence || {}),
-      id: consequence?.id || Date.now().toString(),
+      id: consequence?.id || "",
       name: form.name!,
       description: form.description || "",
       observations: consequence?.observations || [],
@@ -68,9 +70,10 @@ export const ConsequenceManager: React.FC<Props> = ({
         <div className="flex gap-2">
           <button
             onClick={handleSubmit}
-            className="bg-cyan-400 hover:bg-cyan-500 text-slate-900 font-semibold px-4 py-2 rounded shadow"
+            disabled={saving}
+            className="bg-cyan-400 hover:bg-cyan-500 text-slate-900 font-semibold px-4 py-2 rounded shadow disabled:opacity-50"
           >
-            {consequence ? "Update" : "Add"}
+            {saving ? "Saving…" : consequence ? "Update" : "Add"}
           </button>
           <button
             onClick={onCancel}

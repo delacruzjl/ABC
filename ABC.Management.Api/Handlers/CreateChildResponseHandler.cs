@@ -20,7 +20,10 @@ public class CreateChildResponseHandler(
             request.Value.Id,
             request.Value.LastName,
             request.Value.FirstName,
-            request.Value.BirthYear);
+            request.Value.BirthYear)
+        {
+            UserId = request.Value.UserId
+        };
 
         ChildConditionService customService = new(_uow);
         await entity.SetChildConditions(
