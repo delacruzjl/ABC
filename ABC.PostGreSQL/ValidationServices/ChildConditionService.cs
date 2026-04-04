@@ -24,8 +24,9 @@ public class ChildConditionService(IUnitOfWork _uow) : IEntityService<ChildCondi
         if (existing is not null)
             return existing;
 
-        var newCondition = new ChildCondition { Name = name.Trim() };
+        var newCondition = new ChildCondition(name.Trim());
         await _uow.ChildConditions.AddAsync(newCondition, cancellationToken);
+        await _uow.SaveChangesAsync();
         return newCondition;
     }
 }
