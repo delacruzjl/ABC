@@ -1,4 +1,5 @@
 import { useQuery, useMutation } from "@apollo/client/react"
+import { useMemo } from "react"
 import {
   GET_CHILDREN,
   CREATE_CHILD,
@@ -34,15 +35,19 @@ interface ChildConditionsQueryData {
 export function useChildren() {
   const { data, loading, error } = useQuery<ChildrenQueryData>(GET_CHILDREN)
 
-  const children: Child[] = (data?.children?.nodes ?? []).map((node) => ({
-    id: node.id,
-    firstName: node.firstName,
-    lastName: node.lastName,
-    birthYear: node.birthYear,
-    userId: node.userId,
-    conditions: node.conditions ?? [],
-    observationCount: node.observations?.length ?? 0,
-  }))
+  const children: Child[] = useMemo(
+    () =>
+      (data?.children?.nodes ?? []).map((node) => ({
+        id: node.id,
+        firstName: node.firstName,
+        lastName: node.lastName,
+        birthYear: node.birthYear,
+        userId: node.userId,
+        conditions: node.conditions ?? [],
+        observationCount: node.observations?.length ?? 0,
+      })),
+    [data]
+  )
 
   const [createChildMutation] = useMutation(CREATE_CHILD, {
     refetchQueries: [{ query: GET_CHILDREN }],
@@ -87,13 +92,16 @@ export function useChildren() {
 
 export function useUsers() {
   const { data, loading, error } = useQuery<UsersQueryData>(GET_USERS)
-  const users: UserInfo[] = data?.users ?? []
+  const users: UserInfo[] = useMemo(() => data?.users ?? [], [data])
   return { users, loading, error }
 }
 
 export function useChildConditions() {
   const { data, loading, error } =
     useQuery<ChildConditionsQueryData>(GET_CHILD_CONDITIONS)
-  const conditions: ChildCondition[] = data?.childConditions?.nodes ?? []
+  const conditions: ChildCondition[] = useMemo(
+    () => data?.childConditions?.nodes ?? [],
+    [data]
+  )
   return { conditions, loading, error }
 }
