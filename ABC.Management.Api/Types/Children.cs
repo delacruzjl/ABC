@@ -35,20 +35,45 @@ public class Children
     }
 
     [Mutation]
-    [Authorize(Roles = ["Admin"])]
-    [GraphQLDescription("Update an existing child (admin only)")]
+    [Authorize]
+    [GraphQLDescription("Update an existing child")]
     public static async Task<Child?> UpdateChild(
         IMediator handler,
+        IUnitOfWork uow,
         Guid childId,
         string lastName,
         string firstName,
         int birthYear,
-        string userId,
+        string? userId,
         IEnumerable<string>? conditions,
+        ClaimsPrincipal claimsPrincipal,
         IResolverContext context,
         CancellationToken cancellationToken)
     {
-        var command = UpdateChildResponseCommand.Create(childId, lastName, firstName, birthYear, userId, conditions ?? []);
+        var isAdmin = claimsPrincipal.IsInRole("Admin");
+        var currentUserId = claimsPrincipal.FindFirstValue(ClaimTypes.NameIdentifier)!;
+
+        // Non-admins can only update their own children
+        if (!isAdmin)
+        {
+            var childQry = await uow.Children.GetAsync(c => c.Id == childId, cancellationToken);
+            var child = childQry.SingleOrDefault();
+            if (child == null || child.UserId != currentUserId)
+            {
+                context.ReportError(
+                    ErrorBuilder.New()
+                        .SetMessage("You can only update your own children.")
+                        .SetCode("AUTH_NOT_OWNER")
+                        .Build());
+                return null;
+            }
+        }
+
+        var assignedUserId = isAdmin && !string.IsNullOrWhiteSpace(userId)
+            ? userId
+            : currentUserId;
+
+        var command = UpdateChildResponseCommand.Create(childId, lastName, firstName, birthYear, assignedUserId, conditions ?? []);
         return await command.ExecuteHandler(handler, context, cancellationToken);
     }
 

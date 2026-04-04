@@ -60,7 +60,7 @@ export const ChildFormPage: React.FC = () => {
           firstName,
           lastName,
           year,
-          selectedUserId,
+          isAdmin ? selectedUserId : undefined,
           selectedConditions
         )
       } else {

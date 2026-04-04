@@ -51,7 +51,7 @@ export const UPDATE_CHILD = gql`
     $firstName: String!
     $lastName: String!
     $birthYear: Int!
-    $userId: String!
+    $userId: String
     $conditions: [String!]
   ) {
     updateChild(

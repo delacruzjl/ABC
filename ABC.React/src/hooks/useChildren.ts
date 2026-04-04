@@ -72,7 +72,7 @@ export function useChildren() {
     firstName: string,
     lastName: string,
     birthYear: number,
-    userId: string,
+    userId?: string,
     conditions?: string[]
   ) =>
     updateChildMutation({
