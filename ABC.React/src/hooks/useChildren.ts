@@ -50,11 +50,11 @@ export function useChildren() {
   )
 
   const [createChildMutation] = useMutation(CREATE_CHILD, {
-    refetchQueries: [{ query: GET_CHILDREN }],
+    refetchQueries: [{ query: GET_CHILDREN }, { query: GET_CHILD_CONDITIONS }],
   })
 
   const [updateChildMutation] = useMutation(UPDATE_CHILD, {
-    refetchQueries: [{ query: GET_CHILDREN }],
+    refetchQueries: [{ query: GET_CHILDREN }, { query: GET_CHILD_CONDITIONS }],
   })
 
   const [removeChildMutation] = useMutation(REMOVE_CHILD, {
