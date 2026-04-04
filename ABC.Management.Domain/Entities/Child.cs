@@ -10,9 +10,9 @@ public class Child(
 {
     private readonly List<ChildCondition> _childConditions = childConditions;
 
-    public string LastName { get; init; } = lastName;
-    public string FirstName { get; init; } = firstName;
-    public int BirthYear { get; init; } = birthYear;
+    public string LastName { get; set; } = lastName;
+    public string FirstName { get; set; } = firstName;
+    public int BirthYear { get; set; } = birthYear;
     public string UserId { get; set; } = string.Empty;
     public ICollection<ChildCondition> Conditions { get; set; } = childConditions;
     public ICollection<Observation> Observations { get; set; } = _observations;
@@ -47,6 +47,8 @@ public class Child(
     {
 
     }
+
+    public void ClearConditions() => _childConditions.Clear();
 
     public async Task SetChildConditions(
         IEntityService<ChildCondition> entityService,

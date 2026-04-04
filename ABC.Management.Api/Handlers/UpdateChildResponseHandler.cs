@@ -3,6 +3,7 @@ using ABC.Management.Domain.Entities;
 using ABC.PostGreSQL.ValidationServices;
 using ABC.SharedEntityFramework;
 using Mediator;
+using Microsoft.EntityFrameworkCore;
 
 namespace ABC.Management.Api.Handlers;
 
@@ -17,28 +18,25 @@ public class UpdateChildResponseHandler(
         var childQry = await _uow.Children
             .GetAsync(c => c.Id == request.ChildId, cancellationToken);
 
-        var child = childQry.Single();
+        var child = childQry
+            .Include(c => c.Conditions)
+            .Single();
 
-        Child updated = new(
-            child.Id,
-            request.LastName,
-            request.FirstName,
-            request.BirthYear,
-            [])
-        {
-            UserId = request.UserId
-        };
+        child.LastName = request.LastName;
+        child.FirstName = request.FirstName;
+        child.BirthYear = request.BirthYear;
+        child.UserId = request.UserId;
 
+        child.ClearConditions();
         if (request.Conditions.Any())
         {
             ChildConditionService customService = new(_uow);
-            await updated.SetChildConditions(
+            await child.SetChildConditions(
                 customService, request.Conditions, cancellationToken);
         }
 
-        await _uow.Children.Update(updated, cancellationToken);
         await _uow.SaveChangesAsync();
 
-        return new(updated);
+        return new(child);
     }
 }
