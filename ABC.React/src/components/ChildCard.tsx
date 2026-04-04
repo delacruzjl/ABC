@@ -1,5 +1,6 @@
-import React from "react"
+import React, { useState } from "react"
 import type { Child } from "../types/child"
+import { ConfirmDialog } from "./ConfirmDialog"
 
 interface Props {
   child: Child
@@ -8,6 +9,8 @@ interface Props {
 }
 
 export const ChildCard: React.FC<Props> = ({ child, onEdit, onDelete }) => {
+  const [showConfirm, setShowConfirm] = useState(false)
+
   return (
     <div className="bg-slate-700 rounded-lg p-4 border border-slate-600 flex items-center justify-between">
       <div className="flex-1">
@@ -47,13 +50,23 @@ export const ChildCard: React.FC<Props> = ({ child, onEdit, onDelete }) => {
           </button>
         )}
         <button
-          onClick={() => onDelete(child.id)}
+          onClick={() => setShowConfirm(true)}
           className="text-red-400 hover:text-red-300 text-sm font-medium transition"
           title="Remove child"
         >
           Remove
         </button>
       </div>
+      {showConfirm && (
+        <ConfirmDialog
+          message={`Are you sure you want to remove ${child.firstName} ${child.lastName}?`}
+          onConfirm={() => {
+            onDelete(child.id)
+            setShowConfirm(false)
+          }}
+          onCancel={() => setShowConfirm(false)}
+        />
+      )}
     </div>
   )
 }
