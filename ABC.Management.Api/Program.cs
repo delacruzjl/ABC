@@ -148,9 +148,12 @@ internal class Program
                 await roleManager.CreateAsync(new IdentityRole(role));
         }
 
-        var adminEmail = configuration["AdminSeed:Email"] ?? "admin@abc.com";
-        var adminPassword = configuration["AdminSeed:Password"] ?? "Admin123!";
+        var adminEmail = configuration["AdminSeed:Email"];
+        ArgumentException.ThrowIfNullOrEmpty(adminEmail);
 
+        var adminPassword = configuration["AdminSeed:Password"];
+        ArgumentException.ThrowIfNullOrEmpty(adminPassword);
+        
         if (await userManager.FindByEmailAsync(adminEmail) is null)
         {
             var admin = new ApplicationUser
