@@ -2,6 +2,12 @@
 const HTMLWebpackPlugin = require("html-webpack-plugin")
 
 module.exports = (env) => {
+  const proxyTarget =
+    process.env.services__kong__proxy__0 ||
+    process.env.services__kong__http__0 ||
+    process.env.services__abcmanagementapi__https__0 ||
+    process.env.services__abcmanagementapi__http__0;
+
   return {
     entry: "./src/index.tsx",
     devServer: {
@@ -11,11 +17,15 @@ module.exports = (env) => {
       proxy: [
         {
           context: ["/api"],
-          target:
-            process.env.services__abcmanagementapi__https__0 ||
-            process.env.services__abcmanagementapi__http__0,
+          target: proxyTarget,
           pathRewrite: { "^/api": "" },
           secure: false,
+          onProxyReq: (proxyReq) => {
+            const apiKey = process.env.KONG_API_KEY;
+            if (apiKey) {
+              proxyReq.setHeader("apikey", apiKey);
+            }
+          },
         },
       ],
     },
