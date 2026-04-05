@@ -1,4 +1,5 @@
 using ABC.Management.Api.Decorators;
+using ABC.Management.Api.Settings;
 using ABC.Management.Domain.Validators;
 using ABC.PostGreSQL;
 using ABC.PostGreSQL.Extensions;
@@ -35,10 +36,10 @@ internal class Program
             .AddEntityFrameworkStores<ABCContext>()
             .AddDefaultTokenProviders();
 
-        // JWT Authentication
-        var jwtKey = builder.Configuration["Jwt:Key"]!;
-        var jwtIssuer = builder.Configuration["Jwt:Issuer"]!;
-        var jwtAudience = builder.Configuration["Jwt:Audience"]!;
+        // JWT Settings
+        var jwtSection = builder.Configuration.GetSection(JwtSettings.SectionName);
+        services.Configure<JwtSettings>(jwtSection);
+        var jwt = jwtSection.Get<JwtSettings>()!;
 
         services.AddAuthentication(options =>
             {
@@ -53,14 +54,32 @@ internal class Program
                     ValidateAudience = true,
                     ValidateLifetime = true,
                     ValidateIssuerSigningKey = true,
-                    ValidIssuer = jwtIssuer,
-                    ValidAudience = jwtAudience,
+                    ValidIssuer = jwt.Issuer,
+                    ValidAudiences = jwt.Audiences,
                     IssuerSigningKey = new SymmetricSecurityKey(
-                        Encoding.UTF8.GetBytes(jwtKey))
+                        Encoding.UTF8.GetBytes(jwt.Key))
                 };
             });
 
         services.AddAuthorization();
+
+        // CORS — restrict cross-origin requests to allowed origins
+        var allowedOrigins = builder.Configuration
+            .GetSection("Cors:AllowedOrigins").Get<string[]>() ?? [];
+
+        services.AddCors(options =>
+        {
+            options.AddDefaultPolicy(policy =>
+            {
+                if (allowedOrigins.Length > 0)
+                {
+                    policy.WithOrigins(allowedOrigins)
+                        .AllowAnyMethod()
+                        .AllowAnyHeader()
+                        .AllowCredentials();
+                }
+            });
+        });
 
         services.AddValidatorsFromAssemblyContaining<AntecedentValidator>();
         services.AddMediator((MediatorOptions mediatorOptions) =>
@@ -109,6 +128,7 @@ internal class Program
         }
 
         app.UseHttpsRedirection();
+        app.UseCors();
         app.UseAuthentication();
         app.UseAuthorization();
 

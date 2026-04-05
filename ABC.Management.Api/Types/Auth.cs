@@ -1,6 +1,8 @@
+using ABC.Management.Api.Settings;
 using ABC.PostGreSQL;
 using HotChocolate.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -16,7 +18,7 @@ public class Auth
         string email,
         string password,
         UserManager<ApplicationUser> userManager,
-        IConfiguration configuration)
+        IOptions<JwtSettings> jwtOptions)
     {
         var user = new ApplicationUser
         {
@@ -34,7 +36,7 @@ public class Auth
 
         await userManager.AddToRoleAsync(user, "User");
 
-        var token = await GenerateToken(user, userManager, configuration);
+        var token = await GenerateToken(user, userManager, jwtOptions.Value);
         var roles = await userManager.GetRolesAsync(user);
         return new AuthPayload(token, user.Email!, roles.ToList());
     }
@@ -46,7 +48,7 @@ public class Auth
         string password,
         UserManager<ApplicationUser> userManager,
         SignInManager<ApplicationUser> signInManager,
-        IConfiguration configuration)
+        IOptions<JwtSettings> jwtOptions)
     {
         var user = await userManager.FindByEmailAsync(email)
             ?? throw new GraphQLException("Invalid email or password.");
@@ -55,7 +57,7 @@ public class Auth
         if (!valid)
             throw new GraphQLException("Invalid email or password.");
 
-        var token = await GenerateToken(user, userManager, configuration);
+        var token = await GenerateToken(user, userManager, jwtOptions.Value);
         var roles = await userManager.GetRolesAsync(user);
         return new AuthPayload(token, user.Email!, roles.ToList());
     }
@@ -66,7 +68,7 @@ public class Auth
     public static async Task<AuthPayload> Me(
         ClaimsPrincipal claimsPrincipal,
         UserManager<ApplicationUser> userManager,
-        IConfiguration configuration)
+        IOptions<JwtSettings> jwtOptions)
     {
         var userId = claimsPrincipal.FindFirstValue(ClaimTypes.NameIdentifier)
             ?? throw new GraphQLException("Not authenticated.");
@@ -74,7 +76,7 @@ public class Auth
         var user = await userManager.FindByIdAsync(userId)
             ?? throw new GraphQLException("User not found.");
 
-        var token = await GenerateToken(user, userManager, configuration);
+        var token = await GenerateToken(user, userManager, jwtOptions.Value);
         var roles = await userManager.GetRolesAsync(user);
         return new AuthPayload(token, user.Email!, roles.ToList());
     }
@@ -98,7 +100,7 @@ public class Auth
     private static async Task<string> GenerateToken(
         ApplicationUser user,
         UserManager<ApplicationUser> userManager,
-        IConfiguration configuration)
+        JwtSettings jwt)
     {
         var roles = await userManager.GetRolesAsync(user);
 
@@ -112,16 +114,17 @@ public class Auth
         foreach (var role in roles)
             claims.Add(new Claim(ClaimTypes.Role, role));
 
+        foreach (var audience in jwt.Audiences)
+            claims.Add(new Claim(JwtRegisteredClaimNames.Aud, audience));
+
         var key = new SymmetricSecurityKey(
-            Encoding.UTF8.GetBytes(configuration["Jwt:Key"]!));
+            Encoding.UTF8.GetBytes(jwt.Key));
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-        var expiration = int.Parse(configuration["Jwt:ExpirationMinutes"] ?? "480");
 
         var token = new JwtSecurityToken(
-            issuer: configuration["Jwt:Issuer"],
-            audience: configuration["Jwt:Audience"],
+            issuer: jwt.Issuer,
             claims: claims,
-            expires: DateTime.UtcNow.AddMinutes(expiration),
+            expires: DateTime.UtcNow.AddMinutes(jwt.ExpirationMinutes),
             signingCredentials: creds);
 
         return new JwtSecurityTokenHandler().WriteToken(token);
