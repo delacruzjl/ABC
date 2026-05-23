@@ -107,6 +107,7 @@ if (useDockerPostgres)
         .WithEnvironment("BROWSER", "none")
         .WithHttpEndpoint(port: 4001, env: "PORT")
         .WithExternalHttpEndpoints()
+        .WithBrowserLogs()
         .PublishAsDockerFile();
 }
 else
@@ -120,6 +121,7 @@ else
         .WithEnvironment("BROWSER", "none")
         .WithHttpEndpoint(port: 4001, env: "PORT")
         .WithExternalHttpEndpoints()
+        .WithBrowserLogs()
         .PublishAsDockerFile();
 }
 
