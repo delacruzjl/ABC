@@ -1,7 +1,7 @@
 import { gql } from "@apollo/client"
 
-export const GET_ANTECEDENTS_WITH_OBSERVATIONS = gql`
-  query GetAntecedentsWithObservations {
+export const DASHBOARD_QUERY = gql`
+  query Dashboard {
     antecedents(first: 100) {
       nodes {
         id
@@ -16,11 +16,6 @@ export const GET_ANTECEDENTS_WITH_OBSERVATIONS = gql`
         }
       }
     }
-  }
-`
-
-export const GET_BEHAVIORS_WITH_OBSERVATIONS = gql`
-  query GetBehaviorsWithObservations {
     behaviors(first: 100) {
       nodes {
         id
@@ -35,11 +30,6 @@ export const GET_BEHAVIORS_WITH_OBSERVATIONS = gql`
         }
       }
     }
-  }
-`
-
-export const GET_CONSEQUENCES_WITH_OBSERVATIONS = gql`
-  query GetConsequencesWithObservations {
     consequences(first: 100) {
       nodes {
         id
@@ -54,11 +44,6 @@ export const GET_CONSEQUENCES_WITH_OBSERVATIONS = gql`
         }
       }
     }
-  }
-`
-
-export const GET_RECENT_OBSERVATIONS = gql`
-  query GetRecentObservations {
     observations(first: 50) {
       nodes {
         id

@@ -8,10 +8,7 @@ import { MemoryRouter } from "react-router-dom"
 import { DashboardPage } from "../../pages/DashboardPage"
 import { AuthProvider } from "../../context/AuthContext"
 import {
-  GET_ANTECEDENTS_WITH_OBSERVATIONS,
-  GET_BEHAVIORS_WITH_OBSERVATIONS,
-  GET_CONSEQUENCES_WITH_OBSERVATIONS,
-  GET_RECENT_OBSERVATIONS,
+  DASHBOARD_QUERY,
 } from "../../graphql/operations/dashboardOperations"
 
 // Mock recharts
@@ -33,20 +30,15 @@ interface MockDef {
 
 const emptyMocks: MockDef[] = [
   {
-    request: { query: GET_ANTECEDENTS_WITH_OBSERVATIONS },
-    result: { data: { antecedents: { nodes: [] } } },
-  },
-  {
-    request: { query: GET_BEHAVIORS_WITH_OBSERVATIONS },
-    result: { data: { behaviors: { nodes: [] } } },
-  },
-  {
-    request: { query: GET_CONSEQUENCES_WITH_OBSERVATIONS },
-    result: { data: { consequences: { nodes: [] } } },
-  },
-  {
-    request: { query: GET_RECENT_OBSERVATIONS },
-    result: { data: { observations: { nodes: [] } } },
+    request: { query: DASHBOARD_QUERY },
+    result: {
+      data: {
+        antecedents: { nodes: [] },
+        behaviors: { nodes: [] },
+        consequences: { nodes: [] },
+        observations: { nodes: [] },
+      },
+    },
   },
 ]
 
@@ -113,20 +105,8 @@ describe("DashboardPage", () => {
   it("shows error message on query failure", async () => {
     const errorMocks: MockDef[] = [
       {
-        request: { query: GET_ANTECEDENTS_WITH_OBSERVATIONS },
+        request: { query: DASHBOARD_QUERY },
         error: new Error("Network failure"),
-      },
-      {
-        request: { query: GET_BEHAVIORS_WITH_OBSERVATIONS },
-        result: { data: { behaviors: { nodes: [] } } },
-      },
-      {
-        request: { query: GET_CONSEQUENCES_WITH_OBSERVATIONS },
-        result: { data: { consequences: { nodes: [] } } },
-      },
-      {
-        request: { query: GET_RECENT_OBSERVATIONS },
-        result: { data: { observations: { nodes: [] } } },
       },
     ]
 

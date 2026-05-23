@@ -1,4 +1,4 @@
-﻿using ABC.Management.Domain.ValueObjects;
+using ABC.Management.Domain.ValueObjects;
 using ABC.SharedKernel.Events;
 using FluentValidation.Results;
 
@@ -30,7 +30,7 @@ public class Observation : AggregateRoot
 
     public Observation()
         : this(
-              Guid.NewGuid(),
+              Guid.CreateVersion7(),
               null,
               string.Empty)
     {

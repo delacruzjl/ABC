@@ -17,4 +17,7 @@ export interface UserInfo {
   id: string
   email: string
   roles: string[]
+  isActive: boolean
+  hasChildren: boolean
+  hasObservations: boolean
 }

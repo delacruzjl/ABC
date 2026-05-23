@@ -17,12 +17,12 @@ public class AntecedentServiceStepDefinitions
 {
     private readonly AntecedentService _sut;
     private string _expectedName = string.Empty;
-    private Antecedent _actual;
+    private Antecedent? _actual;
 
     private readonly IEnumerable<Antecedent> _antecedents =
         Enumerable.Range(0, 5)
         .Select(i => new Antecedent(
-            Guid.NewGuid(),
+            Guid.CreateVersion7(),
             $"Antecedent{i}",
             $"description for {i}"));
 

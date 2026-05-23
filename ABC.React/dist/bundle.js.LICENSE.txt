@@ -1,3 +1,9 @@
+/*! @azure/msal-browser v5.6.3 2026-04-01 */
+
+/*! @azure/msal-common v16.4.1 2026-04-01 */
+
+/*! @azure/msal-react v5.2.1 2026-04-01 */
+
 /*! decimal.js-light v2.5.1 https://github.com/MikeMcl/decimal.js-light/LICENCE */
 
 /**

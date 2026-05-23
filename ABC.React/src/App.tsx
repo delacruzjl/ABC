@@ -15,16 +15,23 @@ import { BehaviorFormPage } from "./pages/BehaviorFormPage"
 import { ConsequenceFormPage } from "./pages/ConsequenceFormPage"
 import { DashboardPage } from "./pages/DashboardPage"
 import { LoginPage } from "./pages/LoginPage"
-import { RegisterPage } from "./pages/RegisterPage"
 import { ChildrenPage } from "./pages/ChildrenPage"
 import { ChildFormPage } from "./pages/ChildFormPage"
+import { UsersPage } from "./pages/UsersPage"
+import { ObservationPage } from "./pages/ObservationPage"
 import { ProtectedRoute } from "./components/ProtectedRoute"
 import { useAuth } from "./context/AuthContext"
+import { useDefaultChild } from "./hooks/useChildren"
+import { useQuery } from "@apollo/client/react"
+import { GET_CHILDREN } from "./graphql/operations/childOperations"
 
 function NavBar() {
   const navigate = useNavigate()
   const location = useLocation()
   const { user, isAdmin, isAuthenticated, logout } = useAuth()
+  const { defaultChildId } = useDefaultChild()
+  const { data: childrenData } = useQuery(GET_CHILDREN, { skip: !isAuthenticated })
+  const hasChildren = (childrenData?.children?.nodes?.length ?? 0) > 0
 
   const isActive = (path: string) =>
     location.pathname === path || location.pathname.startsWith(path + "/")
@@ -62,6 +69,25 @@ function NavBar() {
               >
                 Children
               </button>
+              {hasChildren && (
+                <button
+                  onClick={() => {
+                    if (defaultChildId) {
+                      navigate(`/observation/${defaultChildId}`)
+                    } else {
+                      navigate("/children")
+                    }
+                  }}
+                  className={navButtonClass("/observation")}
+                  title={
+                    defaultChildId
+                      ? "Start observation for default child"
+                      : "Set a default child first"
+                  }
+                >
+                  Observe
+                </button>
+              )}
               {isAdmin && (
                 <>
                   <button
@@ -81,6 +107,12 @@ function NavBar() {
                     className={navButtonClass("/consequences")}
                   >
                     Consequences
+                  </button>
+                  <button
+                    onClick={() => navigate("/users")}
+                    className={navButtonClass("/users")}
+                  >
+                    Users
                   </button>
                 </>
               )}
@@ -120,7 +152,6 @@ function AppRoutes() {
       <NavBar />
       <Routes>
         <Route path="/login" element={<LoginPage />} />
-        <Route path="/register" element={<RegisterPage />} />
         <Route
           path="/"
           element={
@@ -236,6 +267,30 @@ function AppRoutes() {
               <main className="max-w-5xl mx-auto px-4 py-8">
                 <div className="bg-slate-800 rounded-xl shadow-lg p-6 border border-slate-800">
                   <ConsequenceFormPage />
+                </div>
+              </main>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/users"
+          element={
+            <ProtectedRoute>
+              <main className="max-w-5xl mx-auto px-4 py-8">
+                <div className="bg-slate-800 rounded-xl shadow-lg p-6 border border-slate-800">
+                  <UsersPage />
+                </div>
+              </main>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/observation/:childId"
+          element={
+            <ProtectedRoute>
+              <main className="max-w-5xl mx-auto px-4 py-8">
+                <div className="bg-slate-800 rounded-xl shadow-lg p-6 border border-slate-800">
+                  <ObservationPage />
                 </div>
               </main>
             </ProtectedRoute>

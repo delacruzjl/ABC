@@ -24,7 +24,7 @@ public static class DependencyInjection
             npgsql.MigrationsAssembly("ABC.PostGreSQL")).UseCamelCaseNamingConvention());
         builder.EnrichNpgsqlDbContext<ABCContext>();
 
-        services.AddScoped<IUnitOfWork, UnitOfWork>();
+        services.AddTransient<IUnitOfWork, UnitOfWork>();
         services.AddScoped<IEntityService<Antecedent>, AntecedentService>();
         services.AddScoped<IEntityService<Behavior>, BehaviorService>();
         services.AddScoped<IEntityService<Consequence>, ConsequenceService>();

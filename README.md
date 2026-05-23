@@ -30,6 +30,16 @@ C4Context
     UpdateLayoutConfig($c4ShapeInRow="2", $c4BoundaryInRow="1")
 ```
 
+## Running the AppHost Locally
+
+From the repository root, start the Aspire AppHost with:
+
+```powershell
+dotnet run --project .\ABC.AppHost\ABC.AppHost.csproj
+```
+
+The development AppHost configuration enables Docker-backed PostgreSQL, so Docker Desktop must be running and healthy before local resources can start successfully.
+
 ## Building Container Images
 
 The easiest way to build container images for the ASP.NET Core
@@ -152,6 +162,52 @@ docker build --push -t registry.mycompany.com/dahlsailrunner/carved-rock-api -f 
 ```
 
 Note that you need to have already done a `docker login` to any registry you're pushing to.
+
+## External Authentication Setup
+
+The application supports external identity providers for user login:
+**Google** and **Azure Entra ID** (restricted to the `delacruzhome.com` tenant).
+Admin users continue to use email/password login.
+
+### Azure Entra ID (Microsoft) Setup
+
+1. Go to [Azure Portal → App registrations](https://portal.azure.com/#blade/Microsoft_AAD_RegisteredApps/ApplicationsListBlade)
+2. Click **New registration**
+3. Set the name (e.g., `ABC Management`)
+4. Under **Supported account types**, select **Accounts in this organizational directory only** (single tenant)
+5. Under **Redirect URI**, select **Single-page application (SPA)** and add your app URL (e.g., `http://localhost:4001`)
+6. After creation, note the **Application (client) ID** and **Directory (tenant) ID**
+7. Under **API permissions**, ensure `openid`, `profile`, and `email` are granted
+
+Set these values via Aspire parameters or environment variables:
+```
+ExternalAuth__AzureEntra__ClientId=<your-client-id>
+ExternalAuth__AzureEntra__TenantId=<your-tenant-id>
+```
+
+For the React app (injected via webpack DefinePlugin):
+```
+AZURE_ENTRA_CLIENT_ID=<your-client-id>
+AZURE_ENTRA_TENANT_ID=<your-tenant-id>
+```
+
+### Google OAuth Setup
+
+1. Go to [Google Cloud Console → Credentials](https://console.cloud.google.com/apis/credentials)
+2. Click **Create Credentials → OAuth client ID**
+3. Set application type to **Web application**
+4. Add your app URL to **Authorized JavaScript origins** (e.g., `http://localhost:4001`)
+5. Note the **Client ID**
+
+Set these values via Aspire parameters or environment variables:
+```
+ExternalAuth__Google__ClientId=<your-client-id>
+```
+
+For the React app:
+```
+GOOGLE_CLIENT_ID=<your-client-id>
+```
 
 ## Open Telemetry Configuration
 

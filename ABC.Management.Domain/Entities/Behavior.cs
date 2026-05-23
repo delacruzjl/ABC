@@ -1,4 +1,4 @@
-﻿namespace ABC.Management.Domain.Entities;
+namespace ABC.Management.Domain.Entities;
 
 [ExcludeFromCodeCoverage]
 public class Behavior(
@@ -27,7 +27,7 @@ public class Behavior(
     }
 
     public Behavior()
-        : this(Guid.NewGuid())
+        : this(Guid.CreateVersion7())
     {
 
     }

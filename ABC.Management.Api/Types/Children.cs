@@ -82,10 +82,29 @@ public class Children
     [GraphQLDescription("Remove a child")]
     public static async Task<bool> RemoveChild(
       IMediator handler,
+      IUnitOfWork uow,
       Guid childId,
+      ClaimsPrincipal claimsPrincipal,
       IResolverContext context,
        CancellationToken cancellationToken)
     {
+        var isAdmin = claimsPrincipal.IsInRole("Admin");
+        if (!isAdmin)
+        {
+            var childQry = await uow.Children.GetAsync(c => c.Id == childId, cancellationToken);
+            var child = childQry.SingleOrDefault();
+            var currentUserId = claimsPrincipal.FindFirstValue(ClaimTypes.NameIdentifier)!;
+            if (child == null || child.UserId != currentUserId)
+            {
+                context.ReportError(
+                    ErrorBuilder.New()
+                        .SetMessage("You can only remove your own children.")
+                        .SetCode("AUTH_NOT_OWNER")
+                        .Build());
+                return false;
+            }
+        }
+
         var command = RemoveChildResponseCommand.Create(childId);
         _ = await command.ExecuteHandler(handler, context, cancellationToken);
         return !context.HasErrors;

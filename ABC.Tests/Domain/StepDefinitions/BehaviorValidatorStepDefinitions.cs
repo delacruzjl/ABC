@@ -30,7 +30,7 @@ public class BehaviorValidatorStepDefinitions : IClassFixture<DomainStartupFixtu
     public void GivenBehaviorNameAlreadyExists()
     {
         A.CallTo(() => _service.GetByName(_behavior!.Name, A<CancellationToken>.Ignored))
-            .Returns(new Behavior(Guid.NewGuid()));
+            .Returns(new Behavior(Guid.CreateVersion7()));
     }
 
 

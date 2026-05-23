@@ -17,9 +17,9 @@ public class ConsequenceServiceStepDefinitions
 {
     private readonly IUnitOfWork _uowFake;
     private readonly IEntityService<Consequence> _consequenceService;
-    private Consequence _actual;
-    private string _consequenceName;
-    private IEntityService<Consequence> _sut;
+    private Consequence? _actual;
+    private string _consequenceName = string.Empty;
+    private IEntityService<Consequence> _sut = null!;
     private readonly Lorem _lorem;
 
     public ConsequenceServiceStepDefinitions(PostgresStartupFixture fixture)
@@ -39,7 +39,7 @@ public class ConsequenceServiceStepDefinitions
         var consequences = Enumerable
             .Range(0, 2)
             .Select(i => new Consequence(
-                Guid.NewGuid(),
+                Guid.CreateVersion7(),
                 $"behavior{i}",
                 _lorem.Sentence()))
             .ToList();

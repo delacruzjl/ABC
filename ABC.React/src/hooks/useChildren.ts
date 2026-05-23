@@ -7,6 +7,8 @@ import {
   REMOVE_CHILD,
   GET_USERS,
   GET_CHILD_CONDITIONS,
+  GET_DEFAULT_CHILD_ID,
+  SET_DEFAULT_CHILD,
 } from "../graphql/operations/childOperations"
 import type { Child, ChildCondition, UserInfo } from "../types/child"
 
@@ -104,4 +106,22 @@ export function useChildConditions() {
     [data]
   )
   return { conditions, loading, error }
+}
+
+interface DefaultChildQueryData {
+  defaultChildId: string | null
+}
+
+export function useDefaultChild() {
+  const { data, loading } = useQuery<DefaultChildQueryData>(GET_DEFAULT_CHILD_ID)
+  const [setDefaultMutation] = useMutation(SET_DEFAULT_CHILD, {
+    refetchQueries: [{ query: GET_DEFAULT_CHILD_ID }],
+  })
+
+  const defaultChildId = data?.defaultChildId ?? null
+
+  const setDefaultChild = (childId: string | null) =>
+    setDefaultMutation({ variables: { childId } })
+
+  return { defaultChildId, loading, setDefaultChild }
 }

@@ -1,4 +1,5 @@
 import React, { useState } from "react"
+import { useNavigate } from "react-router-dom"
 import type { Child } from "../types/child"
 import { ConfirmDialog } from "./ConfirmDialog"
 
@@ -6,10 +7,13 @@ interface Props {
   child: Child
   onEdit?: (id: string) => void
   onDelete: (id: string) => void
+  isDefault?: boolean
+  onSetDefault?: (id: string | null) => void | Promise<unknown>
 }
 
-export const ChildCard: React.FC<Props> = ({ child, onEdit, onDelete }) => {
+export const ChildCard: React.FC<Props> = ({ child, onEdit, onDelete, isDefault, onSetDefault }) => {
   const [showConfirm, setShowConfirm] = useState(false)
+  const navigate = useNavigate()
 
   return (
     <div className="bg-slate-700 rounded-lg p-4 border border-slate-600 flex items-center justify-between">
@@ -22,6 +26,11 @@ export const ChildCard: React.FC<Props> = ({ child, onEdit, onDelete }) => {
             {child.observationCount} observation
             {child.observationCount !== 1 ? "s" : ""}
           </span>
+          {isDefault && (
+            <span className="text-xs bg-amber-900 text-amber-300 px-2 py-0.5 rounded">
+              Default
+            </span>
+          )}
         </div>
         <p className="text-slate-400 text-sm">
           Birth Year: {child.birthYear}
@@ -39,7 +48,28 @@ export const ChildCard: React.FC<Props> = ({ child, onEdit, onDelete }) => {
           </div>
         )}
       </div>
-      <div className="flex gap-2 ml-4">
+      <div className="flex items-center gap-3 ml-4">
+        {onSetDefault && (
+          <button
+            onClick={() => onSetDefault(isDefault ? null : child.id)}
+            className={`text-2xl leading-none transition ${
+              isDefault
+                ? "text-amber-400 hover:text-amber-300"
+                : "text-slate-500 hover:text-amber-400"
+            }`}
+            title={isDefault ? "Remove as default" : "Set as default child"}
+            aria-label={isDefault ? "Remove as default" : "Set as default child"}
+          >
+            {isDefault ? "★" : "☆"}
+          </button>
+        )}
+        <button
+          onClick={() => navigate(`/observation/${child.id}`)}
+          className="text-green-400 hover:text-green-300 text-sm font-medium transition"
+          title="Start observation"
+        >
+          Observe
+        </button>
         {onEdit && (
           <button
             onClick={() => onEdit(child.id)}
