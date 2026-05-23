@@ -1,4 +1,4 @@
-﻿using ABC.Management.Api.Commands;
+using ABC.Management.Api.Commands;
 using ABC.Management.Domain.Entities;
 using ABC.SharedEntityFramework;
 using ABC.SharedKernel.Events;
@@ -26,7 +26,7 @@ public class StartObservationHandler(IUnitOfWork _uow)
                  ]);
 
         Observation observation = new(
-            Guid.NewGuid(),
+            Guid.CreateVersion7(),
             child,
             string.Empty);
 

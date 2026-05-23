@@ -10,9 +10,19 @@ export const LOGIN_MUTATION = gql`
   }
 `
 
-export const REGISTER_MUTATION = gql`
-  mutation Register($email: String!, $password: String!) {
-    register(email: $email, password: $password) {
+export const EXTERNAL_LOGIN_MUTATION = gql`
+  mutation ExternalLogin($provider: ExternalAuthProvider!, $idToken: String!) {
+    externalLogin(provider: $provider, idToken: $idToken) {
+      token
+      email
+      roles
+    }
+  }
+`
+
+export const DEV_EXTERNAL_LOGIN_MUTATION = gql`
+  mutation DevExternalLogin($provider: ExternalAuthProvider!, $email: String!) {
+    devExternalLogin(provider: $provider, email: $email) {
       token
       email
       roles

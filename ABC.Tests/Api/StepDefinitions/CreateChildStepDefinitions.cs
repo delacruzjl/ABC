@@ -32,7 +32,7 @@ public class CreateChildStepDefinitions
     public CreateChildStepDefinitions(ApiStartupFixture fixture)
     {
         _childConditionFaker = new Faker<ChildCondition>()
-                .RuleFor(x => x.Id, f => Guid.NewGuid())
+                .RuleFor(x => x.Id, f => Guid.CreateVersion7())
                 .RuleFor(x => x.Name, f => f.Lorem.Word());
 
         _requestFakes = new();

@@ -41,6 +41,10 @@ internal class Program
         services.Configure<JwtSettings>(jwtSection);
         var jwt = jwtSection.Get<JwtSettings>()!;
 
+        // External Auth Settings
+        var externalAuthSection = builder.Configuration.GetSection(ExternalAuthSettings.SectionName);
+        services.Configure<ExternalAuthSettings>(externalAuthSection);
+
         services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -48,6 +52,7 @@ internal class Program
             })
             .AddJwtBearer(options =>
             {
+                options.MapInboundClaims = true;
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuer = true,
@@ -109,11 +114,13 @@ internal class Program
                 o.MaxPageSize = 100;
                 o.DefaultPageSize = 25;
             })
+            .ModifyCostOptions(o => o.MaxTypeCost = 2000)
             .AddTypes()
             .AddFiltering()
             .AddSorting()
             .AddProjections()
-            .AddAuthorization();
+            .AddAuthorization()
+            .AddErrorFilter<ABC.Management.Api.Extensions.CorrelatedErrorFilter>();
 
         var app = builder.Build();
 

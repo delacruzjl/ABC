@@ -1,4 +1,4 @@
-﻿namespace ABC.Management.Domain.Entities;
+namespace ABC.Management.Domain.Entities;
 
 public class ChildCondition(
     Guid id,
@@ -15,7 +15,7 @@ public class ChildCondition(
 
     }
 
-    public ChildCondition(string name) : this(Guid.NewGuid(), name)
+    public ChildCondition(string name) : this(Guid.CreateVersion7(), name)
     {
     }
 

@@ -1,4 +1,4 @@
-﻿namespace ABC.Management.Domain.Entities;
+namespace ABC.Management.Domain.Entities;
 
 [ExcludeFromCodeCoverage]
 public class Consequence(
@@ -27,7 +27,7 @@ public class Consequence(
     }
 
     public Consequence()
-        : this(Guid.NewGuid())
+        : this(Guid.CreateVersion7())
     {
 
     }

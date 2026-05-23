@@ -56,6 +56,116 @@ namespace ABC.PostGreSQL.Migrations
                         .HasName("pK_antecedents");
 
                     b.ToTable("antecedents", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("a6c5ca3b-6ade-4b65-b0e3-64af93caee49"),
+                            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            CreatedBy = "System",
+                            Description = "A sudden or unexpected loud sound in the environment",
+                            Name = "Loud noise",
+                            UpdatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = new Guid("30b66d14-a9e3-4037-8ec1-1f05bc7ec940"),
+                            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            CreatedBy = "System",
+                            Description = "A request or demand was denied or refused",
+                            Name = "Denied request",
+                            UpdatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = new Guid("948150ee-a06f-46e2-a76a-9955ddaeb809"),
+                            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            CreatedBy = "System",
+                            Description = "Transitioning between activities or locations",
+                            Name = "Transition",
+                            UpdatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = new Guid("45815eee-87b7-4123-9ebc-2b06913d3309"),
+                            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            CreatedBy = "System",
+                            Description = "A task or instruction was presented",
+                            Name = "Task demand",
+                            UpdatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = new Guid("3ddfccd6-0a2b-485b-9333-b2e13aad51f8"),
+                            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            CreatedBy = "System",
+                            Description = "Peer or adult social engagement initiated",
+                            Name = "Social interaction",
+                            UpdatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = new Guid("0a44ef8e-8d7a-45af-9d0b-c243db8bcfd6"),
+                            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            CreatedBy = "System",
+                            Description = "Child was left without attention or interaction",
+                            Name = "Left alone",
+                            UpdatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = new Guid("bdaceb17-3b6d-430b-ba49-9ea2024da58d"),
+                            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            CreatedBy = "System",
+                            Description = "A disruption or change to the expected schedule",
+                            Name = "Change in routine",
+                            UpdatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = new Guid("ec3398d0-622b-4dbe-ba95-5f46f6c647b6"),
+                            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            CreatedBy = "System",
+                            Description = "Exposure to a specific sensory input (light, texture, smell)",
+                            Name = "Sensory stimulus",
+                            UpdatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = new Guid("4d9a81b5-4473-43e6-936b-e1be563cec21"),
+                            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            CreatedBy = "System",
+                            Description = "A preferred item or activity was taken away",
+                            Name = "Preferred item removed",
+                            UpdatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = new Guid("4ffdd6e3-f8a9-4731-adb2-dee92e675288"),
+                            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            CreatedBy = "System",
+                            Description = "Required to wait for a turn, item, or activity",
+                            Name = "Waiting",
+                            UpdatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = new Guid("b2cf3462-ce01-493a-9355-93a072be45af"),
+                            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            CreatedBy = "System",
+                            Description = "Disagreement or conflict with a peer",
+                            Name = "Peer conflict",
+                            UpdatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = new Guid("b22744f0-206b-45aa-85b7-f53624bd1c86"),
+                            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            CreatedBy = "System",
+                            Description = "Physical state of hunger, thirst, or tiredness",
+                            Name = "Hunger or fatigue",
+                            UpdatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc)
+                        });
                 });
 
             modelBuilder.Entity("ABC.Management.Domain.Entities.Behavior", b =>
@@ -92,6 +202,116 @@ namespace ABC.PostGreSQL.Migrations
                         .HasName("pK_behaviors");
 
                     b.ToTable("behaviors", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("c25168ef-7ef7-4a8b-9c1d-351e89df4e20"),
+                            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            CreatedBy = "System",
+                            Description = "Crying or tearfulness",
+                            Name = "Crying",
+                            UpdatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = new Guid("6d51409e-bbdc-45dc-a50f-8404c6681047"),
+                            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            CreatedBy = "System",
+                            Description = "Hitting others with hands or objects",
+                            Name = "Hitting",
+                            UpdatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = new Guid("36404391-9bc1-4fea-879e-c33647ac0adc"),
+                            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            CreatedBy = "System",
+                            Description = "Kicking others or objects",
+                            Name = "Kicking",
+                            UpdatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = new Guid("b15aef26-7008-4fe5-9448-4c72da6c1e15"),
+                            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            CreatedBy = "System",
+                            Description = "Screaming or yelling loudly",
+                            Name = "Screaming",
+                            UpdatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = new Guid("8db0289d-0a4f-4ff6-9e80-b2d718771c9e"),
+                            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            CreatedBy = "System",
+                            Description = "Biting self or others",
+                            Name = "Biting",
+                            UpdatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = new Guid("fe85c34d-c5eb-4a59-be23-47b464198b2a"),
+                            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            CreatedBy = "System",
+                            Description = "Throwing items or materials",
+                            Name = "Throwing objects",
+                            UpdatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = new Guid("e18be934-2d56-423b-9cc9-f5516d08ecb0"),
+                            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            CreatedBy = "System",
+                            Description = "Leaving the designated area without permission",
+                            Name = "Elopement",
+                            UpdatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = new Guid("82f3efe1-97c3-404e-a0ca-66d240a446cd"),
+                            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            CreatedBy = "System",
+                            Description = "Refusing to follow instructions or directions",
+                            Name = "Noncompliance",
+                            UpdatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = new Guid("9af0cc72-dd3b-4784-9173-90df515c5b1e"),
+                            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            CreatedBy = "System",
+                            Description = "Engaging in self-injurious behavior (head-banging, scratching)",
+                            Name = "Self-injury",
+                            UpdatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = new Guid("4c1ef311-cace-4d45-b7b1-147b28f88d91"),
+                            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            CreatedBy = "System",
+                            Description = "Extended episode of crying, screaming, and physical resistance",
+                            Name = "Tantrums",
+                            UpdatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = new Guid("8f44e0f6-0d10-44bc-8c52-6c34ffb1b39e"),
+                            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            CreatedBy = "System",
+                            Description = "Breaking, tearing, or damaging items",
+                            Name = "Property destruction",
+                            UpdatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = new Guid("eef83b9c-7852-49cd-8bc5-b99c22128334"),
+                            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            CreatedBy = "System",
+                            Description = "Using threatening or hostile language",
+                            Name = "Verbal aggression",
+                            UpdatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc)
+                        });
                 });
 
             modelBuilder.Entity("ABC.Management.Domain.Entities.Child", b =>
@@ -207,6 +427,98 @@ namespace ABC.PostGreSQL.Migrations
                         .HasName("pK_consequences");
 
                     b.ToTable("consequences", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("441cd995-f81e-4950-99cd-c8ffeb88358a"),
+                            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            CreatedBy = "System",
+                            Description = "Redirected to a different activity or task",
+                            Name = "Redirected",
+                            UpdatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = new Guid("7d6054ce-0670-4eee-896a-759f79553074"),
+                            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            CreatedBy = "System",
+                            Description = "Received a verbal correction or reprimand",
+                            Name = "Verbal reprimand",
+                            UpdatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = new Guid("aedf4064-7aeb-4e24-b690-795d9e1b7692"),
+                            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            CreatedBy = "System",
+                            Description = "Behavior was intentionally ignored (planned ignoring)",
+                            Name = "Ignored",
+                            UpdatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = new Guid("d8ba54d1-7417-47bc-9646-3b99090105b0"),
+                            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            CreatedBy = "System",
+                            Description = "Received attention (verbal, physical, or proximity)",
+                            Name = "Given attention",
+                            UpdatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = new Guid("4cfc6a22-e070-410c-b029-dba6129af02d"),
+                            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            CreatedBy = "System",
+                            Description = "The demand or task was removed or postponed",
+                            Name = "Task removed",
+                            UpdatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = new Guid("90c0e8f6-508a-479a-be5f-9d6a9e41c0e2"),
+                            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            CreatedBy = "System",
+                            Description = "Given access to a preferred item or activity",
+                            Name = "Access to preferred item",
+                            UpdatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = new Guid("e7d2dfa7-daec-4e26-a509-3cef2ff08f0f"),
+                            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            CreatedBy = "System",
+                            Description = "Removed from the reinforcing environment temporarily",
+                            Name = "Time-out",
+                            UpdatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = new Guid("4575b00c-6938-4b5d-964b-666fc865fd89"),
+                            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            CreatedBy = "System",
+                            Description = "Received physical guidance to complete a task",
+                            Name = "Physical prompt",
+                            UpdatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = new Guid("9de37eeb-5008-4fdb-b123-3cbd563b5c57"),
+                            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            CreatedBy = "System",
+                            Description = "Peers reacted to the behavior (laughing, crying, moving away)",
+                            Name = "Peer reaction",
+                            UpdatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = new Guid("537642d3-0608-44ae-a89a-5028ddceeb59"),
+                            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            CreatedBy = "System",
+                            Description = "A natural consequence occurred without adult intervention",
+                            Name = "Natural consequence",
+                            UpdatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc)
+                        });
                 });
 
             modelBuilder.Entity("ABC.Management.Domain.Entities.Observation", b =>
@@ -270,6 +582,10 @@ namespace ABC.PostGreSQL.Migrations
                         .HasColumnType("text")
                         .HasColumnName("concurrencyStamp");
 
+                    b.Property<Guid?>("DefaultChildId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("defaultChildId");
+
                     b.Property<string>("Email")
                         .HasMaxLength(256)
                         .HasColumnType("character varying(256)")
@@ -278,6 +594,10 @@ namespace ABC.PostGreSQL.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("boolean")
                         .HasColumnName("emailConfirmed");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean")
+                        .HasColumnName("isActive");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("boolean")

@@ -5,10 +5,7 @@ import { ApolloProvider } from "@apollo/client/react"
 import { MockLink } from "@apollo/client/testing"
 import { useDashboard } from "../../hooks/useDashboard"
 import {
-  GET_ANTECEDENTS_WITH_OBSERVATIONS,
-  GET_BEHAVIORS_WITH_OBSERVATIONS,
-  GET_CONSEQUENCES_WITH_OBSERVATIONS,
-  GET_RECENT_OBSERVATIONS,
+  DASHBOARD_QUERY,
 } from "../../graphql/operations/dashboardOperations"
 
 interface MockDef {
@@ -30,7 +27,7 @@ function createWrapper(mocks: MockDef[]) {
 
 const baseMocks: MockDef[] = [
   {
-    request: { query: GET_ANTECEDENTS_WITH_OBSERVATIONS },
+    request: { query: DASHBOARD_QUERY },
     result: {
       data: {
         antecedents: {
@@ -40,37 +37,16 @@ const baseMocks: MockDef[] = [
             { id: "3", name: "Quiet space", observations: [] },
           ],
         },
-      },
-    },
-  },
-  {
-    request: { query: GET_BEHAVIORS_WITH_OBSERVATIONS },
-    result: {
-      data: {
         behaviors: {
           nodes: [
             { id: "1", name: "Hand flapping", observations: [{ id: "o1" }, { id: "o2" }, { id: "o3" }] },
           ],
         },
-      },
-    },
-  },
-  {
-    request: { query: GET_CONSEQUENCES_WITH_OBSERVATIONS },
-    result: {
-      data: {
         consequences: {
           nodes: [
             { id: "1", name: "Timeout", observations: [{ id: "o1" }] },
           ],
         },
-      },
-    },
-  },
-  {
-    request: { query: GET_RECENT_OBSERVATIONS },
-    result: {
-      data: {
         observations: {
           nodes: [
             {
@@ -163,20 +139,8 @@ describe("useDashboard", () => {
   it("returns error when a query fails", async () => {
     const errorMocks: MockDef[] = [
       {
-        request: { query: GET_ANTECEDENTS_WITH_OBSERVATIONS },
+        request: { query: DASHBOARD_QUERY },
         error: new Error("Network error"),
-      },
-      {
-        request: { query: GET_BEHAVIORS_WITH_OBSERVATIONS },
-        result: { data: { behaviors: { nodes: [] } } },
-      },
-      {
-        request: { query: GET_CONSEQUENCES_WITH_OBSERVATIONS },
-        result: { data: { consequences: { nodes: [] } } },
-      },
-      {
-        request: { query: GET_RECENT_OBSERVATIONS },
-        result: { data: { observations: { nodes: [] } } },
       },
     ]
 

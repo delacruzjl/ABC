@@ -18,9 +18,9 @@ public class BehaviorServiceStepDefinitions
 {
 
 
-    private Behavior _actual;
-    private string _behaviorName;
-    private IEntityService<Behavior> _sut;
+    private Behavior? _actual;
+    private string _behaviorName = string.Empty;
+    private IEntityService<Behavior> _sut = null!;
     private readonly IUnitOfWork _uow;
     private readonly IEntityService<Behavior> _behaviorService;
     private readonly Lorem _lorem;
@@ -42,7 +42,7 @@ public class BehaviorServiceStepDefinitions
         var behaviors = Enumerable
             .Range(0, 2)
             .Select(i => new Behavior(
-                Guid.NewGuid(),
+                Guid.CreateVersion7(),
                 $"behavior{i}",
                 _lorem.Sentence()))
             .ToList();

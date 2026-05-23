@@ -1,15 +1,28 @@
 import React, { useState } from "react"
-import { useNavigate, Link } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 import { useMutation } from "@apollo/client/react"
-import { LOGIN_MUTATION } from "../graphql/operations/authOperations"
+import {
+  LOGIN_MUTATION,
+  EXTERNAL_LOGIN_MUTATION,
+  DEV_EXTERNAL_LOGIN_MUTATION,
+} from "../graphql/operations/authOperations"
 import { useAuth } from "../context/AuthContext"
+import { useMsal } from "@azure/msal-react"
+import { loginRequest } from "../config/msalConfig"
+import { GoogleLogin, CredentialResponse } from "@react-oauth/google"
+
+const isDevMode = !!process.env.DEV_MODE
 
 export const LoginPage: React.FC = () => {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
+  const [devEmail, setDevEmail] = useState("")
+  const [devProvider, setDevProvider] = useState<"GOOGLE" | "AZURE_ENTRA">("GOOGLE")
   const [error, setError] = useState<string | null>(null)
+  const [showAdminLogin, setShowAdminLogin] = useState(false)
   const { login } = useAuth()
   const navigate = useNavigate()
+  const { instance: msalInstance } = useMsal()
 
   const [loginMutation, { loading }] = useMutation(LOGIN_MUTATION, {
     onCompleted: (data) => {
@@ -20,11 +33,69 @@ export const LoginPage: React.FC = () => {
     onError: (err) => setError(err.message),
   })
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const [externalLoginMutation, { loading: externalLoading }] = useMutation(
+    EXTERNAL_LOGIN_MUTATION,
+    {
+      onCompleted: (data) => {
+        const { token, email: userEmail, roles } = data.externalLogin
+        login(token, userEmail, roles)
+        navigate("/")
+      },
+      onError: (err) => setError(err.message),
+    }
+  )
+
+  const [devExternalLoginMutation, { loading: devLoading }] = useMutation(
+    DEV_EXTERNAL_LOGIN_MUTATION,
+    {
+      onCompleted: (data) => {
+        const { token, email: userEmail, roles } = data.devExternalLogin
+        login(token, userEmail, roles)
+        navigate("/")
+      },
+      onError: (err) => setError(err.message),
+    }
+  )
+
+  const handleAdminSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     setError(null)
     loginMutation({ variables: { email, password } })
   }
+
+  const handleMicrosoftLogin = async () => {
+    setError(null)
+    try {
+      const result = await msalInstance.loginPopup(loginRequest)
+      externalLoginMutation({
+        variables: { provider: "AZURE_ENTRA", idToken: result.idToken },
+      })
+    } catch (err: unknown) {
+      if (err instanceof Error && err.message?.includes("user_cancelled")) return
+      setError(err instanceof Error ? err.message : "Microsoft login failed.")
+    }
+  }
+
+  const handleGoogleSuccess = (credentialResponse: CredentialResponse) => {
+    setError(null)
+    if (!credentialResponse.credential) {
+      setError("Google login failed — no credential received.")
+      return
+    }
+    externalLoginMutation({
+      variables: { provider: "GOOGLE", idToken: credentialResponse.credential },
+    })
+  }
+
+  const handleDevLogin = (e: React.FormEvent) => {
+    e.preventDefault()
+    setError(null)
+    devExternalLoginMutation({
+      variables: { provider: devProvider, email: devEmail },
+    })
+  }
+
+  const isLoading = loading || externalLoading || devLoading
 
   return (
     <div className="min-h-screen bg-slate-900 flex items-center justify-center px-4">
@@ -40,42 +111,138 @@ export const LoginPage: React.FC = () => {
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-          <div>
-            <label className="block text-sm text-slate-400 mb-1">Email</label>
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              className="w-full bg-slate-700 border border-slate-600 rounded-lg px-3 py-2 text-slate-100 focus:outline-none focus:border-cyan-400"
-            />
-          </div>
-          <div>
-            <label className="block text-sm text-slate-400 mb-1">Password</label>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              className="w-full bg-slate-700 border border-slate-600 rounded-lg px-3 py-2 text-slate-100 focus:outline-none focus:border-cyan-400"
-            />
-          </div>
-          <button
-            type="submit"
-            disabled={loading}
-            className="bg-cyan-600 hover:bg-cyan-500 text-white font-medium py-2 rounded-lg transition disabled:opacity-50"
-          >
-            {loading ? "Signing in…" : "Sign In"}
-          </button>
-        </form>
+        {isDevMode && (
+          <>
+            <div className="bg-purple-900/30 border border-purple-700 rounded-lg p-4 mb-6">
+              <p className="text-purple-300 text-xs font-medium mb-3">
+                🛠 Dev Mode — Simulate External Login
+              </p>
+              <form onSubmit={handleDevLogin} className="flex flex-col gap-3">
+                <input
+                  type="email"
+                  value={devEmail}
+                  onChange={(e) => setDevEmail(e.target.value)}
+                  placeholder="user@example.com"
+                  required
+                  className="w-full bg-slate-700 border border-purple-600 rounded-lg px-3 py-2 text-slate-100 text-sm focus:outline-none focus:border-purple-400"
+                />
+                <div className="flex gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setDevProvider("GOOGLE")}
+                    className={`flex-1 text-xs py-2 rounded-lg transition border ${
+                      devProvider === "GOOGLE"
+                        ? "bg-purple-700 border-purple-500 text-white"
+                        : "bg-slate-700 border-slate-600 text-slate-400"
+                    }`}
+                  >
+                    Google
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setDevProvider("AZURE_ENTRA")}
+                    className={`flex-1 text-xs py-2 rounded-lg transition border ${
+                      devProvider === "AZURE_ENTRA"
+                        ? "bg-purple-700 border-purple-500 text-white"
+                        : "bg-slate-700 border-slate-600 text-slate-400"
+                    }`}
+                  >
+                    Azure Entra
+                  </button>
+                </div>
+                <button
+                  type="submit"
+                  disabled={isLoading}
+                  className="bg-purple-600 hover:bg-purple-500 text-white font-medium py-2 rounded-lg transition disabled:opacity-50 text-sm"
+                >
+                  {devLoading ? "Signing in…" : "Dev Sign In"}
+                </button>
+              </form>
+            </div>
 
-        <p className="text-slate-400 text-sm mt-6 text-center">
-          Don't have an account?{" "}
-          <Link to="/register" className="text-cyan-400 hover:text-cyan-300">
-            Register
-          </Link>
-        </p>
+            <div className="relative mb-6">
+              <div className="absolute inset-0 flex items-center">
+                <div className="w-full border-t border-slate-600"></div>
+              </div>
+              <div className="relative flex justify-center text-sm">
+                <span className="bg-slate-800 px-3 text-slate-500">or use real providers</span>
+              </div>
+            </div>
+          </>
+        )}
+
+        <div className="flex flex-col gap-3 mb-6">
+          <button
+            onClick={handleMicrosoftLogin}
+            disabled={isLoading}
+            className="flex items-center justify-center gap-3 w-full bg-[#2f2f2f] hover:bg-[#3b3b3b] text-white font-medium py-3 rounded-lg transition disabled:opacity-50 border border-slate-600"
+          >
+            <svg className="w-5 h-5" viewBox="0 0 21 21" xmlns="http://www.w3.org/2000/svg">
+              <rect x="1" y="1" width="9" height="9" fill="#f25022" />
+              <rect x="11" y="1" width="9" height="9" fill="#7fba00" />
+              <rect x="1" y="11" width="9" height="9" fill="#00a4ef" />
+              <rect x="11" y="11" width="9" height="9" fill="#ffb900" />
+            </svg>
+            Sign in with Microsoft
+          </button>
+
+          <div className="flex justify-center">
+            <GoogleLogin
+              onSuccess={handleGoogleSuccess}
+              onError={() => setError("Google login failed.")}
+              theme="filled_black"
+              size="large"
+              width="400"
+              text="signin_with"
+            />
+          </div>
+        </div>
+
+        <div className="relative mb-6">
+          <div className="absolute inset-0 flex items-center">
+            <div className="w-full border-t border-slate-600"></div>
+          </div>
+          <div className="relative flex justify-center text-sm">
+            <button
+              onClick={() => setShowAdminLogin(!showAdminLogin)}
+              className="bg-slate-800 px-3 text-slate-400 hover:text-slate-300 transition"
+            >
+              {showAdminLogin ? "Hide admin login" : "Admin login"}
+            </button>
+          </div>
+        </div>
+
+        {showAdminLogin && (
+          <form onSubmit={handleAdminSubmit} className="flex flex-col gap-4">
+            <div>
+              <label className="block text-sm text-slate-400 mb-1">Email</label>
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                className="w-full bg-slate-700 border border-slate-600 rounded-lg px-3 py-2 text-slate-100 focus:outline-none focus:border-cyan-400"
+              />
+            </div>
+            <div>
+              <label className="block text-sm text-slate-400 mb-1">Password</label>
+              <input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                className="w-full bg-slate-700 border border-slate-600 rounded-lg px-3 py-2 text-slate-100 focus:outline-none focus:border-cyan-400"
+              />
+            </div>
+            <button
+              type="submit"
+              disabled={isLoading}
+              className="bg-cyan-600 hover:bg-cyan-500 text-white font-medium py-2 rounded-lg transition disabled:opacity-50"
+            >
+              {loading ? "Signing in…" : "Sign In"}
+            </button>
+          </form>
+        )}
       </div>
     </div>
   )

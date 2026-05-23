@@ -1,10 +1,5 @@
 import { useQuery } from "@apollo/client/react"
-import {
-  GET_ANTECEDENTS_WITH_OBSERVATIONS,
-  GET_BEHAVIORS_WITH_OBSERVATIONS,
-  GET_CONSEQUENCES_WITH_OBSERVATIONS,
-  GET_RECENT_OBSERVATIONS,
-} from "../graphql/operations/dashboardOperations"
+import { DASHBOARD_QUERY } from "../graphql/operations/dashboardOperations"
 import type {
   Observation,
   ItemWithObservationCount,
@@ -21,16 +16,10 @@ interface EntityWithObservations {
   observations: ObservationWithChild[]
 }
 
-interface AntecedentsData {
+interface DashboardData {
   antecedents: { nodes: EntityWithObservations[] }
-}
-interface BehaviorsData {
   behaviors: { nodes: EntityWithObservations[] }
-}
-interface ConsequencesData {
   consequences: { nodes: EntityWithObservations[] }
-}
-interface ObservationsData {
   observations: { nodes: Observation[] }
 }
 
@@ -99,53 +88,22 @@ function toRecentObservations(
 }
 
 export function useDashboard() {
-  const {
-    data: antecedentData,
-    loading: loadingAntecedents,
-    error: errorAntecedents,
-  } = useQuery<AntecedentsData>(GET_ANTECEDENTS_WITH_OBSERVATIONS)
-
-  const {
-    data: behaviorData,
-    loading: loadingBehaviors,
-    error: errorBehaviors,
-  } = useQuery<BehaviorsData>(GET_BEHAVIORS_WITH_OBSERVATIONS)
-
-  const {
-    data: consequenceData,
-    loading: loadingConsequences,
-    error: errorConsequences,
-  } = useQuery<ConsequencesData>(GET_CONSEQUENCES_WITH_OBSERVATIONS)
-
-  const {
-    data: observationData,
-    loading: loadingObservations,
-    error: errorObservations,
-  } = useQuery<ObservationsData>(GET_RECENT_OBSERVATIONS)
-
-  const loading =
-    loadingAntecedents ||
-    loadingBehaviors ||
-    loadingConsequences ||
-    loadingObservations
-
-  const error =
-    errorAntecedents || errorBehaviors || errorConsequences || errorObservations
+  const { data, loading, error } = useQuery<DashboardData>(DASHBOARD_QUERY)
 
   const topAntecedents = toTopItemsWithChildren(
-    antecedentData?.antecedents?.nodes ?? [],
+    data?.antecedents?.nodes ?? [],
     10
   )
   const topBehaviors = toTopItemsWithChildren(
-    behaviorData?.behaviors?.nodes ?? [],
+    data?.behaviors?.nodes ?? [],
     10
   )
   const topConsequences = toTopItemsWithChildren(
-    consequenceData?.consequences?.nodes ?? [],
+    data?.consequences?.nodes ?? [],
     10
   )
   const recentObservations = toRecentObservations(
-    observationData?.observations?.nodes ?? [],
+    data?.observations?.nodes ?? [],
     3
   )
 

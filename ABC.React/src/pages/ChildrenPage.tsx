@@ -1,11 +1,25 @@
-import React from "react"
+import React, { useState } from "react"
 import { useNavigate } from "react-router-dom"
-import { useChildren } from "../hooks/useChildren"
+import { useChildren, useDefaultChild } from "../hooks/useChildren"
 import { ChildList } from "../components/ChildList"
 
 export const ChildrenPage: React.FC = () => {
   const { children, loading, error, removeChild } = useChildren()
+  const { defaultChildId, setDefaultChild } = useDefaultChild()
+  const [actionError, setActionError] = useState<string | null>(null)
   const navigate = useNavigate()
+
+  const handleSetDefault = async (id: string | null) => {
+    setActionError(null)
+    try {
+      const result = await setDefaultChild(id)
+      if (result.errors?.length) {
+        setActionError(result.errors[0].message)
+      }
+    } catch (e: unknown) {
+      setActionError(e instanceof Error ? e.message : "Failed to set default child")
+    }
+  }
 
   if (loading) {
     return (
@@ -24,11 +38,21 @@ export const ChildrenPage: React.FC = () => {
   }
 
   return (
-    <ChildList
-      children={children}
-      onAdd={() => navigate("/child/manage")}
-      onEdit={(id) => navigate(`/child/edit/${id}`)}
-      onDelete={(id) => removeChild(id)}
-    />
+    <div>
+      {actionError && (
+        <div className="mb-4 p-3 bg-red-900/50 border border-red-700 rounded-lg text-red-300 text-sm flex justify-between items-center">
+          <span>{actionError}</span>
+          <button onClick={() => setActionError(null)} className="text-red-400 hover:text-red-200 ml-4">✕</button>
+        </div>
+      )}
+      <ChildList
+        children={children}
+        onAdd={() => navigate("/child/manage")}
+        onEdit={(id) => navigate(`/child/edit/${id}`)}
+        onDelete={(id) => removeChild(id)}
+        defaultChildId={defaultChildId}
+        onSetDefault={handleSetDefault}
+      />
+    </div>
   )
 }

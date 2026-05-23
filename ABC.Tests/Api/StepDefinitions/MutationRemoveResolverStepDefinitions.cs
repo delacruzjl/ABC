@@ -1,5 +1,6 @@
 using ABC.Management.Api.Commands;
 using ABC.Management.Api.Types;
+using ABC.SharedEntityFramework;
 using FakeItEasy;
 using HotChocolate.Resolvers;
 using Mediator;
@@ -7,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Reqnroll;
 using Shouldly;
 using ABC.Tests.Fixtures;
+using System.Security.Claims;
 
 namespace ABC.Tests.Api.StepDefinitions;
 
@@ -15,6 +17,8 @@ public class MutationRemoveResolverStepDefinitions
 {
     private readonly IMediator _mediatorFake;
     private readonly IResolverContext _resolverContext;
+    private readonly IUnitOfWork _uowFake;
+    private readonly ClaimsPrincipal _adminPrincipal;
 
     private Guid _existingGuid;
     private bool _actual = false;
@@ -23,12 +27,19 @@ public class MutationRemoveResolverStepDefinitions
     {
         _mediatorFake = fixture.Services.GetRequiredService<IMediator>();
         _resolverContext = fixture.Services.GetRequiredService<IResolverContext>();
+        _uowFake = fixture.Services.GetRequiredService<IUnitOfWork>();
         A.CallTo(() => _resolverContext.HasErrors).Returns(false);
+
+        _adminPrincipal = new ClaimsPrincipal(new ClaimsIdentity(
+        [
+            new Claim(ClaimTypes.NameIdentifier, Guid.CreateVersion7().ToString()),
+            new Claim(ClaimTypes.Role, "Admin")
+        ], "test"));
     }
 
     [Given("I have a valid RemoveAntecedentCommand request")]
     public void GivenIHaveAValidRemoveAntecedentCommandRequest() =>
-        _existingGuid = Guid.NewGuid();
+        _existingGuid = Guid.CreateVersion7();
 
     [When("I send the request to delete the antecedent")]
     public async Task WhenISendTheRequestToDeleteTheAntecedent() =>
@@ -52,7 +63,7 @@ public class MutationRemoveResolverStepDefinitions
 
     [Given("I have a valid RemoveBehaviorCommand request")]
     public void GivenIHaveAValidRemoveBehaviorCommandRequest() =>
-        _existingGuid = Guid.NewGuid();
+        _existingGuid = Guid.CreateVersion7();
 
     [When("I send the request to delete the behavior")]
     public async Task WhenISendTheRequestToDeleteTheBehavior() =>
@@ -75,7 +86,7 @@ public class MutationRemoveResolverStepDefinitions
 
     [Given("I have a valid RemoveConsequenceCommand request")]
     public void GivenIHaveAValidRemoveConsequenceCommandRequest() =>
-        _existingGuid = Guid.NewGuid();
+        _existingGuid = Guid.CreateVersion7();
 
     [When("I send the request to delete the consequence")]
     public async Task WhenISendTheRequestToDeleteTheConsequence() =>
@@ -98,13 +109,15 @@ public class MutationRemoveResolverStepDefinitions
 
     [Given("I have a valid RemoveChildCommand request")]
     public void GivenIHaveAValidRemoveChildCommandRequest() =>
-        _existingGuid = Guid.NewGuid();
+        _existingGuid = Guid.CreateVersion7();
 
     [When("I send the request to delete the child")]
     public async Task WhenISendTheRequestToDeleteTheChild() =>
         _actual = await Children.RemoveChild(
             _mediatorFake,
+            _uowFake,
             _existingGuid,
+            _adminPrincipal,
             _resolverContext,
             CancellationToken.None);
 

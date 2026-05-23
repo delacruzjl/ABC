@@ -26,7 +26,7 @@ public class ChildSpecsStepDefinitions : IClassFixture<DomainStartupFixture>
 
     [Given("Last Name is empty")]
     public void GivenLastNameIsEmpty() =>
-        _child = new(Guid.NewGuid(), null!, "Fake Last", 13, []);
+        _child = new(Guid.CreateVersion7(), null!, "Fake Last", 13, []);
 
     [When("Validating child")]
     public async Task WhenValidatingChild() =>
@@ -65,7 +65,7 @@ public class ChildSpecsStepDefinitions : IClassFixture<DomainStartupFixture>
     [Given("all conditions are found")]
     public void GivenAllConditionsAreFound() =>
         A.CallTo(() => _entityService.GetByName(A<string>.Ignored, A<CancellationToken>.Ignored))!
-            .Returns(Task.FromResult(new ChildCondition(Guid.NewGuid(), "Fake Condition")));
+            .Returns(Task.FromResult(new ChildCondition(Guid.CreateVersion7(), "Fake Condition")));
 
     [Given("domain condition from the list is not found")]
     public void GivenConditionFromTheListIsNotFound() =>

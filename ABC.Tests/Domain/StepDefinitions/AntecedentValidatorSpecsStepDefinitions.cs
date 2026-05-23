@@ -22,7 +22,7 @@ namespace ABC.Management.Domain.Tests.StepDefinitions
         [Given("An antecedent with empty name")]
         public void GivenAnAntecedentWithEmptyName()
         {
-            _antecedent = new(Guid.NewGuid());
+            _antecedent = new(Guid.CreateVersion7());
         }
 
         [When("validating")]
@@ -38,19 +38,19 @@ namespace ABC.Management.Domain.Tests.StepDefinitions
         [Given("An antecedent with attributes {string} and empty description")]
         public void GivenAnAntecedentWithAttributesAnd(string name)
         {
-            _antecedent = new(Guid.NewGuid(), name, null!);
+            _antecedent = new(Guid.CreateVersion7(), name, null!);
         }
 
         [Given("Antecedent with the same name exists")]
         public void GivenAntecedentWithTheSameNameExists() =>
             A.CallTo(() => _service.GetByName(_antecedent!.Name, A<CancellationToken>.Ignored))
-            .Returns(new Antecedent(Guid.NewGuid()));
+            .Returns(new Antecedent(Guid.CreateVersion7()));
 
 
         [Given("An antecedent with Id {string}, and attributes  {string} and {string}")]
         public void GivenAnAntecedentWithIdAndAttributesAnd(string id, string name, string description)
         {
-            _antecedent = new(Guid.NewGuid(), name, description);
+            _antecedent = new(Guid.CreateVersion7(), name, description);
         }
     }
 }

@@ -4,14 +4,31 @@ import "@testing-library/jest-dom"
 import { ApolloClient, InMemoryCache } from "@apollo/client"
 import { ApolloProvider } from "@apollo/client/react"
 import { MockLink } from "@apollo/client/testing"
+
+// Mock MSAL modules to avoid browser crypto requirement in jsdom
+jest.mock("@azure/msal-browser", () => ({
+  PublicClientApplication: jest.fn().mockImplementation(() => ({
+    initialize: jest.fn().mockResolvedValue(undefined),
+    acquireTokenSilent: jest.fn(),
+    loginPopup: jest.fn(),
+    getAllAccounts: jest.fn().mockReturnValue([]),
+  })),
+  LogLevel: { Warning: 2, Error: 4 },
+}))
+jest.mock("@azure/msal-react", () => ({
+  MsalProvider: ({ children }: { children: React.ReactNode }) => <>{children}</>,
+  useMsal: () => ({ instance: { loginPopup: jest.fn() }, accounts: [] }),
+}))
+jest.mock("@react-oauth/google", () => ({
+  GoogleOAuthProvider: ({ children }: { children: React.ReactNode }) => <>{children}</>,
+  GoogleLogin: () => <div data-testid="google-login" />,
+}))
+
 import { GET_ANTECEDENTS } from "./graphql/operations/antecedentOperations"
 import { GET_BEHAVIORS } from "./graphql/operations/behaviorOperations"
 import { GET_CONSEQUENCES } from "./graphql/operations/consequenceOperations"
 import {
-  GET_ANTECEDENTS_WITH_OBSERVATIONS,
-  GET_BEHAVIORS_WITH_OBSERVATIONS,
-  GET_CONSEQUENCES_WITH_OBSERVATIONS,
-  GET_RECENT_OBSERVATIONS,
+  DASHBOARD_QUERY,
 } from "./graphql/operations/dashboardOperations"
 import { AuthProvider } from "./context/AuthContext"
 import App from "./App"
@@ -30,20 +47,15 @@ const mocks = [
     result: { data: { consequences: { nodes: [] } } },
   },
   {
-    request: { query: GET_ANTECEDENTS_WITH_OBSERVATIONS },
-    result: { data: { antecedents: { nodes: [] } } },
-  },
-  {
-    request: { query: GET_BEHAVIORS_WITH_OBSERVATIONS },
-    result: { data: { behaviors: { nodes: [] } } },
-  },
-  {
-    request: { query: GET_CONSEQUENCES_WITH_OBSERVATIONS },
-    result: { data: { consequences: { nodes: [] } } },
-  },
-  {
-    request: { query: GET_RECENT_OBSERVATIONS },
-    result: { data: { observations: { nodes: [] } } },
+    request: { query: DASHBOARD_QUERY },
+    result: {
+      data: {
+        antecedents: { nodes: [] },
+        behaviors: { nodes: [] },
+        consequences: { nodes: [] },
+        observations: { nodes: [] },
+      },
+    },
   },
 ]
 

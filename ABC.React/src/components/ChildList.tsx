@@ -7,6 +7,8 @@ interface Props {
   onAdd: () => void
   onEdit?: (id: string) => void
   onDelete: (id: string) => void
+  defaultChildId?: string | null
+  onSetDefault?: (id: string | null) => void | Promise<unknown>
 }
 
 export const ChildList: React.FC<Props> = ({
@@ -14,6 +16,8 @@ export const ChildList: React.FC<Props> = ({
   onAdd,
   onEdit,
   onDelete,
+  defaultChildId,
+  onSetDefault,
 }) => {
   return (
     <div>
@@ -46,6 +50,8 @@ export const ChildList: React.FC<Props> = ({
               child={child}
               onEdit={onEdit}
               onDelete={onDelete}
+              isDefault={defaultChildId === child.id}
+              onSetDefault={onSetDefault}
             />
           ))}
         </div>

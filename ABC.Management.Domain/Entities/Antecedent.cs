@@ -1,4 +1,4 @@
-﻿namespace ABC.Management.Domain.Entities;
+namespace ABC.Management.Domain.Entities;
 
 public class Antecedent(
     Guid id,
@@ -26,7 +26,7 @@ public class Antecedent(
     }
 
     public Antecedent()
-        : this(Guid.NewGuid())
+        : this(Guid.CreateVersion7())
     {
 
     }

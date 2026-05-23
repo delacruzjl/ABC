@@ -1,5 +1,7 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from "react"
 
+import { useApolloClient } from "@apollo/client/react"
+
 interface AuthUser {
   email: string
   roles: string[]
@@ -42,6 +44,7 @@ function parseToken(token: string): AuthUser | null {
 }
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const client = useApolloClient()
   const [token, setToken] = useState<string | null>(() => localStorage.getItem("abc_token"))
   const [user, setUser] = useState<AuthUser | null>(() => {
     const stored = localStorage.getItem("abc_token")
@@ -58,7 +61,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     localStorage.removeItem("abc_token")
     setToken(null)
     setUser(null)
-  }, [])
+    client.clearStore()
+  }, [client])
 
   useEffect(() => {
     if (token) {

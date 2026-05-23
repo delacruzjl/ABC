@@ -16,11 +16,11 @@ namespace ABC.Tests.PostgreSQL.StepDefinitions;
 public class AntecedentRepositoryStepDefinitions
 {
     private readonly IUnitOfWork _uowFake;
-    private IUnitOfWork _uow;
+    private IUnitOfWork _uow = null!;
     private int _actual;
     private int _expected;
     private Guid _antecedentId;
-    private string _antecedentName;
+    private string _antecedentName = string.Empty;
     private readonly Lorem _lorem;
 
     public AntecedentRepositoryStepDefinitions(PostgresStartupFixture fixture)
@@ -48,7 +48,7 @@ public class AntecedentRepositoryStepDefinitions
         for (var i = antecedents.Count(); i < rows; i++)
         {
             var antecedent = new Antecedent(
-                Guid.NewGuid(),
+                Guid.CreateVersion7(),
                 _lorem.Word(),
                 _lorem.Sentence());
             await _uow.Antecedents.AddAsync(antecedent);
@@ -102,7 +102,7 @@ public class AntecedentRepositoryStepDefinitions
     [When("I request antecedents by a non-existing id from the database")]
     public void WhenIRequestAntecedentsByANon_ExistingIdFromTheDatabase()
     {
-        _antecedentId = Guid.NewGuid();
+        _antecedentId = Guid.CreateVersion7();
     }
 
     [Then("I should receive an exception indicating antecedents not found")]

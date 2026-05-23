@@ -1,5 +1,6 @@
 // ...existing code...
 const HTMLWebpackPlugin = require("html-webpack-plugin")
+const webpack = require("webpack")
 
 module.exports = (env) => {
   const proxyTarget =
@@ -37,6 +38,12 @@ module.exports = (env) => {
       new HTMLWebpackPlugin({
         template: "./public/index.html",
         favicon: "./public/favicon.ico",
+      }),
+      new webpack.DefinePlugin({
+        "process.env.GOOGLE_CLIENT_ID": JSON.stringify(process.env.GOOGLE_CLIENT_ID || ""),
+        "process.env.AZURE_ENTRA_CLIENT_ID": JSON.stringify(process.env.AZURE_ENTRA_CLIENT_ID || ""),
+        "process.env.AZURE_ENTRA_TENANT_ID": JSON.stringify(process.env.AZURE_ENTRA_TENANT_ID || ""),
+        "process.env.DEV_MODE": JSON.stringify(process.env.NODE_ENV !== "production" ? "true" : ""),
       }),
     ],
     resolve: {

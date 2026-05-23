@@ -10,6 +10,10 @@ import { setContext } from "@apollo/client/link/context"
 import { ApolloProvider } from "@apollo/client/react"
 import { AuthProvider } from "./context/AuthContext"
 import { apiErrorVar } from "./state/apiError"
+import { MsalProvider } from "@azure/msal-react"
+import { msalInstance } from "./config/msalConfig"
+import { GoogleOAuthProvider } from "@react-oauth/google"
+import { googleConfig } from "./config/googleConfig"
 
 const httpLink = new HttpLink({ uri: "/api/graphql" })
 
@@ -46,11 +50,15 @@ const client = new ApolloClient({
 const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement)
 root.render(
   <React.StrictMode>
-    <ApolloProvider client={client}>
-      <AuthProvider>
-        <App />
-      </AuthProvider>
-    </ApolloProvider>
+    <MsalProvider instance={msalInstance}>
+      <GoogleOAuthProvider clientId={googleConfig.clientId}>
+        <ApolloProvider client={client}>
+          <AuthProvider>
+            <App />
+          </AuthProvider>
+        </ApolloProvider>
+      </GoogleOAuthProvider>
+    </MsalProvider>
   </React.StrictMode>
 )
 

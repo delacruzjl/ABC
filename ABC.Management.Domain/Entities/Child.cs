@@ -1,4 +1,4 @@
-﻿namespace ABC.Management.Domain.Entities;
+namespace ABC.Management.Domain.Entities;
 
 public class Child(
     Guid id,
@@ -43,7 +43,7 @@ public class Child(
 
     }
 
-    public Child() : this(Guid.NewGuid())
+    public Child() : this(Guid.CreateVersion7())
     {
 
     }

@@ -15,6 +15,9 @@ var adminSeedPassword = builder.AddParameter("adminSeedPassword", secret: true);
 var pgPassword = builder.AddParameter("pgPassword", secret: true);
 var kongReactApiKey = builder.AddParameter("kongReactApiKey", secret: true);
 var allowedOrigins = builder.AddParameter("allowedOrigins");
+var googleClientId = builder.AddParameter("googleClientId");
+var azureEntraClientId = builder.AddParameter("azureEntraClientId");
+var azureEntraTenantId = builder.AddParameter("azureEntraTenantId");
 
 builder.Services.AddFeatureManagement();
 
@@ -25,6 +28,9 @@ IResourceBuilder<ProjectResource> managementApi = builder
         .WithEnvironment("AdminSeed__Email", adminSeedEmail)
         .WithEnvironment("AdminSeed__Password", adminSeedPassword)
         .WithEnvironment("Cors__AllowedOrigins__0", allowedOrigins)
+        .WithEnvironment("ExternalAuth__Google__ClientId", googleClientId)
+        .WithEnvironment("ExternalAuth__AzureEntra__ClientId", azureEntraClientId)
+        .WithEnvironment("ExternalAuth__AzureEntra__TenantId", azureEntraTenantId)
         .WithHttpsEndpoint(port: 5100, name: "kong-upstream", isProxied: false);
 
 var featureManager = builder.Services.BuildServiceProvider().GetRequiredService<IFeatureManager>();
@@ -95,8 +101,11 @@ if (useDockerPostgres)
         .WithReference(kongProxyEndpoint)
         .WaitFor(kong)
         .WithEnvironment("KONG_API_KEY", kongReactApiKey)
+        .WithEnvironment("GOOGLE_CLIENT_ID", googleClientId)
+        .WithEnvironment("AZURE_ENTRA_CLIENT_ID", azureEntraClientId)
+        .WithEnvironment("AZURE_ENTRA_TENANT_ID", azureEntraTenantId)
         .WithEnvironment("BROWSER", "none")
-        .WithHttpEndpoint(env: "PORT")
+        .WithHttpEndpoint(port: 4001, env: "PORT")
         .WithExternalHttpEndpoints()
         .PublishAsDockerFile();
 }
@@ -105,8 +114,11 @@ else
     builder.AddJavaScriptApp("react", "../ABC.React", "start")
         .WithReference(managementApi)
         .WaitFor(managementApi)
+        .WithEnvironment("GOOGLE_CLIENT_ID", googleClientId)
+        .WithEnvironment("AZURE_ENTRA_CLIENT_ID", azureEntraClientId)
+        .WithEnvironment("AZURE_ENTRA_TENANT_ID", azureEntraTenantId)
         .WithEnvironment("BROWSER", "none")
-        .WithHttpEndpoint(env: "PORT")
+        .WithHttpEndpoint(port: 4001, env: "PORT")
         .WithExternalHttpEndpoints()
         .PublishAsDockerFile();
 }

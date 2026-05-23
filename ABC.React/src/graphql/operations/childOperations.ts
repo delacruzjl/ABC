@@ -87,6 +87,9 @@ export const GET_USERS = gql`
       id
       email
       roles
+      isActive
+      hasChildren
+      hasObservations
     }
   }
 `
@@ -99,5 +102,17 @@ export const GET_CHILD_CONDITIONS = gql`
         name
       }
     }
+  }
+`
+
+export const GET_DEFAULT_CHILD_ID = gql`
+  query GetDefaultChildId {
+    defaultChildId
+  }
+`
+
+export const SET_DEFAULT_CHILD = gql`
+  mutation SetDefaultChild($childId: UUID) {
+    setDefaultChild(childId: $childId)
   }
 `
