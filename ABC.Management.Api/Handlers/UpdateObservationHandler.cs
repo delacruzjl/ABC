@@ -67,21 +67,27 @@ public class UpdateObservationHandler(IUnitOfWork _uow)
         {
             case nameof(Antecedent):
                 var antecedents = await Task.WhenAll(entityIds
-                    .Select(entity => TryFindEntity(() => _uow.Antecedents.FindAsync(entity, cancellationToken))));
+                    .Select(entity => TryFindEntity(
+                        () => _uow.Antecedents.FindAsync(entity, cancellationToken),
+                        $"{nameof(Antecedent)} with Id: {entity} not found.")));
                 return antecedents
                     .Where(a => a is not null)
                     .Cast<TEntity>()
                     .ToArray();
             case nameof(Behavior):
                 var behaviors = await Task.WhenAll(entityIds
-                    .Select(entity => TryFindEntity(() => _uow.Behaviors.FindAsync(entity, cancellationToken))));
+                    .Select(entity => TryFindEntity(
+                        () => _uow.Behaviors.FindAsync(entity, cancellationToken),
+                        $"{nameof(Behavior)} with Id: {entity} not found.")));
                 return behaviors
                     .Where(b => b is not null)
                     .Cast<TEntity>()
                     .ToArray();
             case nameof(Consequence):
                 var consequences = await Task.WhenAll(entityIds
-                    .Select(entity => TryFindEntity(() => _uow.Consequences.FindAsync(entity, cancellationToken))));
+                    .Select(entity => TryFindEntity(
+                        () => _uow.Consequences.FindAsync(entity, cancellationToken),
+                        $"{nameof(Consequence)} with Id: {entity} not found.")));
                 return consequences
                     .Where(c => c is not null)
                     .Cast<TEntity>()
@@ -91,14 +97,17 @@ public class UpdateObservationHandler(IUnitOfWork _uow)
         throw new InvalidOperationException($"Unknown entity type: {typeof(TEntity).Name}");
     }
 
-    private static async Task<TEntityType?> TryFindEntity<TEntityType>(Func<Task<TEntityType>> findEntity)
+    private static async Task<TEntityType?> TryFindEntity<TEntityType>(
+        Func<Task<TEntityType>> findEntity,
+        string notFoundMessage)
         where TEntityType : Entity
     {
         try
         {
             return await findEntity();
         }
-        catch (DataException)
+        catch (DataException exception)
+            when (string.Equals(exception.Message, notFoundMessage, StringComparison.Ordinal))
         {
             return null;
         }
