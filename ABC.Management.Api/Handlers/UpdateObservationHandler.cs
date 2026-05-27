@@ -4,6 +4,7 @@ using ABC.SharedEntityFramework;
 using ABC.SharedKernel;
 using ABC.SharedKernel.Events;
 using Mediator;
+using System.Data;
 
 namespace ABC.Management.Api.Handlers;
 
@@ -65,25 +66,41 @@ public class UpdateObservationHandler(IUnitOfWork _uow)
         switch (typeof(TEntity).Name)
         {
             case nameof(Antecedent):
-                var aTasks = entityIds
-                      .Select(async entity =>
-                        (TEntity)(object)(await _uow.Antecedents.FindAsync(entity, cancellationToken)))
-                      .Where(a => a is not null);
-                return await Task.WhenAll(aTasks);
+                var antecedents = await Task.WhenAll(entityIds
+                    .Select(entity => TryFindEntity(() => _uow.Antecedents.FindAsync(entity, cancellationToken))));
+                return antecedents
+                    .Where(a => a is not null)
+                    .Cast<TEntity>()
+                    .ToArray();
             case nameof(Behavior):
-                var bTasks = entityIds
-                        .Select(async entity =>
-                            (TEntity)(object)(await _uow.Behaviors.FindAsync(entity, cancellationToken)))
-                        .Where(a => a is not null);
-                return await Task.WhenAll(bTasks);
+                var behaviors = await Task.WhenAll(entityIds
+                    .Select(entity => TryFindEntity(() => _uow.Behaviors.FindAsync(entity, cancellationToken))));
+                return behaviors
+                    .Where(b => b is not null)
+                    .Cast<TEntity>()
+                    .ToArray();
             case nameof(Consequence):
-                var cTask = entityIds
-                       .Select(async entity =>
-                            (TEntity)(object)(await _uow.Consequences.FindAsync(entity, cancellationToken)))
-                       .Where(a => a is not null);
-                return await Task.WhenAll(cTask);
+                var consequences = await Task.WhenAll(entityIds
+                    .Select(entity => TryFindEntity(() => _uow.Consequences.FindAsync(entity, cancellationToken))));
+                return consequences
+                    .Where(c => c is not null)
+                    .Cast<TEntity>()
+                    .ToArray();
         }
 
         throw new InvalidOperationException($"Unknown entity type: {typeof(TEntity).Name}");
+    }
+
+    private static async Task<TEntityType?> TryFindEntity<TEntityType>(Func<Task<TEntityType>> findEntity)
+        where TEntityType : Entity
+    {
+        try
+        {
+            return await findEntity();
+        }
+        catch (DataException)
+        {
+            return null;
+        }
     }
 }
