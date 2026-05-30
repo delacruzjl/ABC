@@ -1,4 +1,5 @@
 using ABC.Management.Domain.ValueObjects;
+using ABC.SharedKernel;
 using ABC.SharedKernel.Events;
 using FluentValidation.Results;
 
@@ -18,14 +19,17 @@ public class Observation : AggregateRoot
     public string Notes { get; private set; }
     public DateTimeRange When { get; private set; } = new();
     public ObservationStatus Status { get; private set; }
+    public DailyContext? DailyContext { get; private set; }
 
     public Observation(
     Guid id,
     Child? child,
-    string notes) : base(id)
+    string notes,
+    DailyContext? dailyContext = null) : base(id)
     {
         Child = child;
         Notes = notes;
+        DailyContext = dailyContext;
     }
 
     public Observation()
@@ -74,10 +78,15 @@ public class Observation : AggregateRoot
                 Id = e.Id;
                 Status = ObservationStatus.Open;
                 When = new DateTimeRange(e.StartedAt, null);
+                DailyContext = e.DailyContext;
                 break;
             case NotesUpdated e:
                 ValidateObservationStatus();
                 Notes = e.Notes;
+                break;
+            case DailyContextUpdated e:
+                ValidateObservationStatus();
+                DailyContext = e.DailyContext;
                 break;
             case ObservationEnded e:
                 ValidateObservationStatus();

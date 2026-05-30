@@ -88,7 +88,9 @@ function toRecentObservations(
 }
 
 export function useDashboard() {
-  const { data, loading, error } = useQuery<DashboardData>(DASHBOARD_QUERY)
+  const { data, loading, error } = useQuery<DashboardData>(DASHBOARD_QUERY, {
+    fetchPolicy: "cache-and-network",
+  })
 
   const topAntecedents = toTopItemsWithChildren(
     data?.antecedents?.nodes ?? [],

@@ -58,10 +58,20 @@ const mockObservation = {
   notes: "",
   status: "OPEN",
   when: { startedAt: "2025-01-01T10:00:00Z", endedAt: null },
+  dailyContext: null,
   antecedents: [],
   behaviors: [],
   consequences: [],
   child: { id: childId, firstName: "Jane", lastName: "Doe" },
+}
+
+const defaultDailyContext = {
+  hadBreakfast: false,
+  hadLunch: false,
+  hadDinner: false,
+  hadSnack: false,
+  sleptWell: false,
+  hoursOfSleep: null,
 }
 
 function renderPage(extraMocks: MockDef[] = []) {
@@ -108,7 +118,7 @@ describe("ObservationPage", () => {
     const startMock: MockDef = {
       request: {
         query: START_OBSERVATION,
-        variables: { childId },
+        variables: { childId, dailyContext: defaultDailyContext },
       },
       result: { data: { startObservation: mockObservation } },
     }
@@ -137,7 +147,7 @@ describe("ObservationPage", () => {
     const startMock: MockDef = {
       request: {
         query: START_OBSERVATION,
-        variables: { childId },
+        variables: { childId, dailyContext: defaultDailyContext },
       },
       result: { data: { startObservation: mockObservation } },
     }
@@ -168,7 +178,7 @@ describe("ObservationPage", () => {
     const startMock: MockDef = {
       request: {
         query: START_OBSERVATION,
-        variables: { childId },
+        variables: { childId, dailyContext: defaultDailyContext },
       },
       result: { data: { startObservation: mockObservation } },
     }
@@ -204,7 +214,7 @@ describe("ObservationPage", () => {
     const startMock: MockDef = {
       request: {
         query: START_OBSERVATION,
-        variables: { childId },
+        variables: { childId, dailyContext: defaultDailyContext },
       },
       result: { data: { startObservation: mockObservation } },
     }
@@ -226,6 +236,7 @@ describe("ObservationPage", () => {
           behaviors: ["b1"],
           consequences: ["c1"],
           notes: "Test note",
+          dailyContext: defaultDailyContext,
         },
       },
       result: { data: { updateObservation: updatedObs } },
@@ -285,7 +296,7 @@ describe("ObservationPage", () => {
     const startMock: MockDef = {
       request: {
         query: START_OBSERVATION,
-        variables: { childId },
+        variables: { childId, dailyContext: defaultDailyContext },
       },
       error: new Error("Server error"),
     }
@@ -324,7 +335,7 @@ describe("ObservationPage", () => {
     const startMock: MockDef = {
       request: {
         query: START_OBSERVATION,
-        variables: { childId },
+        variables: { childId, dailyContext: defaultDailyContext },
       },
       result: { data: { startObservation: mockObservation } },
     }

@@ -52,6 +52,12 @@ public class ABCContext(DbContextOptions<ABCContext> options) : IdentityDbContex
                 d.ToJson();
             });
 
+        modelBuilder.Entity<Observation>()
+            .OwnsOne(o => o.DailyContext, d =>
+            {
+                d.ToJson();
+            });
+
         SeedAntecedents(modelBuilder);
         SeedBehaviors(modelBuilder);
         SeedConsequences(modelBuilder);

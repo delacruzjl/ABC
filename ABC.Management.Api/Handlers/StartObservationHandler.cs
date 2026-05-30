@@ -28,10 +28,11 @@ public class StartObservationHandler(IUnitOfWork _uow)
         Observation observation = new(
             Guid.CreateVersion7(),
             child,
-            string.Empty);
+            string.Empty,
+            request.DailyContext?.ToDomain());
 
         observation.Load(
-            new ObservationStarted(observation.Id, child?.Id, DateTime.UtcNow));
+            new ObservationStarted(observation.Id, child?.Id, DateTime.UtcNow, request.DailyContext?.ToDomain()));
 
         await _uow.Observations.AddAsync(observation, cancellationToken);
 

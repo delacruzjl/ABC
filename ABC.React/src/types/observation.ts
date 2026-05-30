@@ -1,3 +1,12 @@
+export interface DailyContext {
+  hadBreakfast: boolean
+  hadLunch: boolean
+  hadDinner: boolean
+  hadSnack: boolean
+  sleptWell: boolean
+  hoursOfSleep: number | null
+}
+
 export interface Observation {
   id: string
   notes: string
@@ -6,6 +15,7 @@ export interface Observation {
     startedAt: string | null
     endedAt: string | null
   }
+  dailyContext: DailyContext | null
   antecedents: { id: string; name: string }[]
   behaviors: { id: string; name: string }[]
   consequences: { id: string; name: string }[]

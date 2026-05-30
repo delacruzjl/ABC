@@ -19,6 +19,7 @@ public class Observations
         IMediator handler,
         IUnitOfWork uow,
         Guid childId,
+        DailyContextInput? dailyContext,
         ClaimsPrincipal claimsPrincipal,
         IResolverContext context,
         CancellationToken cancellationToken)
@@ -33,7 +34,7 @@ public class Observations
             return null;
         }
 
-        StartObservationCommand command = new(childId);
+        StartObservationCommand command = new(childId, dailyContext);
         return await command.ExecuteHandler(handler, context, cancellationToken);
     }
 

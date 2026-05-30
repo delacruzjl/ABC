@@ -1,6 +1,7 @@
 import React, { useState } from "react"
 import { useParams, useNavigate } from "react-router-dom"
 import { useObservation } from "../hooks/useObservation"
+import type { DailyContext } from "../types/observation"
 
 interface SelectionSectionProps {
   title: string
@@ -50,6 +51,88 @@ const SelectionSection: React.FC<SelectionSectionProps> = ({
   </div>
 )
 
+interface DailyContextSectionProps {
+  dailyContext: DailyContext
+  onChange: (ctx: DailyContext) => void
+}
+
+const DailyContextSection: React.FC<DailyContextSectionProps> = ({
+  dailyContext,
+  onChange,
+}) => {
+  const toggle = (field: keyof DailyContext) => {
+    onChange({ ...dailyContext, [field]: !dailyContext[field] })
+  }
+
+  return (
+    <div>
+      <h3 className="text-lg font-semibold text-slate-200 mb-3">
+        Daily Context
+      </h3>
+      <p className="text-slate-400 text-xs mb-3">
+        Optional — record the child's meals and sleep before this session.
+      </p>
+      <div className="space-y-3">
+        <div>
+          <p className="text-sm text-slate-300 mb-2 font-medium">Meals</p>
+          <div className="flex flex-wrap gap-4">
+            {(["hadBreakfast", "hadLunch", "hadDinner", "hadSnack"] as const).map(
+              (field) => (
+                <label
+                  key={field}
+                  className="flex items-center gap-2 text-sm text-slate-300 cursor-pointer"
+                >
+                  <input
+                    type="checkbox"
+                    checked={dailyContext[field]}
+                    onChange={() => toggle(field)}
+                    className="w-4 h-4 rounded border-slate-500 bg-slate-700 text-cyan-500 focus:ring-cyan-500"
+                  />
+                  {field === "hadBreakfast" && "Breakfast"}
+                  {field === "hadLunch" && "Lunch"}
+                  {field === "hadDinner" && "Dinner"}
+                  {field === "hadSnack" && "Snack"}
+                </label>
+              )
+            )}
+          </div>
+        </div>
+        <div>
+          <p className="text-sm text-slate-300 mb-2 font-medium">Sleep</p>
+          <div className="flex flex-wrap items-center gap-4">
+            <label className="flex items-center gap-2 text-sm text-slate-300 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={dailyContext.sleptWell}
+                onChange={() => toggle("sleptWell")}
+                className="w-4 h-4 rounded border-slate-500 bg-slate-700 text-cyan-500 focus:ring-cyan-500"
+              />
+              Slept well
+            </label>
+            <label className="flex items-center gap-2 text-sm text-slate-300">
+              <span>Hours of sleep:</span>
+              <input
+                type="number"
+                min={0}
+                max={24}
+                value={dailyContext.hoursOfSleep ?? ""}
+                onChange={(e) =>
+                  onChange({
+                    ...dailyContext,
+                    hoursOfSleep: e.target.value ? parseInt(e.target.value, 10) : null,
+                  })
+                }
+                placeholder="—"
+                className="w-16 bg-slate-700 text-slate-200 border border-slate-600 rounded px-2 py-1 text-sm focus:outline-none focus:border-cyan-500"
+              />
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 export const ObservationPage: React.FC = () => {
   const { childId } = useParams<{ childId: string }>()
   const navigate = useNavigate()
@@ -63,6 +146,8 @@ export const ObservationPage: React.FC = () => {
     selectedConsequences,
     notes,
     setNotes,
+    dailyContext,
+    setDailyContext,
     toggleAntecedent,
     toggleBehavior,
     toggleConsequence,
@@ -163,6 +248,14 @@ export const ObservationPage: React.FC = () => {
           Begin an ABC data collection session for this child. You'll select
           antecedents, behaviors, and consequences observed during the session.
         </p>
+
+        <div className="max-w-md mx-auto mb-6 text-left bg-slate-800 rounded-lg p-4 border border-slate-700">
+          <DailyContextSection
+            dailyContext={dailyContext}
+            onChange={setDailyContext}
+          />
+        </div>
+
         {error && (
           <p className="text-red-400 text-sm mb-4">{error}</p>
         )}
@@ -249,6 +342,11 @@ export const ObservationPage: React.FC = () => {
             className="w-full bg-slate-700 text-slate-200 border border-slate-600 rounded-lg px-3 py-2 focus:outline-none focus:border-cyan-500 placeholder-slate-500 resize-y"
           />
         </div>
+
+        <DailyContextSection
+          dailyContext={dailyContext}
+          onChange={setDailyContext}
+        />
       </div>
 
       {!canEnd && (

@@ -37,7 +37,8 @@ public class UpdateObservationHandler(IUnitOfWork _uow)
             new NotesUpdated(request.ObservationId, request.Notes ?? string.Empty),
             new AntecedentsUpdated(request.ObservationId, antecedents),
             new BehaviorsUpdated(request.ObservationId, behaviors),
-            new ConsequencesUpdated(request.ObservationId, consequences));
+            new ConsequencesUpdated(request.ObservationId, consequences),
+            new DailyContextUpdated(request.ObservationId, request.DailyContext?.ToDomain()));
 
         observation = await _uow.Observations.Update(observation, cancellationToken);
         var count = await _uow.SaveChangesAsync();

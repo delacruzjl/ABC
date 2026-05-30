@@ -1,14 +1,28 @@
 import { gql } from "@apollo/client"
 
+export const DAILY_CONTEXT_FRAGMENT = gql`
+  fragment DailyContextFields on DailyContext {
+    hadBreakfast
+    hadLunch
+    hadDinner
+    hadSnack
+    sleptWell
+    hoursOfSleep
+  }
+`
+
 export const START_OBSERVATION = gql`
-  mutation StartObservation($childId: UUID!) {
-    startObservation(childId: $childId) {
+  mutation StartObservation($childId: UUID!, $dailyContext: DailyContextInput) {
+    startObservation(childId: $childId, dailyContext: $dailyContext) {
       id
       notes
       status
       when {
         startedAt
         endedAt
+      }
+      dailyContext {
+        ...DailyContextFields
       }
       antecedents {
         id
@@ -29,6 +43,7 @@ export const START_OBSERVATION = gql`
       }
     }
   }
+  ${DAILY_CONTEXT_FRAGMENT}
 `
 
 export const UPDATE_OBSERVATION = gql`
@@ -38,6 +53,7 @@ export const UPDATE_OBSERVATION = gql`
     $behaviors: [UUID!]
     $consequences: [UUID!]
     $notes: String
+    $dailyContext: DailyContextInput
   ) {
     updateObservation(
       command: {
@@ -46,6 +62,7 @@ export const UPDATE_OBSERVATION = gql`
         behaviors: $behaviors
         consequences: $consequences
         notes: $notes
+        dailyContext: $dailyContext
       }
     ){
       id
@@ -54,6 +71,9 @@ export const UPDATE_OBSERVATION = gql`
       when {
         startedAt
         endedAt
+      }
+      dailyContext {
+        ...DailyContextFields
       }
       antecedents {
         id
@@ -69,6 +89,7 @@ export const UPDATE_OBSERVATION = gql`
       }
     }
   }
+  ${DAILY_CONTEXT_FRAGMENT}
 `
 
 export const END_OBSERVATION = gql`
@@ -81,6 +102,9 @@ export const END_OBSERVATION = gql`
         startedAt
         endedAt
       }
+      dailyContext {
+        ...DailyContextFields
+      }
       antecedents {
         id
         name
@@ -95,4 +119,5 @@ export const END_OBSERVATION = gql`
       }
     }
   }
+  ${DAILY_CONTEXT_FRAGMENT}
 `

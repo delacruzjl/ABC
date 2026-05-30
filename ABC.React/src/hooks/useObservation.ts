@@ -5,10 +5,11 @@ import {
   UPDATE_OBSERVATION,
   END_OBSERVATION,
 } from "../graphql/operations/observationOperations"
+import { DASHBOARD_QUERY } from "../graphql/operations/dashboardOperations"
 import { GET_ANTECEDENTS } from "../graphql/operations/antecedentOperations"
 import { GET_BEHAVIORS } from "../graphql/operations/behaviorOperations"
 import { GET_CONSEQUENCES } from "../graphql/operations/consequenceOperations"
-import type { Observation } from "../types/observation"
+import type { DailyContext, Observation } from "../types/observation"
 
 interface SelectableItem {
   id: string
@@ -26,12 +27,22 @@ interface ConsequencesData {
   consequences: { nodes: SelectableItem[] }
 }
 
+const defaultDailyContext: DailyContext = {
+  hadBreakfast: false,
+  hadLunch: false,
+  hadDinner: false,
+  hadSnack: false,
+  sleptWell: false,
+  hoursOfSleep: null,
+}
+
 export function useObservation() {
   const [observation, setObservation] = useState<Observation | null>(null)
   const [selectedAntecedents, setSelectedAntecedents] = useState<string[]>([])
   const [selectedBehaviors, setSelectedBehaviors] = useState<string[]>([])
   const [selectedConsequences, setSelectedConsequences] = useState<string[]>([])
   const [notes, setNotes] = useState("")
+  const [dailyContext, setDailyContext] = useState<DailyContext>({ ...defaultDailyContext })
 
   const {
     data: antecedentsData,
@@ -59,19 +70,20 @@ export function useObservation() {
 
   const startObservation = useCallback(
     async (childId: string) => {
-      const { data } = await startMutation({ variables: { childId } })
+      const { data } = await startMutation({
+        variables: { childId, dailyContext },
+      })
       if (data?.startObservation) {
         setObservation(data.startObservation)
       }
       return data?.startObservation ?? null
     },
-    [startMutation]
+    [startMutation, dailyContext]
   )
 
   const saveAndEndObservation = useCallback(async () => {
     if (!observation) return null
 
-    // Submit the full selection set once, then end
     const { data: updateData } = await updateMutation({
       variables: {
         observationId: observation.id,
@@ -79,6 +91,7 @@ export function useObservation() {
         behaviors: selectedBehaviors,
         consequences: selectedConsequences,
         notes,
+        dailyContext,
       },
     })
 
@@ -88,6 +101,7 @@ export function useObservation() {
 
     const { data: endData } = await endMutation({
       variables: { observationId: observation.id },
+      refetchQueries: [{ query: DASHBOARD_QUERY }],
     })
 
     if (endData?.endObservation) {
@@ -101,6 +115,7 @@ export function useObservation() {
     selectedBehaviors,
     selectedConsequences,
     notes,
+    dailyContext,
     updateMutation,
     endMutation,
   ])
@@ -134,6 +149,7 @@ export function useObservation() {
     setSelectedBehaviors([])
     setSelectedConsequences([])
     setNotes("")
+    setDailyContext({ ...defaultDailyContext })
   }, [])
 
   return {
@@ -146,6 +162,8 @@ export function useObservation() {
     selectedConsequences,
     notes,
     setNotes,
+    dailyContext,
+    setDailyContext,
     toggleAntecedent,
     toggleBehavior,
     toggleConsequence,
