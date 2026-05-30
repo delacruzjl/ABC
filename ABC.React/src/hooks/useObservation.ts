@@ -1,9 +1,10 @@
-import { useMutation, useQuery } from "@apollo/client/react"
+import { useMutation, useQuery, useLazyQuery } from "@apollo/client/react"
 import { useState, useCallback } from "react"
 import {
   START_OBSERVATION,
   UPDATE_OBSERVATION,
   END_OBSERVATION,
+  GET_OPEN_OBSERVATIONS,
 } from "../graphql/operations/observationOperations"
 import { DASHBOARD_QUERY } from "../graphql/operations/dashboardOperations"
 import { GET_ANTECEDENTS } from "../graphql/operations/antecedentOperations"
@@ -25,6 +26,9 @@ interface BehaviorsData {
 }
 interface ConsequencesData {
   consequences: { nodes: SelectableItem[] }
+}
+interface OpenObservationsData {
+  observations: { nodes: Observation[] }
 }
 
 const defaultDailyContext: DailyContext = {
@@ -62,6 +66,9 @@ export function useObservation() {
   const [startMutation, { loading: starting }] = useMutation(START_OBSERVATION)
   const [updateMutation, { loading: updating }] = useMutation(UPDATE_OBSERVATION)
   const [endMutation, { loading: ending }] = useMutation(END_OBSERVATION)
+  const [fetchOpenObservations, { loading: loadingOpen }] = useLazyQuery<OpenObservationsData>(GET_OPEN_OBSERVATIONS, {
+    fetchPolicy: "network-only",
+  })
 
   const antecedents = antecedentsData?.antecedents?.nodes ?? []
   const behaviors = behaviorsData?.behaviors?.nodes ?? []
@@ -79,6 +86,30 @@ export function useObservation() {
       return data?.startObservation ?? null
     },
     [startMutation, dailyContext]
+  )
+
+  const continueObservation = useCallback(
+    (obs: Observation) => {
+      setObservation(obs)
+      setSelectedAntecedents(obs.antecedents.map((a) => a.id))
+      setSelectedBehaviors(obs.behaviors.map((b) => b.id))
+      setSelectedConsequences(obs.consequences.map((c) => c.id))
+      setNotes(obs.notes || "")
+      if (obs.dailyContext) {
+        setDailyContext(obs.dailyContext)
+      }
+    },
+    []
+  )
+
+  const getOpenObservations = useCallback(
+    async (childId: string): Promise<Observation[]> => {
+      const { data } = await fetchOpenObservations({
+        variables: { childId },
+      })
+      return data?.observations?.nodes ?? []
+    },
+    [fetchOpenObservations]
   )
 
   const saveAndEndObservation = useCallback(async () => {
@@ -168,6 +199,8 @@ export function useObservation() {
     toggleBehavior,
     toggleConsequence,
     startObservation,
+    continueObservation,
+    getOpenObservations,
     saveAndEndObservation,
     canEnd,
     reset,
@@ -175,6 +208,7 @@ export function useObservation() {
     starting,
     updating,
     ending,
+    loadingOpen,
     saving: updating || ending,
   }
 }

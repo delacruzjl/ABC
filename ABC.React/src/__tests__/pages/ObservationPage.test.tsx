@@ -13,6 +13,7 @@ import {
   START_OBSERVATION,
   UPDATE_OBSERVATION,
   END_OBSERVATION,
+  GET_OPEN_OBSERVATIONS,
 } from "../../graphql/operations/observationOperations"
 
 interface MockDef {
@@ -36,6 +37,8 @@ const mockConsequences = [
   { id: "c2", name: "Ignored", description: "Behavior was ignored" },
 ]
 
+const childId = "child-123"
+
 const listMocks: MockDef[] = [
   {
     request: { query: GET_ANTECEDENTS },
@@ -49,9 +52,11 @@ const listMocks: MockDef[] = [
     request: { query: GET_CONSEQUENCES },
     result: { data: { consequences: { nodes: mockConsequences } } },
   },
+  {
+    request: { query: GET_OPEN_OBSERVATIONS, variables: { childId } },
+    result: { data: { observations: { nodes: [] } } },
+  },
 ]
-
-const childId = "child-123"
 
 const mockObservation = {
   id: "obs-1",
@@ -95,9 +100,13 @@ function renderPage(extraMocks: MockDef[] = []) {
 }
 
 describe("ObservationPage", () => {
-  it("shows loading state while fetching lists", () => {
+  it("shows loading state while fetching lists", async () => {
     renderPage()
     expect(screen.getByText(/Loading observation data/)).toBeInTheDocument()
+    // Wait for pending effects to avoid interference with subsequent tests
+    await waitFor(() => {
+      expect(screen.queryByText(/Loading observation data/)).not.toBeInTheDocument()
+    })
   })
 
   it("shows pre-start state after lists load", async () => {
@@ -105,13 +114,16 @@ describe("ObservationPage", () => {
 
     await waitFor(() => {
       expect(
-        screen.getByRole("button", { name: "Start Observation" })
+        screen.getByRole("button", { name: "Start New Observation" })
       ).toBeInTheDocument()
     })
 
     expect(
       screen.getByText(/Begin an ABC data collection session/)
     ).toBeInTheDocument()
+
+    // Wait for any pending lazy query effects to settle
+    await waitFor(() => {})
   })
 
   it("starts observation and shows active recording view", async () => {
@@ -127,11 +139,11 @@ describe("ObservationPage", () => {
 
     await waitFor(() => {
       expect(
-        screen.getByRole("button", { name: "Start Observation" })
+        screen.getByRole("button", { name: "Start New Observation" })
       ).toBeInTheDocument()
     })
 
-    fireEvent.click(screen.getByRole("button", { name: "Start Observation" }))
+    fireEvent.click(screen.getByRole("button", { name: "Start New Observation" }))
 
     await waitFor(() => {
       expect(screen.getByText("Recording Observation")).toBeInTheDocument()
@@ -156,11 +168,11 @@ describe("ObservationPage", () => {
 
     await waitFor(() => {
       expect(
-        screen.getByRole("button", { name: "Start Observation" })
+        screen.getByRole("button", { name: "Start New Observation" })
       ).toBeInTheDocument()
     })
 
-    fireEvent.click(screen.getByRole("button", { name: "Start Observation" }))
+    fireEvent.click(screen.getByRole("button", { name: "Start New Observation" }))
 
     await waitFor(() => {
       expect(screen.getByText("Recording Observation")).toBeInTheDocument()
@@ -187,11 +199,11 @@ describe("ObservationPage", () => {
 
     await waitFor(() => {
       expect(
-        screen.getByRole("button", { name: "Start Observation" })
+        screen.getByRole("button", { name: "Start New Observation" })
       ).toBeInTheDocument()
     })
 
-    fireEvent.click(screen.getByRole("button", { name: "Start Observation" }))
+    fireEvent.click(screen.getByRole("button", { name: "Start New Observation" }))
 
     await waitFor(() => {
       expect(screen.getByText("Recording Observation")).toBeInTheDocument()
@@ -264,10 +276,10 @@ describe("ObservationPage", () => {
     // Wait for lists, then start
     await waitFor(() => {
       expect(
-        screen.getByRole("button", { name: "Start Observation" })
+        screen.getByRole("button", { name: "Start New Observation" })
       ).toBeInTheDocument()
     })
-    fireEvent.click(screen.getByRole("button", { name: "Start Observation" }))
+    fireEvent.click(screen.getByRole("button", { name: "Start New Observation" }))
 
     await waitFor(() => {
       expect(screen.getByText("Recording Observation")).toBeInTheDocument()
@@ -305,11 +317,11 @@ describe("ObservationPage", () => {
 
     await waitFor(() => {
       expect(
-        screen.getByRole("button", { name: "Start Observation" })
+        screen.getByRole("button", { name: "Start New Observation" })
       ).toBeInTheDocument()
     })
 
-    fireEvent.click(screen.getByRole("button", { name: "Start Observation" }))
+    fireEvent.click(screen.getByRole("button", { name: "Start New Observation" }))
 
     await waitFor(() => {
       expect(screen.getByText("Server error")).toBeInTheDocument()
@@ -329,6 +341,10 @@ describe("ObservationPage", () => {
       {
         request: { query: GET_CONSEQUENCES },
         result: { data: { consequences: { nodes: [] } } },
+      },
+      {
+        request: { query: GET_OPEN_OBSERVATIONS, variables: { childId } },
+        result: { data: { observations: { nodes: [] } } },
       },
     ]
 
@@ -363,11 +379,11 @@ describe("ObservationPage", () => {
 
     await waitFor(() => {
       expect(
-        screen.getByRole("button", { name: "Start Observation" })
+        screen.getByRole("button", { name: "Start New Observation" })
       ).toBeInTheDocument()
     })
 
-    fireEvent.click(screen.getByRole("button", { name: "Start Observation" }))
+    fireEvent.click(screen.getByRole("button", { name: "Start New Observation" }))
 
     await waitFor(() => {
       expect(screen.getByText("Recording Observation")).toBeInTheDocument()

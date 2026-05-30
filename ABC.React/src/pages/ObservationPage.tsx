@@ -1,7 +1,7 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import { useParams, useNavigate } from "react-router-dom"
 import { useObservation } from "../hooks/useObservation"
-import type { DailyContext } from "../types/observation"
+import type { DailyContext, Observation as ObservationType } from "../types/observation"
 
 interface SelectionSectionProps {
   title: string
@@ -152,16 +152,39 @@ export const ObservationPage: React.FC = () => {
     toggleBehavior,
     toggleConsequence,
     startObservation,
+    continueObservation,
+    getOpenObservations,
     saveAndEndObservation,
     canEnd,
     reset,
     listsLoading,
     starting,
     saving,
+    loadingOpen,
   } = useObservation()
 
   const [error, setError] = useState<string | null>(null)
   const [completed, setCompleted] = useState(false)
+  const [openObservations, setOpenObservations] = useState<ObservationType[]>([])
+  const [checkedOpen, setCheckedOpen] = useState(false)
+
+  useEffect(() => {
+    let cancelled = false
+    if (childId && !observation && !checkedOpen) {
+      setCheckedOpen(true)
+      getOpenObservations(childId).then((obs) => {
+        if (!cancelled) {
+          setOpenObservations(obs)
+        }
+      })
+    }
+    return () => { cancelled = true }
+  }, [childId, observation, checkedOpen, getOpenObservations])
+
+  const handleContinue = (obs: ObservationType) => {
+    setError(null)
+    continueObservation(obs)
+  }
 
   const handleStart = async () => {
     if (!childId) return
@@ -249,6 +272,56 @@ export const ObservationPage: React.FC = () => {
           antecedents, behaviors, and consequences observed during the session.
         </p>
 
+        {/* Open observations to continue */}
+        {(loadingOpen) && (
+          <p className="text-slate-400 text-sm mb-4">Checking for open observations…</p>
+        )}
+        {openObservations.length > 0 && (
+          <div className="max-w-md mx-auto mb-6 text-left bg-slate-800 rounded-lg p-4 border border-amber-700">
+            <h3 className="text-lg font-semibold text-amber-400 mb-3">
+              Open Observations
+            </h3>
+            <p className="text-slate-400 text-xs mb-3">
+              You have open observations for this child. Continue where you left off or start a new one.
+            </p>
+            <div className="flex flex-col gap-2">
+              {openObservations.map((obs) => (
+                <button
+                  key={obs.id}
+                  onClick={() => handleContinue(obs)}
+                  className="w-full text-left bg-slate-700 hover:bg-slate-600 border border-slate-600 hover:border-amber-400 rounded-lg p-3 transition"
+                >
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm text-slate-200">
+                      Started:{" "}
+                      {obs.when.startedAt
+                        ? new Date(obs.when.startedAt).toLocaleString()
+                        : "—"}
+                    </span>
+                    <span className="text-xs bg-yellow-900 text-yellow-300 px-2 py-0.5 rounded">
+                      OPEN
+                    </span>
+                  </div>
+                  {obs.notes && (
+                    <p className="text-slate-400 text-xs mt-1 truncate">{obs.notes}</p>
+                  )}
+                  <div className="flex gap-1 mt-2">
+                    {obs.antecedents.length > 0 && (
+                      <span className="text-xs text-cyan-400">{obs.antecedents.length}A</span>
+                    )}
+                    {obs.behaviors.length > 0 && (
+                      <span className="text-xs text-purple-400">{obs.behaviors.length}B</span>
+                    )}
+                    {obs.consequences.length > 0 && (
+                      <span className="text-xs text-amber-400">{obs.consequences.length}C</span>
+                    )}
+                  </div>
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
         <div className="max-w-md mx-auto mb-6 text-left bg-slate-800 rounded-lg p-4 border border-slate-700">
           <DailyContextSection
             dailyContext={dailyContext}
@@ -265,7 +338,7 @@ export const ObservationPage: React.FC = () => {
             disabled={starting}
             className="bg-cyan-600 hover:bg-cyan-500 disabled:opacity-50 text-white font-medium px-6 py-2 rounded-lg transition"
           >
-            {starting ? "Starting…" : "Start Observation"}
+            {starting ? "Starting…" : "Start New Observation"}
           </button>
           <button
             onClick={() => navigate("/children")}

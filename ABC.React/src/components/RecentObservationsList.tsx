@@ -1,4 +1,5 @@
 import React from "react"
+import { useNavigate } from "react-router-dom"
 import type { Observation } from "../types/observation"
 
 interface Props {
@@ -18,6 +19,8 @@ function formatDate(dateStr: string | null): string {
 }
 
 export const RecentObservationsList: React.FC<Props> = ({ observations }) => {
+  const navigate = useNavigate()
+
   if (observations.length === 0) {
     return (
       <div className="bg-slate-700 rounded-lg p-4">
@@ -50,9 +53,19 @@ export const RecentObservationsList: React.FC<Props> = ({ observations }) => {
               >
                 {obs.status}
               </span>
-              <span className="text-xs text-slate-400">
-                {formatDate(obs.when?.startedAt)}
-              </span>
+              <div className="flex items-center gap-2">
+                <span className="text-xs text-slate-400">
+                  {formatDate(obs.when?.startedAt)}
+                </span>
+                {obs.status === "OPEN" && obs.child && (
+                  <button
+                    onClick={() => navigate(`/observation/${obs.child!.id}`)}
+                    className="text-xs bg-amber-700 hover:bg-amber-600 text-amber-100 px-2 py-0.5 rounded transition font-medium"
+                  >
+                    Continue
+                  </button>
+                )}
+              </div>
             </div>
             {obs.notes && (
               <p className="text-slate-300 text-sm mb-2">{obs.notes}</p>

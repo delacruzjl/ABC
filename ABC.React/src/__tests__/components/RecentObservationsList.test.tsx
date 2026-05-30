@@ -1,6 +1,7 @@
 import React from "react"
 import { render, screen } from "@testing-library/react"
 import "@testing-library/jest-dom"
+import { MemoryRouter } from "react-router-dom"
 import { RecentObservationsList } from "../../components/RecentObservationsList"
 import type { Observation } from "../../types/observation"
 
@@ -25,38 +26,54 @@ const mockObservations: Observation[] = [
     antecedents: [],
     behaviors: [{ id: "2", name: "Screaming" }],
     consequences: [],
+    child: { id: "child-1", firstName: "Jane", lastName: "Doe" },
   },
 ]
 
+function renderWithRouter(ui: React.ReactElement) {
+  return render(<MemoryRouter>{ui}</MemoryRouter>)
+}
+
 describe("RecentObservationsList", () => {
   it("renders the heading", () => {
-    render(<RecentObservationsList observations={[]} />)
+    renderWithRouter(<RecentObservationsList observations={[]} />)
     expect(
       screen.getByText("Most Recent Observations")
     ).toBeInTheDocument()
   })
 
   it("shows empty message when no observations", () => {
-    render(<RecentObservationsList observations={[]} />)
+    renderWithRouter(<RecentObservationsList observations={[]} />)
     expect(screen.getByText("No observations yet")).toBeInTheDocument()
   })
 
   it("renders observation notes", () => {
-    render(<RecentObservationsList observations={mockObservations} />)
+    renderWithRouter(<RecentObservationsList observations={mockObservations} />)
     expect(screen.getByText("First observation notes")).toBeInTheDocument()
   })
 
   it("renders status badges", () => {
-    render(<RecentObservationsList observations={mockObservations} />)
+    renderWithRouter(<RecentObservationsList observations={mockObservations} />)
     expect(screen.getByText("CLOSED")).toBeInTheDocument()
     expect(screen.getByText("OPEN")).toBeInTheDocument()
   })
 
   it("renders ABC tags", () => {
-    render(<RecentObservationsList observations={mockObservations} />)
+    renderWithRouter(<RecentObservationsList observations={mockObservations} />)
     expect(screen.getByText("A: Loud noise")).toBeInTheDocument()
     expect(screen.getByText("B: Hand flapping")).toBeInTheDocument()
     expect(screen.getByText("C: Timeout")).toBeInTheDocument()
     expect(screen.getByText("B: Screaming")).toBeInTheDocument()
+  })
+
+  it("shows Continue button for open observations with a child", () => {
+    renderWithRouter(<RecentObservationsList observations={mockObservations} />)
+    expect(screen.getByRole("button", { name: "Continue" })).toBeInTheDocument()
+  })
+
+  it("does not show Continue button for closed observations", () => {
+    const closedOnly: Observation[] = [mockObservations[0]]
+    renderWithRouter(<RecentObservationsList observations={closedOnly} />)
+    expect(screen.queryByRole("button", { name: "Continue" })).not.toBeInTheDocument()
   })
 })
