@@ -12,6 +12,16 @@ export const GET_CONSEQUENCES = gql`
   }
 `
 
+export const GET_TRANSLATED_CONSEQUENCES = gql`
+  query GetTranslatedConsequences {
+    translatedConsequences {
+      id
+      name
+      description
+    }
+  }
+`
+
 export const CREATE_CONSEQUENCE = gql`
   mutation CreateConsequence($name: String!, $description: String!) {
     createConsequence(name: $name, description: $description) {

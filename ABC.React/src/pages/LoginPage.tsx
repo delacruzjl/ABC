@@ -1,6 +1,7 @@
 import React, { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { useMutation } from "@apollo/client/react"
+import { useTranslation } from "react-i18next"
 import {
   LOGIN_MUTATION,
   EXTERNAL_LOGIN_MUTATION,
@@ -14,6 +15,7 @@ import { GoogleLogin, CredentialResponse } from "@react-oauth/google"
 const isDevMode = !!process.env.DEV_MODE
 
 export const LoginPage: React.FC = () => {
+  const { t } = useTranslation()
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [devEmail, setDevEmail] = useState("")
@@ -72,14 +74,16 @@ export const LoginPage: React.FC = () => {
       })
     } catch (err: unknown) {
       if (err instanceof Error && err.message?.includes("user_cancelled")) return
-      setError(err instanceof Error ? err.message : "Microsoft login failed.")
+      setError(
+        err instanceof Error ? err.message : t("auth.microsoftLoginFailed")
+      )
     }
   }
 
   const handleGoogleSuccess = (credentialResponse: CredentialResponse) => {
     setError(null)
     if (!credentialResponse.credential) {
-      setError("Google login failed — no credential received.")
+      setError(t("auth.googleNoCredential"))
       return
     }
     externalLoginMutation({
@@ -101,9 +105,11 @@ export const LoginPage: React.FC = () => {
     <div className="min-h-screen bg-slate-900 flex items-center justify-center px-4">
       <div className="bg-slate-800 rounded-xl shadow-lg p-8 border border-slate-700 w-full max-w-md">
         <h1 className="text-2xl font-bold text-cyan-400 mb-6 text-center">
-          ABC Management
+          {t("app.title")}
         </h1>
-        <h2 className="text-lg text-slate-300 mb-6 text-center">Sign In</h2>
+        <h2 className="text-lg text-slate-300 mb-6 text-center">
+          {t("auth.signIn")}
+        </h2>
 
         {error && (
           <div className="bg-red-900/50 border border-red-700 rounded-lg p-3 mb-4">
@@ -115,7 +121,7 @@ export const LoginPage: React.FC = () => {
           <>
             <div className="bg-purple-900/30 border border-purple-700 rounded-lg p-4 mb-6">
               <p className="text-purple-300 text-xs font-medium mb-3">
-                🛠 Dev Mode — Simulate External Login
+                {t("auth.devModeTitle")}
               </p>
               <form onSubmit={handleDevLogin} className="flex flex-col gap-3">
                 <input
@@ -155,7 +161,7 @@ export const LoginPage: React.FC = () => {
                   disabled={isLoading}
                   className="bg-purple-600 hover:bg-purple-500 text-white font-medium py-2 rounded-lg transition disabled:opacity-50 text-sm"
                 >
-                  {devLoading ? "Signing in…" : "Dev Sign In"}
+                  {devLoading ? t("auth.signingIn") : t("auth.devLogin")}
                 </button>
               </form>
             </div>
@@ -165,7 +171,9 @@ export const LoginPage: React.FC = () => {
                 <div className="w-full border-t border-slate-600"></div>
               </div>
               <div className="relative flex justify-center text-sm">
-                <span className="bg-slate-800 px-3 text-slate-500">or use real providers</span>
+                <span className="bg-slate-800 px-3 text-slate-500">
+                  {t("auth.orUseRealProviders")}
+                </span>
               </div>
             </div>
           </>
@@ -183,13 +191,13 @@ export const LoginPage: React.FC = () => {
               <rect x="1" y="11" width="9" height="9" fill="#00a4ef" />
               <rect x="11" y="11" width="9" height="9" fill="#ffb900" />
             </svg>
-            Sign in with Microsoft
+            {t("auth.azureLogin")}
           </button>
 
           <div className="flex justify-center">
             <GoogleLogin
               onSuccess={handleGoogleSuccess}
-              onError={() => setError("Google login failed.")}
+              onError={() => setError(t("auth.googleLoginFailed"))}
               theme="filled_black"
               size="large"
               width="400"
@@ -207,7 +215,9 @@ export const LoginPage: React.FC = () => {
               onClick={() => setShowAdminLogin(!showAdminLogin)}
               className="bg-slate-800 px-3 text-slate-400 hover:text-slate-300 transition"
             >
-              {showAdminLogin ? "Hide admin login" : "Admin login"}
+              {showAdminLogin
+                ? t("auth.hideAdminLogin")
+                : t("auth.adminLogin")}
             </button>
           </div>
         </div>
@@ -215,7 +225,9 @@ export const LoginPage: React.FC = () => {
         {showAdminLogin && (
           <form onSubmit={handleAdminSubmit} className="flex flex-col gap-4">
             <div>
-              <label className="block text-sm text-slate-400 mb-1">Email</label>
+              <label className="block text-sm text-slate-400 mb-1">
+                {t("auth.email")}
+              </label>
               <input
                 type="email"
                 value={email}
@@ -225,7 +237,9 @@ export const LoginPage: React.FC = () => {
               />
             </div>
             <div>
-              <label className="block text-sm text-slate-400 mb-1">Password</label>
+              <label className="block text-sm text-slate-400 mb-1">
+                {t("auth.password")}
+              </label>
               <input
                 type="password"
                 value={password}
@@ -239,7 +253,7 @@ export const LoginPage: React.FC = () => {
               disabled={isLoading}
               className="bg-cyan-600 hover:bg-cyan-500 text-white font-medium py-2 rounded-lg transition disabled:opacity-50"
             >
-              {loading ? "Signing in…" : "Sign In"}
+              {loading ? t("auth.signingIn") : t("auth.signIn")}
             </button>
           </form>
         )}

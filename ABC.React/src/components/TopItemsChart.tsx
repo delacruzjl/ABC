@@ -1,4 +1,5 @@
 import React from "react"
+import { useTranslation } from "react-i18next"
 import {
   BarChart,
   Bar,
@@ -35,11 +36,13 @@ export const TopItemsChart: React.FC<Props> = ({
   items,
   barColor = "#22d3ee",
 }) => {
+  const { t } = useTranslation()
+
   if (items.length === 0) {
     return (
       <div className="bg-slate-700 rounded-lg p-4">
         <h3 className="text-lg font-semibold text-cyan-400 mb-3">{title}</h3>
-        <p className="text-slate-400 text-sm">No data available</p>
+        <p className="text-slate-400 text-sm">{t("dashboard.noDataAvailable")}</p>
       </div>
     )
   }
@@ -77,7 +80,7 @@ export const TopItemsChart: React.FC<Props> = ({
               borderRadius: "8px",
               color: "#e2e8f0",
             }}
-            formatter={(value: number) => [value, "Observations"]}
+            formatter={(value: number) => [value, t("common.observations")]}
             labelFormatter={(_label, payload) =>
               payload?.[0]?.payload?.fullName ?? _label
             }

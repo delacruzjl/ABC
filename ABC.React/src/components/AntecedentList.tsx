@@ -1,4 +1,5 @@
 import React, { useState } from "react"
+import { useTranslation } from "react-i18next"
 import type { Antecedent } from "../types/antecedent"
 import { ConfirmDialog } from "./ConfirmDialog"
 
@@ -15,16 +16,19 @@ export const AntecedentList: React.FC<Props> = ({
   onEdit,
   onDelete,
 }) => {
+  const { t } = useTranslation()
   const [deleteId, setDeleteId] = useState<string | null>(null)
 
   return (
     <div className="p-6 bg-slate-800 rounded-xl shadow-lg max-w-xl mx-auto border border-slate-800">
-      <h2 className="text-xl font-bold mb-4 text-cyan-400">Antecedents</h2>
+      <h2 className="text-xl font-bold mb-4 text-cyan-400">
+        {t("antecedents.title")}
+      </h2>
       <button
         onClick={onAdd}
         className="mb-4 bg-cyan-400 hover:bg-cyan-500 text-slate-900 font-semibold px-4 py-2 rounded shadow"
       >
-        Add Antecedent
+        {t("antecedents.add")}
       </button>
       <ul className="divide-y divide-slate-800">
         {antecedents.map((a) => (
@@ -38,13 +42,13 @@ export const AntecedentList: React.FC<Props> = ({
                 onClick={() => onEdit(a.id)}
                 className="bg-slate-800 text-cyan-400 hover:bg-slate-700 hover:text-cyan-300 px-3 py-1 rounded shadow"
               >
-                Edit
+                {t("common.edit")}
               </button>
               <button
                 onClick={() => setDeleteId(a.id)}
                 className="bg-slate-800 text-red-400 hover:bg-slate-700 hover:text-red-300 px-3 py-1 rounded shadow"
               >
-                Delete
+                {t("common.delete")}
               </button>
             </div>
           </li>
@@ -52,7 +56,7 @@ export const AntecedentList: React.FC<Props> = ({
       </ul>
       {deleteId && (
         <ConfirmDialog
-          message="Are you sure you want to delete this antecedent?"
+          message={t("antecedents.confirmDelete")}
           onConfirm={() => {
             onDelete(deleteId)
             setDeleteId(null)

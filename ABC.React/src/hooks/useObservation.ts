@@ -7,9 +7,9 @@ import {
   GET_OPEN_OBSERVATIONS,
 } from "../graphql/operations/observationOperations"
 import { DASHBOARD_QUERY } from "../graphql/operations/dashboardOperations"
-import { GET_ANTECEDENTS } from "../graphql/operations/antecedentOperations"
-import { GET_BEHAVIORS } from "../graphql/operations/behaviorOperations"
-import { GET_CONSEQUENCES } from "../graphql/operations/consequenceOperations"
+import { GET_TRANSLATED_ANTECEDENTS } from "../graphql/operations/antecedentOperations"
+import { GET_TRANSLATED_BEHAVIORS } from "../graphql/operations/behaviorOperations"
+import { GET_TRANSLATED_CONSEQUENCES } from "../graphql/operations/consequenceOperations"
 import type { DailyContext, Observation } from "../types/observation"
 
 interface SelectableItem {
@@ -19,13 +19,13 @@ interface SelectableItem {
 }
 
 interface AntecedentsData {
-  antecedents: { nodes: SelectableItem[] }
+  translatedAntecedents: SelectableItem[]
 }
 interface BehaviorsData {
-  behaviors: { nodes: SelectableItem[] }
+  translatedBehaviors: SelectableItem[]
 }
 interface ConsequencesData {
-  consequences: { nodes: SelectableItem[] }
+  translatedConsequences: SelectableItem[]
 }
 interface OpenObservationsData {
   observations: { nodes: Observation[] }
@@ -51,17 +51,17 @@ export function useObservation() {
   const {
     data: antecedentsData,
     loading: antecedentsLoading,
-  } = useQuery<AntecedentsData>(GET_ANTECEDENTS)
+  } = useQuery<AntecedentsData>(GET_TRANSLATED_ANTECEDENTS)
 
   const {
     data: behaviorsData,
     loading: behaviorsLoading,
-  } = useQuery<BehaviorsData>(GET_BEHAVIORS)
+  } = useQuery<BehaviorsData>(GET_TRANSLATED_BEHAVIORS)
 
   const {
     data: consequencesData,
     loading: consequencesLoading,
-  } = useQuery<ConsequencesData>(GET_CONSEQUENCES)
+  } = useQuery<ConsequencesData>(GET_TRANSLATED_CONSEQUENCES)
 
   const [startMutation, { loading: starting }] = useMutation(START_OBSERVATION)
   const [updateMutation, { loading: updating }] = useMutation(UPDATE_OBSERVATION)
@@ -70,9 +70,9 @@ export function useObservation() {
     fetchPolicy: "network-only",
   })
 
-  const antecedents = antecedentsData?.antecedents?.nodes ?? []
-  const behaviors = behaviorsData?.behaviors?.nodes ?? []
-  const consequences = consequencesData?.consequences?.nodes ?? []
+  const antecedents = antecedentsData?.translatedAntecedents ?? []
+  const behaviors = behaviorsData?.translatedBehaviors ?? []
+  const consequences = consequencesData?.translatedConsequences ?? []
   const listsLoading = antecedentsLoading || behaviorsLoading || consequencesLoading
 
   const startObservation = useCallback(

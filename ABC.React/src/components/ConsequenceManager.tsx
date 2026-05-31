@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react"
+import { useTranslation } from "react-i18next"
 import type { Consequence } from "../types/consequence"
 
 interface Props {
@@ -14,6 +15,7 @@ export const ConsequenceManager: React.FC<Props> = ({
   onCancel,
   saving = false,
 }) => {
+  const { t } = useTranslation()
   const [form, setForm] = useState<Partial<Consequence>>({
     name: "",
     description: "",
@@ -47,14 +49,14 @@ export const ConsequenceManager: React.FC<Props> = ({
     try {
       await onSave(cons)
     } catch (err: any) {
-      setError(err?.message ?? "An unexpected error occurred.")
+      setError(err?.message ?? t("common.unexpectedError"))
     }
   }
 
   return (
     <div className="p-6 bg-slate-800 rounded-xl shadow-lg max-w-xl mx-auto border border-slate-800">
       <h2 className="text-xl font-bold mb-4 text-cyan-400">
-        {consequence ? "Edit Consequence" : "Add Consequence"}
+        {consequence ? t("consequences.editItem") : t("consequences.add")}
       </h2>
       {error && (
         <div className="bg-red-900/50 border border-red-700 rounded-lg p-3 mb-4">
@@ -66,17 +68,17 @@ export const ConsequenceManager: React.FC<Props> = ({
           name="name"
           value={form.name || ""}
           onChange={handleChange}
-          placeholder="Name"
+          placeholder={t("consequences.name")}
           className="border border-cyan-400 focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500 placeholder:text-slate-400 bg-slate-800 text-slate-100 p-3 rounded outline-none transition duration-150"
-          aria-label="Consequence Name"
+          aria-label={t("consequences.name")}
         />
         <textarea
           name="description"
           value={form.description || ""}
           onChange={handleChange}
-          placeholder="Description"
+          placeholder={t("consequences.description")}
           className="border border-cyan-400 focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500 placeholder:text-slate-400 bg-slate-800 text-slate-100 p-3 rounded outline-none transition duration-150"
-          aria-label="Consequence Description"
+          aria-label={t("consequences.description")}
         />
         <div className="flex gap-2">
           <button
@@ -84,13 +86,13 @@ export const ConsequenceManager: React.FC<Props> = ({
             disabled={saving}
             className="bg-cyan-400 hover:bg-cyan-500 text-slate-900 font-semibold px-4 py-2 rounded shadow disabled:opacity-50"
           >
-            {saving ? "Saving…" : consequence ? "Update" : "Add"}
+            {saving ? t("common.saving") : t("consequences.save")}
           </button>
           <button
             onClick={onCancel}
             className="bg-slate-800 hover:bg-slate-700 text-slate-100 px-4 py-2 rounded shadow"
           >
-            Cancel
+            {t("consequences.cancel")}
           </button>
         </div>
       </div>

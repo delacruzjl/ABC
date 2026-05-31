@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from "react"
+import React, { useEffect, useState } from "react"
 import { useParams, useNavigate } from "react-router-dom"
+import { useTranslation } from "react-i18next"
 import { useObservation } from "../hooks/useObservation"
 import type { DailyContext, Observation as ObservationType } from "../types/observation"
 
@@ -9,6 +10,7 @@ interface SelectionSectionProps {
   selectedIds: string[]
   onToggle: (id: string) => void
   accentColor: string
+  emptyMessageKey: string
 }
 
 const SelectionSection: React.FC<SelectionSectionProps> = ({
@@ -17,39 +19,42 @@ const SelectionSection: React.FC<SelectionSectionProps> = ({
   selectedIds,
   onToggle,
   accentColor,
-}) => (
-  <div>
-    <h3 className="text-lg font-semibold text-slate-200 mb-3">{title}</h3>
-    {items.length === 0 ? (
-      <p className="text-slate-500 text-sm italic">
-        No {title.toLowerCase()} available. An admin needs to create them first.
+  emptyMessageKey,
+}) => {
+  const { t } = useTranslation()
+
+  return (
+    <div>
+      <h3 className="text-lg font-semibold text-slate-200 mb-3">{title}</h3>
+      {items.length === 0 ? (
+        <p className="text-slate-500 text-sm italic">{t(emptyMessageKey)}</p>
+      ) : (
+        <div className="flex flex-wrap gap-2">
+          {items.map((item) => {
+            const selected = selectedIds.includes(item.id)
+            return (
+              <button
+                key={item.id}
+                onClick={() => onToggle(item.id)}
+                title={item.description}
+                className={`px-3 py-1.5 rounded-lg text-sm font-medium border transition ${
+                  selected
+                    ? `${accentColor} border-transparent`
+                    : "bg-slate-700 text-slate-300 border-slate-600 hover:border-slate-400"
+                }`}
+              >
+                {item.name}
+              </button>
+            )
+          })}
+        </div>
+      )}
+      <p className="text-xs text-slate-500 mt-1">
+        {t("observation.selectedCount", { count: selectedIds.length })}
       </p>
-    ) : (
-      <div className="flex flex-wrap gap-2">
-        {items.map((item) => {
-          const selected = selectedIds.includes(item.id)
-          return (
-            <button
-              key={item.id}
-              onClick={() => onToggle(item.id)}
-              title={item.description}
-              className={`px-3 py-1.5 rounded-lg text-sm font-medium border transition ${
-                selected
-                  ? `${accentColor} border-transparent`
-                  : "bg-slate-700 text-slate-300 border-slate-600 hover:border-slate-400"
-              }`}
-            >
-              {item.name}
-            </button>
-          )
-        })}
-      </div>
-    )}
-    <p className="text-xs text-slate-500 mt-1">
-      {selectedIds.length} selected
-    </p>
-  </div>
-)
+    </div>
+  )
+}
 
 interface DailyContextSectionProps {
   dailyContext: DailyContext
@@ -60,6 +65,8 @@ const DailyContextSection: React.FC<DailyContextSectionProps> = ({
   dailyContext,
   onChange,
 }) => {
+  const { t } = useTranslation()
+
   const toggle = (field: keyof DailyContext) => {
     onChange({ ...dailyContext, [field]: !dailyContext[field] })
   }
@@ -67,14 +74,16 @@ const DailyContextSection: React.FC<DailyContextSectionProps> = ({
   return (
     <div>
       <h3 className="text-lg font-semibold text-slate-200 mb-3">
-        Daily Context
+        {t("observation.dailyContext")}
       </h3>
       <p className="text-slate-400 text-xs mb-3">
-        Optional — record the child's meals and sleep before this session.
+        {t("observation.dailyContextDescription")}
       </p>
       <div className="space-y-3">
         <div>
-          <p className="text-sm text-slate-300 mb-2 font-medium">Meals</p>
+          <p className="text-sm text-slate-300 mb-2 font-medium">
+            {t("observation.meals")}
+          </p>
           <div className="flex flex-wrap gap-4">
             {(["hadBreakfast", "hadLunch", "hadDinner", "hadSnack"] as const).map(
               (field) => (
@@ -88,17 +97,19 @@ const DailyContextSection: React.FC<DailyContextSectionProps> = ({
                     onChange={() => toggle(field)}
                     className="w-4 h-4 rounded border-slate-500 bg-slate-700 text-cyan-500 focus:ring-cyan-500"
                   />
-                  {field === "hadBreakfast" && "Breakfast"}
-                  {field === "hadLunch" && "Lunch"}
-                  {field === "hadDinner" && "Dinner"}
-                  {field === "hadSnack" && "Snack"}
+                  {field === "hadBreakfast" && t("observation.breakfast")}
+                  {field === "hadLunch" && t("observation.lunch")}
+                  {field === "hadDinner" && t("observation.dinner")}
+                  {field === "hadSnack" && t("observation.snack")}
                 </label>
               )
             )}
           </div>
         </div>
         <div>
-          <p className="text-sm text-slate-300 mb-2 font-medium">Sleep</p>
+          <p className="text-sm text-slate-300 mb-2 font-medium">
+            {t("observation.sleep")}
+          </p>
           <div className="flex flex-wrap items-center gap-4">
             <label className="flex items-center gap-2 text-sm text-slate-300 cursor-pointer">
               <input
@@ -107,10 +118,10 @@ const DailyContextSection: React.FC<DailyContextSectionProps> = ({
                 onChange={() => toggle("sleptWell")}
                 className="w-4 h-4 rounded border-slate-500 bg-slate-700 text-cyan-500 focus:ring-cyan-500"
               />
-              Slept well
+              {t("observation.sleptWell")}
             </label>
             <label className="flex items-center gap-2 text-sm text-slate-300">
-              <span>Hours of sleep:</span>
+              <span>{t("observation.hoursOfSleep")}</span>
               <input
                 type="number"
                 min={0}
@@ -134,6 +145,7 @@ const DailyContextSection: React.FC<DailyContextSectionProps> = ({
 }
 
 export const ObservationPage: React.FC = () => {
+  const { t } = useTranslation()
   const { childId } = useParams<{ childId: string }>()
   const navigate = useNavigate()
   const {
@@ -178,8 +190,16 @@ export const ObservationPage: React.FC = () => {
         }
       })
     }
-    return () => { cancelled = true }
+    return () => {
+      cancelled = true
+    }
   }, [childId, observation, checkedOpen, getOpenObservations])
+
+  const getStatusLabel = (status: string) => {
+    if (status === "OPEN") return t("observation.inProgress")
+    if (status === "CLOSED") return t("observation.ended")
+    return status
+  }
 
   const handleContinue = (obs: ObservationType) => {
     setError(null)
@@ -192,7 +212,7 @@ export const ObservationPage: React.FC = () => {
     try {
       await startObservation(childId)
     } catch (e: unknown) {
-      setError(e instanceof Error ? e.message : "Failed to start observation")
+      setError(e instanceof Error ? e.message : t("observation.failedStart"))
     }
   }
 
@@ -202,9 +222,7 @@ export const ObservationPage: React.FC = () => {
       await saveAndEndObservation()
       setCompleted(true)
     } catch (e: unknown) {
-      setError(
-        e instanceof Error ? e.message : "Failed to end observation"
-      )
+      setError(e instanceof Error ? e.message : t("observation.failedEnd"))
     }
   }
 
@@ -218,26 +236,25 @@ export const ObservationPage: React.FC = () => {
     return (
       <div className="flex justify-center py-12">
         <span className="text-cyan-400 text-lg">
-          Loading observation data…
+          {t("observation.loadingData")}
         </span>
       </div>
     )
   }
 
-  // Completed state
   if (completed && observation) {
     return (
       <div className="text-center py-12">
         <div className="text-green-400 text-5xl mb-4">✓</div>
         <h2 className="text-2xl font-bold text-slate-100 mb-2">
-          Observation Complete
+          {t("observation.completeTitle")}
         </h2>
         <p className="text-slate-400 mb-6">
-          Started:{" "}
+          {t("common.started")}:{" "}
           {observation.when.startedAt
             ? new Date(observation.when.startedAt).toLocaleString()
             : "—"}{" "}
-          — Ended:{" "}
+          — {t("common.ended")}:{" "}
           {observation.when.endedAt
             ? new Date(observation.when.endedAt).toLocaleString()
             : "—"}
@@ -247,42 +264,39 @@ export const ObservationPage: React.FC = () => {
             onClick={handleNewObservation}
             className="bg-cyan-600 hover:bg-cyan-500 text-white font-medium px-4 py-2 rounded-lg transition"
           >
-            New Observation
+            {t("observation.newObservation")}
           </button>
           <button
             onClick={() => navigate("/children")}
             className="bg-slate-700 hover:bg-slate-600 text-slate-200 font-medium px-4 py-2 rounded-lg transition border border-slate-600"
           >
-            Back to Children
+            {t("observation.backToChildren")}
           </button>
         </div>
       </div>
     )
   }
 
-  // Pre-start state
   if (!observation) {
     return (
       <div className="text-center py-12">
         <h2 className="text-2xl font-bold text-cyan-400 mb-4">
-          Start Observation
+          {t("observation.start")}
         </h2>
-        <p className="text-slate-400 mb-6">
-          Begin an ABC data collection session for this child. You'll select
-          antecedents, behaviors, and consequences observed during the session.
-        </p>
+        <p className="text-slate-400 mb-6">{t("observation.intro")}</p>
 
-        {/* Open observations to continue */}
-        {(loadingOpen) && (
-          <p className="text-slate-400 text-sm mb-4">Checking for open observations…</p>
+        {loadingOpen && (
+          <p className="text-slate-400 text-sm mb-4">
+            {t("observation.checkingOpen")}
+          </p>
         )}
         {openObservations.length > 0 && (
           <div className="max-w-md mx-auto mb-6 text-left bg-slate-800 rounded-lg p-4 border border-amber-700">
             <h3 className="text-lg font-semibold text-amber-400 mb-3">
-              Open Observations
+              {t("observation.openObservations")}
             </h3>
             <p className="text-slate-400 text-xs mb-3">
-              You have open observations for this child. Continue where you left off or start a new one.
+              {t("observation.openObservationsDescription")}
             </p>
             <div className="flex flex-col gap-2">
               {openObservations.map((obs) => (
@@ -293,13 +307,13 @@ export const ObservationPage: React.FC = () => {
                 >
                   <div className="flex justify-between items-center">
                     <span className="text-sm text-slate-200">
-                      Started:{" "}
+                      {t("common.started")}:{" "}
                       {obs.when.startedAt
                         ? new Date(obs.when.startedAt).toLocaleString()
                         : "—"}
                     </span>
                     <span className="text-xs bg-yellow-900 text-yellow-300 px-2 py-0.5 rounded">
-                      OPEN
+                      {t("observation.inProgress")}
                     </span>
                   </div>
                   {obs.notes && (
@@ -329,50 +343,48 @@ export const ObservationPage: React.FC = () => {
           />
         </div>
 
-        {error && (
-          <p className="text-red-400 text-sm mb-4">{error}</p>
-        )}
+        {error && <p className="text-red-400 text-sm mb-4">{error}</p>}
         <div className="flex justify-center gap-4">
           <button
             onClick={handleStart}
             disabled={starting}
             className="bg-cyan-600 hover:bg-cyan-500 disabled:opacity-50 text-white font-medium px-6 py-2 rounded-lg transition"
           >
-            {starting ? "Starting…" : "Start New Observation"}
+            {starting ? t("common.starting") : t("observation.startNew")}
           </button>
           <button
             onClick={() => navigate("/children")}
             className="bg-slate-700 hover:bg-slate-600 text-slate-200 font-medium px-4 py-2 rounded-lg transition border border-slate-600"
           >
-            Cancel
+            {t("common.cancel")}
           </button>
         </div>
       </div>
     )
   }
 
-  // Active observation
   return (
     <div>
       <div className="flex justify-between items-center mb-6">
         <div>
           <h1 className="text-2xl font-bold text-cyan-400">
-            Recording Observation
+            {t("observation.recordingTitle")}
           </h1>
           {observation.child && (
             <p className="text-slate-400 text-sm mt-1">
-              Child: {observation.child.firstName} {observation.child.lastName}
+              {t("observation.childLabel")}: {observation.child.firstName}{" "}
+              {observation.child.lastName}
             </p>
           )}
           <p className="text-slate-500 text-xs mt-0.5">
-            Started:{" "}
+            {t("common.started")}:{" "}
             {observation.when.startedAt
               ? new Date(observation.when.startedAt).toLocaleString()
               : "—"}
           </p>
         </div>
         <span className="text-xs bg-green-900 text-green-300 px-2 py-0.5 rounded uppercase tracking-wide">
-          {observation.status}
+          {getStatusLabel(observation.status)}
         </span>
       </div>
 
@@ -384,34 +396,39 @@ export const ObservationPage: React.FC = () => {
 
       <div className="space-y-6 mb-8">
         <SelectionSection
-          title="Antecedents"
+          title={t("antecedents.title")}
           items={antecedents}
           selectedIds={selectedAntecedents}
           onToggle={toggleAntecedent}
           accentColor="bg-cyan-700 text-cyan-100"
+          emptyMessageKey="observation.noAntecedentsAvailable"
         />
         <SelectionSection
-          title="Behaviors"
+          title={t("behaviors.title")}
           items={behaviors}
           selectedIds={selectedBehaviors}
           onToggle={toggleBehavior}
           accentColor="bg-purple-700 text-purple-100"
+          emptyMessageKey="observation.noBehaviorsAvailable"
         />
         <SelectionSection
-          title="Consequences"
+          title={t("consequences.title")}
           items={consequences}
           selectedIds={selectedConsequences}
           onToggle={toggleConsequence}
           accentColor="bg-amber-700 text-amber-100"
+          emptyMessageKey="observation.noConsequencesAvailable"
         />
 
         <div>
-          <h3 className="text-lg font-semibold text-slate-200 mb-2">Notes</h3>
+          <h3 className="text-lg font-semibold text-slate-200 mb-2">
+            {t("observation.notes")}
+          </h3>
           <textarea
             value={notes}
             onChange={(e) => setNotes(e.target.value)}
             rows={4}
-            placeholder="Add any additional context about the observation…"
+            placeholder={t("observation.notesPlaceholder")}
             className="w-full bg-slate-700 text-slate-200 border border-slate-600 rounded-lg px-3 py-2 focus:outline-none focus:border-cyan-500 placeholder-slate-500 resize-y"
           />
         </div>
@@ -424,8 +441,7 @@ export const ObservationPage: React.FC = () => {
 
       {!canEnd && (
         <p className="text-amber-400 text-sm mb-4">
-          Select at least one antecedent, one behavior, and one consequence
-          before ending the observation.
+          {t("observation.endRequirements")}
         </p>
       )}
 
@@ -435,13 +451,13 @@ export const ObservationPage: React.FC = () => {
           disabled={!canEnd || saving}
           className="bg-green-700 hover:bg-green-600 disabled:opacity-50 disabled:cursor-not-allowed text-white font-medium px-5 py-2 rounded-lg transition"
         >
-          {saving ? "Saving…" : "End Observation"}
+          {saving ? t("common.saving") : t("observation.end")}
         </button>
         <button
           onClick={() => navigate("/children")}
           className="bg-slate-700 hover:bg-slate-600 text-slate-200 font-medium px-4 py-2 rounded-lg transition border border-slate-600"
         >
-          Cancel
+          {t("common.cancel")}
         </button>
       </div>
     </div>

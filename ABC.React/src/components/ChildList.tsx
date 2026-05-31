@@ -1,4 +1,5 @@
 import React from "react"
+import { useTranslation } from "react-i18next"
 import { ChildCard } from "./ChildCard"
 import type { Child } from "../types/child"
 
@@ -19,28 +20,28 @@ export const ChildList: React.FC<Props> = ({
   defaultChildId,
   onSetDefault,
 }) => {
+  const { t } = useTranslation()
+
   return (
     <div>
       <div className="flex justify-between items-center mb-6">
         <div>
-          <h1 className="text-2xl font-bold text-cyan-400">Children</h1>
+          <h1 className="text-2xl font-bold text-cyan-400">{t("children.title")}</h1>
           <p className="text-slate-400 text-sm mt-1">
-            Manage children and view their observation counts
+            {t("children.manageDescription")}
           </p>
         </div>
         <button
           onClick={onAdd}
           className="bg-cyan-600 hover:bg-cyan-500 text-white font-medium px-4 py-2 rounded-lg transition"
         >
-          + Add Child
+          + {t("children.addChild")}
         </button>
       </div>
 
       {childList.length === 0 ? (
         <div className="text-center py-12">
-          <p className="text-slate-400">
-            No children yet. Add one to get started.
-          </p>
+          <p className="text-slate-400">{t("children.noChildren")}</p>
         </div>
       ) : (
         <div className="flex flex-col gap-3">

@@ -1,8 +1,10 @@
 import React from "react"
 import { useReactiveVar } from "@apollo/client/react"
+import { useTranslation } from "react-i18next"
 import { apiErrorVar } from "../state/apiError"
 
 export const OfflineBanner: React.FC = () => {
+  const { t } = useTranslation()
   const error = useReactiveVar(apiErrorVar)
 
   if (!error) return null
@@ -17,7 +19,7 @@ export const OfflineBanner: React.FC = () => {
         onClick={() => apiErrorVar(null)}
         className="text-red-300 hover:text-red-100 text-sm font-medium ml-4 transition"
       >
-        Dismiss
+        {t("common.dismiss")}
       </button>
     </div>
   )

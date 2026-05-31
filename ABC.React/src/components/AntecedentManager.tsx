@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react"
+import { useTranslation } from "react-i18next"
 import type { Antecedent } from "../types/antecedent"
 
 interface Props {
@@ -14,6 +15,7 @@ export const AntecedentManager: React.FC<Props> = ({
   onCancel,
   saving = false,
 }) => {
+  const { t } = useTranslation()
   const [form, setForm] = useState<Partial<Antecedent>>({
     name: "",
     description: "",
@@ -47,14 +49,14 @@ export const AntecedentManager: React.FC<Props> = ({
     try {
       await onSave(ant)
     } catch (err: any) {
-      setError(err?.message ?? "An unexpected error occurred.")
+      setError(err?.message ?? t("common.unexpectedError"))
     }
   }
 
   return (
     <div className="p-6 bg-slate-800 rounded-xl shadow-lg max-w-xl mx-auto border border-slate-800">
       <h2 className="text-xl font-bold mb-4 text-cyan-400">
-        {antecedent ? "Edit Antecedent" : "Add Antecedent"}
+        {antecedent ? t("antecedents.editItem") : t("antecedents.add")}
       </h2>
       {error && (
         <div className="bg-red-900/50 border border-red-700 rounded-lg p-3 mb-4">
@@ -66,17 +68,17 @@ export const AntecedentManager: React.FC<Props> = ({
           name="name"
           value={form.name || ""}
           onChange={handleChange}
-          placeholder="Name"
+          placeholder={t("antecedents.name")}
           className="border border-cyan-400 focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500 placeholder:text-slate-400 bg-slate-800 text-slate-100 p-3 rounded outline-none transition duration-150"
-          aria-label="Antecedent Name"
+          aria-label={t("antecedents.name")}
         />
         <textarea
           name="description"
           value={form.description || ""}
           onChange={handleChange}
-          placeholder="Description"
+          placeholder={t("antecedents.description")}
           className="border border-cyan-400 focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500 placeholder:text-slate-400 bg-slate-800 text-slate-100 p-3 rounded outline-none transition duration-150"
-          aria-label="Antecedent Description"
+          aria-label={t("antecedents.description")}
         />
         <div className="flex gap-2">
           <button
@@ -84,13 +86,13 @@ export const AntecedentManager: React.FC<Props> = ({
             disabled={saving}
             className="bg-cyan-400 hover:bg-cyan-500 text-slate-900 font-semibold px-4 py-2 rounded shadow disabled:opacity-50"
           >
-            {saving ? "Saving…" : antecedent ? "Update" : "Add"}
+            {saving ? t("common.saving") : t("antecedents.save")}
           </button>
           <button
             onClick={onCancel}
             className="bg-slate-800 hover:bg-slate-700 text-slate-100 px-4 py-2 rounded shadow"
           >
-            Cancel
+            {t("antecedents.cancel")}
           </button>
         </div>
       </div>

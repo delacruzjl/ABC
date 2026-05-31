@@ -31,3 +31,9 @@ export const DELETE_USER_MUTATION = gql`
     deleteUser(userId: $userId)
   }
 `
+
+export const UPDATE_PREFERRED_LANGUAGE = gql`
+  mutation UpdatePreferredLanguage($language: String!) {
+    updatePreferredLanguage(language: $language)
+  }
+`

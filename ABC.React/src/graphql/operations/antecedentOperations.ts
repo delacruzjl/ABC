@@ -12,6 +12,16 @@ export const GET_ANTECEDENTS = gql`
   }
 `
 
+export const GET_TRANSLATED_ANTECEDENTS = gql`
+  query GetTranslatedAntecedents {
+    translatedAntecedents {
+      id
+      name
+      description
+    }
+  }
+`
+
 export const CREATE_ANTECEDENT = gql`
   mutation CreateAntecedent($name: String!, $description: String!) {
     createAntecedent(name: $name, description: $description) {

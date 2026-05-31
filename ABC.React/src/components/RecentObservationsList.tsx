@@ -1,15 +1,16 @@
 import React from "react"
 import { useNavigate } from "react-router-dom"
+import { useTranslation } from "react-i18next"
 import type { Observation } from "../types/observation"
 
 interface Props {
   observations: Observation[]
 }
 
-function formatDate(dateStr: string | null): string {
+function formatDate(dateStr: string | null, locale: string): string {
   if (!dateStr) return "—"
   const d = new Date(dateStr)
-  return d.toLocaleDateString("en-US", {
+  return d.toLocaleDateString(locale, {
     month: "short",
     day: "numeric",
     year: "numeric",
@@ -19,15 +20,22 @@ function formatDate(dateStr: string | null): string {
 }
 
 export const RecentObservationsList: React.FC<Props> = ({ observations }) => {
+  const { t, i18n } = useTranslation()
   const navigate = useNavigate()
+
+  const getStatusLabel = (status: string) => {
+    if (status === "OPEN") return t("observation.inProgress")
+    if (status === "CLOSED") return t("observation.ended")
+    return status
+  }
 
   if (observations.length === 0) {
     return (
       <div className="bg-slate-700 rounded-lg p-4">
         <h3 className="text-lg font-semibold text-cyan-400 mb-3">
-          Most Recent Observations
+          {t("dashboard.recentObservations")}
         </h3>
-        <p className="text-slate-400 text-sm">No observations yet</p>
+        <p className="text-slate-400 text-sm">{t("dashboard.noObservations")}</p>
       </div>
     )
   }
@@ -35,7 +43,7 @@ export const RecentObservationsList: React.FC<Props> = ({ observations }) => {
   return (
     <div className="bg-slate-700 rounded-lg p-4">
       <h3 className="text-lg font-semibold text-cyan-400 mb-3">
-        Most Recent Observations
+        {t("dashboard.recentObservations")}
       </h3>
       <div className="flex flex-col gap-3">
         {observations.map((obs) => (
@@ -51,18 +59,18 @@ export const RecentObservationsList: React.FC<Props> = ({ observations }) => {
                     : "bg-yellow-900 text-yellow-300"
                 }`}
               >
-                {obs.status}
+                {getStatusLabel(obs.status)}
               </span>
               <div className="flex items-center gap-2">
                 <span className="text-xs text-slate-400">
-                  {formatDate(obs.when?.startedAt)}
+                  {formatDate(obs.when?.startedAt, i18n.language)}
                 </span>
                 {obs.status === "OPEN" && obs.child && (
                   <button
                     onClick={() => navigate(`/observation/${obs.child!.id}`)}
                     className="text-xs bg-amber-700 hover:bg-amber-600 text-amber-100 px-2 py-0.5 rounded transition font-medium"
                   >
-                    Continue
+                    {t("common.continue")}
                   </button>
                 )}
               </div>

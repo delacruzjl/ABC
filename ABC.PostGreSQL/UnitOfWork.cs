@@ -25,6 +25,9 @@ namespace ABC.PostGreSQL
         public IRepository<ChildCondition> ChildConditions =>
             MakeRepository<ChildCondition>();
 
+        public IRepository<EntityTranslation> EntityTranslations =>
+            MakeRepository<EntityTranslation>();
+
         public IRepository<Observation> Observations =>
             MakeRepository<Observation>();
 

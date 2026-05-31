@@ -1,11 +1,13 @@
 import React, { useEffect, useMemo, useRef, useState } from "react"
 import { useNavigate, useParams } from "react-router-dom"
+import { useTranslation } from "react-i18next"
 import { useChildren, useUsers, useChildConditions } from "../hooks/useChildren"
 import { useAuth } from "../context/AuthContext"
 
 const DEFAULT_SUGGESTIONS = ["Autism", "ADHD", "IDD"]
 
 export const ChildFormPage: React.FC = () => {
+  const { t } = useTranslation()
   const { id } = useParams<{ id: string }>()
   const isEditMode = Boolean(id)
 
@@ -49,6 +51,7 @@ export const ChildFormPage: React.FC = () => {
         setShowSuggestions(false)
       }
     }
+
     document.addEventListener("mousedown", handleClickOutside)
     return () => document.removeEventListener("mousedown", handleClickOutside)
   }, [])
@@ -75,8 +78,10 @@ export const ChildFormPage: React.FC = () => {
     if (
       !trimmed ||
       selectedConditions.some((s) => s.toLowerCase() === trimmed.toLowerCase())
-    )
+    ) {
       return
+    }
+
     setSelectedConditions((prev) => [...prev, trimmed])
     setConditionInput("")
     setShowSuggestions(false)
@@ -108,12 +113,12 @@ export const ChildFormPage: React.FC = () => {
 
     const year = parseInt(birthYear, 10)
     if (isNaN(year) || year < 1900 || year > new Date().getFullYear()) {
-      setError("Please enter a valid birth year.")
+      setError(t("children.invalidBirthYear"))
       return
     }
 
     if (isAdmin && !selectedUserId) {
-      setError("Please select a parent user.")
+      setError(t("children.selectParentUser"))
       return
     }
 
@@ -138,7 +143,7 @@ export const ChildFormPage: React.FC = () => {
       }
       navigate("/children")
     } catch (err: any) {
-      setError(err.message ?? "Failed to save child.")
+      setError(err.message ?? t("children.failedSave"))
     }
   }
 
@@ -146,12 +151,12 @@ export const ChildFormPage: React.FC = () => {
     <div>
       <div className="mb-6">
         <h1 className="text-2xl font-bold text-cyan-400">
-          {isEditMode ? "Edit Child" : "Add Child"}
+          {isEditMode ? t("children.editChild") : t("children.addChild")}
         </h1>
         <p className="text-slate-400 text-sm mt-1">
           {isEditMode
-            ? "Update child information"
-            : "Register a new child for observations"}
+            ? t("children.editDescription")
+            : t("children.addDescription")}
         </p>
       </div>
 
@@ -164,7 +169,7 @@ export const ChildFormPage: React.FC = () => {
       <form onSubmit={handleSubmit} className="flex flex-col gap-4 max-w-md">
         <div>
           <label className="block text-sm text-slate-400 mb-1">
-            First Name
+            {t("children.firstName")}
           </label>
           <input
             type="text"
@@ -176,7 +181,7 @@ export const ChildFormPage: React.FC = () => {
         </div>
         <div>
           <label className="block text-sm text-slate-400 mb-1">
-            Last Name
+            {t("children.lastName")}
           </label>
           <input
             type="text"
@@ -188,7 +193,7 @@ export const ChildFormPage: React.FC = () => {
         </div>
         <div>
           <label className="block text-sm text-slate-400 mb-1">
-            Birth Year
+            {t("children.birthYear")}
           </label>
           <input
             type="number"
@@ -204,7 +209,7 @@ export const ChildFormPage: React.FC = () => {
         {isAdmin && (
           <div>
             <label className="block text-sm text-slate-400 mb-1">
-              Assigned User
+              {t("children.assignedUser")}
             </label>
             <select
               value={selectedUserId}
@@ -212,7 +217,7 @@ export const ChildFormPage: React.FC = () => {
               required
               className="w-full bg-slate-700 border border-slate-600 rounded-lg px-3 py-2 text-slate-100 focus:outline-none focus:border-cyan-400"
             >
-              <option value="">Select a user…</option>
+              <option value="">{t("children.selectUser")}</option>
               {users.map((u) => (
                 <option key={u.id} value={u.id}>
                   {u.email}
@@ -224,7 +229,7 @@ export const ChildFormPage: React.FC = () => {
 
         <div>
           <label className="block text-sm text-slate-400 mb-1">
-            Conditions
+            {t("children.conditions")}
           </label>
           <div className="w-full bg-slate-700 border border-slate-600 rounded-lg px-2 py-1.5 flex flex-wrap gap-1.5 items-center focus-within:border-cyan-400 min-h-[42px]">
             {selectedConditions.map((name) => (
@@ -237,7 +242,7 @@ export const ChildFormPage: React.FC = () => {
                   type="button"
                   onClick={() => removeCondition(name)}
                   className="text-purple-300 hover:text-white font-bold leading-none"
-                  aria-label={`Remove ${name}`}
+                  aria-label={t("children.removeCondition", { name })}
                 >
                   ×
                 </button>
@@ -256,8 +261,8 @@ export const ChildFormPage: React.FC = () => {
                 onKeyDown={handleConditionKeyDown}
                 placeholder={
                   selectedConditions.length === 0
-                    ? "Type a condition or pick a suggestion…"
-                    : "Add more…"
+                    ? t("children.conditionsPlaceholder")
+                    : t("children.conditionsPlaceholderMore")
                 }
                 className="w-full bg-transparent text-slate-100 text-sm focus:outline-none py-1 px-1"
               />
@@ -281,8 +286,7 @@ export const ChildFormPage: React.FC = () => {
             </div>
           </div>
           <p className="text-slate-500 text-xs mt-1">
-            Type to add a new condition or select from suggestions. Press Enter
-            to add.
+            {t("children.conditionsHelp")}
           </p>
         </div>
 
@@ -291,14 +295,14 @@ export const ChildFormPage: React.FC = () => {
             type="submit"
             className="bg-cyan-600 hover:bg-cyan-500 text-white font-medium px-6 py-2 rounded-lg transition"
           >
-            {isEditMode ? "Update" : "Save"}
+            {t("common.save")}
           </button>
           <button
             type="button"
             onClick={() => navigate("/children")}
             className="bg-slate-600 hover:bg-slate-500 text-white font-medium px-6 py-2 rounded-lg transition"
           >
-            Cancel
+            {t("common.cancel")}
           </button>
         </div>
       </form>

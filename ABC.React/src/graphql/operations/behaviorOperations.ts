@@ -12,6 +12,16 @@ export const GET_BEHAVIORS = gql`
   }
 `
 
+export const GET_TRANSLATED_BEHAVIORS = gql`
+  query GetTranslatedBehaviors {
+    translatedBehaviors {
+      id
+      name
+      description
+    }
+  }
+`
+
 export const CREATE_BEHAVIOR = gql`
   mutation CreateBehavior($name: String!, $description: String!) {
     createBehavior(name: $name, description: $description) {

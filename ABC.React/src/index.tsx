@@ -8,6 +8,7 @@ import { ApolloClient, HttpLink, InMemoryCache, from } from "@apollo/client"
 import { onError } from "@apollo/client/link/error"
 import { setContext } from "@apollo/client/link/context"
 import { ApolloProvider } from "@apollo/client/react"
+import i18n from "./config/i18n"
 import { AuthProvider } from "./context/AuthContext"
 import { apiErrorVar } from "./state/apiError"
 import { MsalProvider } from "@azure/msal-react"
@@ -29,9 +30,7 @@ const authLink = setContext((_, { headers }) => {
 
 const errorLink = onError(({ networkError, graphQLErrors }) => {
   if (networkError) {
-    apiErrorVar(
-      "Unable to connect to the server. Please check your connection and try again."
-    )
+    apiErrorVar(i18n.t("offline.message"))
     return
   }
   if (graphQLErrors?.some((e) => e.extensions?.code === "AUTH_NOT_AUTHENTICATED")) {
@@ -62,4 +61,4 @@ root.render(
   </React.StrictMode>
 )
 
-reportWebVitals(console.log)
+reportWebVitals()

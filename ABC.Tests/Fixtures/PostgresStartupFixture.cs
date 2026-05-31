@@ -36,6 +36,7 @@ public class PostgresStartupFixture : IAsyncLifetime
         collection.AddTransient<IEntityService<Antecedent>, AntecedentService>();
         collection.AddTransient<IEntityService<Behavior>, BehaviorService>();
         collection.AddTransient<IEntityService<Consequence>, ConsequenceService>();
+        collection.AddTransient<ITranslationService, TranslationService>();
 
         Services = collection.BuildServiceProvider();
     }

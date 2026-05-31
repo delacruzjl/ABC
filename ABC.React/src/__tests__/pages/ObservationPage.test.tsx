@@ -6,9 +6,9 @@ import { ApolloProvider } from "@apollo/client/react"
 import { MockLink } from "@apollo/client/testing"
 import { MemoryRouter, Route, Routes } from "react-router-dom"
 import { ObservationPage } from "../../pages/ObservationPage"
-import { GET_ANTECEDENTS } from "../../graphql/operations/antecedentOperations"
-import { GET_BEHAVIORS } from "../../graphql/operations/behaviorOperations"
-import { GET_CONSEQUENCES } from "../../graphql/operations/consequenceOperations"
+import { GET_TRANSLATED_ANTECEDENTS } from "../../graphql/operations/antecedentOperations"
+import { GET_TRANSLATED_BEHAVIORS } from "../../graphql/operations/behaviorOperations"
+import { GET_TRANSLATED_CONSEQUENCES } from "../../graphql/operations/consequenceOperations"
 import {
   START_OBSERVATION,
   UPDATE_OBSERVATION,
@@ -41,16 +41,16 @@ const childId = "child-123"
 
 const listMocks: MockDef[] = [
   {
-    request: { query: GET_ANTECEDENTS },
-    result: { data: { antecedents: { nodes: mockAntecedents } } },
+    request: { query: GET_TRANSLATED_ANTECEDENTS },
+    result: { data: { translatedAntecedents: mockAntecedents } },
   },
   {
-    request: { query: GET_BEHAVIORS },
-    result: { data: { behaviors: { nodes: mockBehaviors } } },
+    request: { query: GET_TRANSLATED_BEHAVIORS },
+    result: { data: { translatedBehaviors: mockBehaviors } },
   },
   {
-    request: { query: GET_CONSEQUENCES },
-    result: { data: { consequences: { nodes: mockConsequences } } },
+    request: { query: GET_TRANSLATED_CONSEQUENCES },
+    result: { data: { translatedConsequences: mockConsequences } },
   },
   {
     request: { query: GET_OPEN_OBSERVATIONS, variables: { childId } },
@@ -331,16 +331,16 @@ describe("ObservationPage", () => {
   it("shows empty list message when no items available", async () => {
     const emptyListMocks: MockDef[] = [
       {
-        request: { query: GET_ANTECEDENTS },
-        result: { data: { antecedents: { nodes: [] } } },
+        request: { query: GET_TRANSLATED_ANTECEDENTS },
+        result: { data: { translatedAntecedents: [] } },
       },
       {
-        request: { query: GET_BEHAVIORS },
-        result: { data: { behaviors: { nodes: [] } } },
+        request: { query: GET_TRANSLATED_BEHAVIORS },
+        result: { data: { translatedBehaviors: [] } },
       },
       {
-        request: { query: GET_CONSEQUENCES },
-        result: { data: { consequences: { nodes: [] } } },
+        request: { query: GET_TRANSLATED_CONSEQUENCES },
+        result: { data: { translatedConsequences: [] } },
       },
       {
         request: { query: GET_OPEN_OBSERVATIONS, variables: { childId } },

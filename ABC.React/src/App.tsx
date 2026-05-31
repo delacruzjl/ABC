@@ -7,6 +7,8 @@ import {
   useNavigate,
   useLocation,
 } from "react-router-dom"
+import { useQuery } from "@apollo/client/react"
+import { useTranslation } from "react-i18next"
 import { AntecedentsPage } from "./pages/AntecedentsPage"
 import { BehaviorsPage } from "./pages/BehaviorsPage"
 import { ConsequencesPage } from "./pages/ConsequencesPage"
@@ -20,14 +22,15 @@ import { ChildFormPage } from "./pages/ChildFormPage"
 import { UsersPage } from "./pages/UsersPage"
 import { ObservationPage } from "./pages/ObservationPage"
 import { ProtectedRoute } from "./components/ProtectedRoute"
+import { OfflineBanner } from "./components/OfflineBanner"
 import { useAuth } from "./context/AuthContext"
 import { useDefaultChild } from "./hooks/useChildren"
-import { useQuery } from "@apollo/client/react"
 import { GET_CHILDREN } from "./graphql/operations/childOperations"
 
 function NavBar() {
   const navigate = useNavigate()
   const location = useLocation()
+  const { t } = useTranslation()
   const { user, isAdmin, isAuthenticated, logout } = useAuth()
   const { defaultChildId } = useDefaultChild()
   const { data: childrenData } = useQuery(GET_CHILDREN, { skip: !isAuthenticated })
@@ -54,20 +57,20 @@ function NavBar() {
               onClick={() => navigate("/")}
               className="font-bold text-xl text-cyan-400 tracking-tight hover:text-cyan-300 transition"
             >
-              ABC Management
+              {t("app.title")}
             </button>
             <div className="flex gap-2">
               <button
                 onClick={() => navigate("/")}
                 className={navButtonClass("/")}
               >
-                Dashboard
+                {t("nav.dashboard")}
               </button>
               <button
                 onClick={() => navigate("/children")}
                 className={navButtonClass("/children")}
               >
-                Children
+                {t("nav.children")}
               </button>
               {hasChildren && (
                 <button
@@ -81,11 +84,11 @@ function NavBar() {
                   className={navButtonClass("/observation")}
                   title={
                     defaultChildId
-                      ? "Start observation for default child"
-                      : "Set a default child first"
+                      ? t("nav.startObservationDefault")
+                      : t("nav.setDefaultChildFirst")
                   }
                 >
-                  Observe
+                  {t("nav.observe")}
                 </button>
               )}
               {isAdmin && (
@@ -94,25 +97,25 @@ function NavBar() {
                     onClick={() => navigate("/antecedents")}
                     className={navButtonClass("/antecedents")}
                   >
-                    Antecedents
+                    {t("nav.antecedents")}
                   </button>
                   <button
                     onClick={() => navigate("/behaviors")}
                     className={navButtonClass("/behaviors")}
                   >
-                    Behaviors
+                    {t("nav.behaviors")}
                   </button>
                   <button
                     onClick={() => navigate("/consequences")}
                     className={navButtonClass("/consequences")}
                   >
-                    Consequences
+                    {t("nav.consequences")}
                   </button>
                   <button
                     onClick={() => navigate("/users")}
                     className={navButtonClass("/users")}
                   >
-                    Users
+                    {t("nav.users")}
                   </button>
                 </>
               )}
@@ -123,7 +126,7 @@ function NavBar() {
               {user?.email}
               {isAdmin && (
                 <span className="ml-2 text-xs bg-amber-900 text-amber-300 px-2 py-0.5 rounded">
-                  Admin
+                  {t("nav.admin")}
                 </span>
               )}
             </span>
@@ -134,7 +137,7 @@ function NavBar() {
               }}
               className="text-slate-400 hover:text-red-400 text-sm font-medium transition"
             >
-              Logout
+              {t("nav.logout")}
             </button>
           </div>
         </div>
@@ -142,8 +145,6 @@ function NavBar() {
     </nav>
   )
 }
-
-import { OfflineBanner } from "./components/OfflineBanner"
 
 function AppRoutes() {
   return (

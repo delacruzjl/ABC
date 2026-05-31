@@ -6,4 +6,5 @@ public class ApplicationUser : IdentityUser
 {
     public bool IsActive { get; set; } = true;
     public Guid? DefaultChildId { get; set; }
+    public string PreferredLanguage { get; set; } = "en";
 }
