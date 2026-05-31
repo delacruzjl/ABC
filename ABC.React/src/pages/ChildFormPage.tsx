@@ -4,10 +4,9 @@ import { useTranslation } from "react-i18next"
 import { useChildren, useUsers, useChildConditions } from "../hooks/useChildren"
 import { useAuth } from "../context/AuthContext"
 
-const DEFAULT_SUGGESTIONS = ["Autism", "ADHD", "IDD"]
-
 export const ChildFormPage: React.FC = () => {
   const { t } = useTranslation()
+  const defaultSuggestions = t("children.conditionSuggestions", { returnObjects: true }) as string[]
   const { id } = useParams<{ id: string }>()
   const isEditMode = Boolean(id)
 
@@ -58,14 +57,14 @@ export const ChildFormPage: React.FC = () => {
 
   const allSuggestions = useMemo(() => {
     const dbNames = availableConditions.map((c) => c.name)
-    const merged = [...new Set([...DEFAULT_SUGGESTIONS, ...dbNames])]
+    const merged = [...new Set([...defaultSuggestions, ...dbNames])]
     return merged.filter(
       (name) =>
         !selectedConditions.some(
           (s) => s.toLowerCase() === name.toLowerCase()
         )
     )
-  }, [availableConditions, selectedConditions])
+  }, [availableConditions, selectedConditions, defaultSuggestions])
 
   const filteredSuggestions = useMemo(() => {
     if (!conditionInput.trim()) return allSuggestions

@@ -27,6 +27,7 @@ import { OfflineBanner } from "./components/OfflineBanner"
 import { useAuth } from "./context/AuthContext"
 import { useDefaultChild } from "./hooks/useChildren"
 import { GET_CHILDREN } from "./graphql/operations/childOperations"
+import { GET_PREFERRED_LANGUAGE } from "./graphql/operations/languageOperations"
 
 function UserMenu({ email, isAdmin, onLogout }: { email: string; isAdmin: boolean; onLogout: () => void }) {
   const { t } = useTranslation()
@@ -82,11 +83,19 @@ function UserMenu({ email, isAdmin, onLogout }: { email: string; isAdmin: boolea
 function NavBar() {
   const navigate = useNavigate()
   const location = useLocation()
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const { user, isAdmin, isAuthenticated, logout } = useAuth()
   const { defaultChildId } = useDefaultChild()
   const { data: childrenData } = useQuery(GET_CHILDREN, { skip: !isAuthenticated })
+  const { data: langData } = useQuery(GET_PREFERRED_LANGUAGE, { skip: !isAuthenticated })
   const hasChildren = (childrenData?.children?.nodes?.length ?? 0) > 0
+
+  useEffect(() => {
+    if (langData?.preferredLanguage && langData.preferredLanguage !== i18n.language) {
+      i18n.changeLanguage(langData.preferredLanguage)
+      localStorage.setItem("abc_language", langData.preferredLanguage)
+    }
+  }, [langData, i18n])
 
   const isActive = (path: string) =>
     location.pathname === path || location.pathname.startsWith(path + "/")

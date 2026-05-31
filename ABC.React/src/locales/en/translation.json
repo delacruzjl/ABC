@@ -87,6 +87,7 @@
     "conditionsPlaceholder": "Type a condition or pick a suggestion…",
     "conditionsPlaceholderMore": "Add more…",
     "conditionsHelp": "Type to add a new condition or select from suggestions. Press Enter to add.",
+    "conditionSuggestions": ["Autism", "ADHD", "IDD"],
     "removeCondition": "Remove {{name}}",
     "failedSave": "Failed to save child.",
     "failedSetDefault": "Failed to set default child."

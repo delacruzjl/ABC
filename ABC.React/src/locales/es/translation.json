@@ -87,6 +87,7 @@
     "conditionsPlaceholder": "Escribe una condición o elige una sugerencia…",
     "conditionsPlaceholderMore": "Agregar más…",
     "conditionsHelp": "Escribe para agregar una nueva condición o elige una sugerencia. Presiona Enter para agregar.",
+    "conditionSuggestions": ["Autismo", "TDAH", "DI"],
     "removeCondition": "Quitar {{name}}",
     "failedSave": "No se pudo guardar el niño.",
     "failedSetDefault": "No se pudo establecer el niño predeterminado."

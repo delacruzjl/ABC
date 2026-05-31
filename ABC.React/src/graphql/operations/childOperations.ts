@@ -105,6 +105,16 @@ export const GET_CHILD_CONDITIONS = gql`
   }
 `
 
+export const GET_TRANSLATED_CHILD_CONDITIONS = gql`
+  query GetTranslatedChildConditions {
+    translatedChildConditions {
+      id
+      name
+      description
+    }
+  }
+`
+
 export const GET_DEFAULT_CHILD_ID = gql`
   query GetDefaultChildId {
     defaultChildId

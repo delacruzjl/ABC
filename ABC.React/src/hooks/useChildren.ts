@@ -7,6 +7,7 @@ import {
   REMOVE_CHILD,
   GET_USERS,
   GET_CHILD_CONDITIONS,
+  GET_TRANSLATED_CHILD_CONDITIONS,
   GET_DEFAULT_CHILD_ID,
   SET_DEFAULT_CHILD,
 } from "../graphql/operations/childOperations"
@@ -32,6 +33,10 @@ interface UsersQueryData {
 
 interface ChildConditionsQueryData {
   childConditions: { nodes: ChildCondition[] }
+}
+
+interface TranslatedChildConditionsQueryData {
+  translatedChildConditions: { id: string; name: string; description: string }[]
 }
 
 export function useChildren() {
@@ -100,9 +105,9 @@ export function useUsers() {
 
 export function useChildConditions() {
   const { data, loading, error } =
-    useQuery<ChildConditionsQueryData>(GET_CHILD_CONDITIONS)
+    useQuery<TranslatedChildConditionsQueryData>(GET_TRANSLATED_CHILD_CONDITIONS)
   const conditions: ChildCondition[] = useMemo(
-    () => data?.childConditions?.nodes ?? [],
+    () => data?.translatedChildConditions?.map(c => ({ id: c.id, name: c.name })) ?? [],
     [data]
   )
   return { conditions, loading, error }
