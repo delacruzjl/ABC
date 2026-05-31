@@ -51,17 +51,17 @@ export function useObservation() {
   const {
     data: antecedentsData,
     loading: antecedentsLoading,
-  } = useQuery<AntecedentsData>(GET_TRANSLATED_ANTECEDENTS)
+  } = useQuery<AntecedentsData>(GET_TRANSLATED_ANTECEDENTS, { errorPolicy: "all" })
 
   const {
     data: behaviorsData,
     loading: behaviorsLoading,
-  } = useQuery<BehaviorsData>(GET_TRANSLATED_BEHAVIORS)
+  } = useQuery<BehaviorsData>(GET_TRANSLATED_BEHAVIORS, { errorPolicy: "all" })
 
   const {
     data: consequencesData,
     loading: consequencesLoading,
-  } = useQuery<ConsequencesData>(GET_TRANSLATED_CONSEQUENCES)
+  } = useQuery<ConsequencesData>(GET_TRANSLATED_CONSEQUENCES, { errorPolicy: "all" })
 
   const [startMutation, { loading: starting }] = useMutation(START_OBSERVATION)
   const [updateMutation, { loading: updating }] = useMutation(UPDATE_OBSERVATION)

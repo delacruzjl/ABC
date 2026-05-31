@@ -1,20 +1,11 @@
 import React from "react"
-import { useMutation, useQuery } from "@apollo/client/react"
+import { useMutation } from "@apollo/client/react"
 import { useTranslation } from "react-i18next"
-import { GET_PREFERRED_LANGUAGE } from "../graphql/operations/languageOperations"
 import { UPDATE_PREFERRED_LANGUAGE } from "../graphql/operations/userOperations"
 
 export const LanguageSwitcher: React.FC = () => {
   const { i18n, t } = useTranslation()
-  const { data } = useQuery(GET_PREFERRED_LANGUAGE)
   const [updateLanguage] = useMutation(UPDATE_PREFERRED_LANGUAGE)
-
-  React.useEffect(() => {
-    if (data?.preferredLanguage && data.preferredLanguage !== i18n.language) {
-      i18n.changeLanguage(data.preferredLanguage)
-      localStorage.setItem("abc_language", data.preferredLanguage)
-    }
-  }, [data, i18n])
 
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const newLang = e.target.value

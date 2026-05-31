@@ -121,12 +121,19 @@ public class TranslatedEntities
         if (string.IsNullOrEmpty(userId))
             return "en";
 
-        await using var dbContext = await dbContextFactory.CreateDbContextAsync(cancellationToken);
-        var user = await dbContext.Users
-            .AsNoTracking()
-            .FirstOrDefaultAsync(u => u.Id == userId, cancellationToken);
+        try
+        {
+            await using var dbContext = await dbContextFactory.CreateDbContextAsync(cancellationToken);
+            var user = await dbContext.Users
+                .AsNoTracking()
+                .FirstOrDefaultAsync(u => u.Id == userId, cancellationToken);
 
-        return user?.PreferredLanguage ?? "en";
+            return user?.PreferredLanguage ?? "en";
+        }
+        catch
+        {
+            return "en";
+        }
     }
 
     private static async Task<List<TranslatedEntity>> ApplyTranslations<T>(
@@ -138,25 +145,31 @@ public class TranslatedEntities
         Func<T, string> descriptionSelector,
         CancellationToken cancellationToken) where T : Entity
     {
+        var items = entities
+            .Select(entity => new TranslatedEntity(entity.Id, nameSelector(entity), descriptionSelector(entity)))
+            .ToList();
+
         if (language == "en")
+            return items;
+
+        try
         {
-            return entities
-                .Select(entity => new TranslatedEntity(entity.Id, nameSelector(entity), descriptionSelector(entity)))
-                .ToList();
+            var translations = await translationService.GetTranslationsAsync(
+                entityType,
+                entities.Select(entity => entity.Id),
+                language,
+                cancellationToken);
+
+            return items.Select(item =>
+            {
+                if (translations.TryGetValue(item.Id, out var translation))
+                    return new TranslatedEntity(item.Id, translation.Name, translation.Description);
+                return item;
+            }).ToList();
         }
-
-        var translations = await translationService.GetTranslationsAsync(
-            entityType,
-            entities.Select(entity => entity.Id),
-            language,
-            cancellationToken);
-
-        return entities.Select(entity =>
+        catch
         {
-            if (translations.TryGetValue(entity.Id, out var translation))
-                return new TranslatedEntity(entity.Id, translation.Name, translation.Description);
-
-            return new TranslatedEntity(entity.Id, nameSelector(entity), descriptionSelector(entity));
-        }).ToList();
+            return items;
+        }
     }
 }
