@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState, useRef, useEffect } from "react"
 import {
   BrowserRouter as Router,
   Routes,
@@ -9,6 +9,7 @@ import {
 } from "react-router-dom"
 import { useQuery } from "@apollo/client/react"
 import { useTranslation } from "react-i18next"
+import { LanguageSwitcher } from "./components/LanguageSwitcher"
 import { AntecedentsPage } from "./pages/AntecedentsPage"
 import { BehaviorsPage } from "./pages/BehaviorsPage"
 import { ConsequencesPage } from "./pages/ConsequencesPage"
@@ -26,6 +27,57 @@ import { OfflineBanner } from "./components/OfflineBanner"
 import { useAuth } from "./context/AuthContext"
 import { useDefaultChild } from "./hooks/useChildren"
 import { GET_CHILDREN } from "./graphql/operations/childOperations"
+
+function UserMenu({ email, isAdmin, onLogout }: { email: string; isAdmin: boolean; onLogout: () => void }) {
+  const { t } = useTranslation()
+  const [open, setOpen] = useState(false)
+  const menuRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
+        setOpen(false)
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside)
+    return () => document.removeEventListener("mousedown", handleClickOutside)
+  }, [])
+
+  return (
+    <div className="relative" ref={menuRef}>
+      <button
+        onClick={() => setOpen(!open)}
+        className="flex items-center gap-2 text-slate-300 hover:text-cyan-400 text-sm font-medium transition px-3 py-2 rounded-lg hover:bg-slate-700"
+      >
+        <span>{email}</span>
+        {isAdmin && (
+          <span className="text-xs bg-amber-900 text-amber-300 px-2 py-0.5 rounded">
+            {t("nav.admin")}
+          </span>
+        )}
+        <svg className={`w-4 h-4 transition-transform ${open ? "rotate-180" : ""}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+        </svg>
+      </button>
+      {open && (
+        <div className="absolute right-0 mt-2 w-56 bg-slate-800 border border-slate-700 rounded-lg shadow-xl z-50 py-2">
+          <div className="px-4 py-2 border-b border-slate-700">
+            <p className="text-xs text-slate-400">{t("language.label")}</p>
+            <div className="mt-1">
+              <LanguageSwitcher />
+            </div>
+          </div>
+          <button
+            onClick={() => { setOpen(false); onLogout() }}
+            className="w-full text-left px-4 py-2 text-sm text-slate-300 hover:text-red-400 hover:bg-slate-700 transition"
+          >
+            {t("nav.logout")}
+          </button>
+        </div>
+      )}
+    </div>
+  )
+}
 
 function NavBar() {
   const navigate = useNavigate()
@@ -121,25 +173,11 @@ function NavBar() {
               )}
             </div>
           </div>
-          <div className="flex items-center gap-4">
-            <span className="text-slate-400 text-sm">
-              {user?.email}
-              {isAdmin && (
-                <span className="ml-2 text-xs bg-amber-900 text-amber-300 px-2 py-0.5 rounded">
-                  {t("nav.admin")}
-                </span>
-              )}
-            </span>
-            <button
-              onClick={() => {
-                logout()
-                navigate("/login")
-              }}
-              className="text-slate-400 hover:text-red-400 text-sm font-medium transition"
-            >
-              {t("nav.logout")}
-            </button>
-          </div>
+          <UserMenu
+            email={user?.email ?? ""}
+            isAdmin={isAdmin}
+            onLogout={() => { logout(); navigate("/login") }}
+          />
         </div>
       </div>
     </nav>
