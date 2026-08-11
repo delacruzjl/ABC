@@ -35,10 +35,17 @@ C4Context
 From the repository root, start the Aspire AppHost with:
 
 ```powershell
+dotnet user-secrets --project .\ABC.AppHost\ABC.AppHost.csproj set `
+  "ConnectionStrings:abcdata" `
+  "Host=<server>;Port=5432;Database=abcdata;Username=<user>;Password=<password>"
+
 dotnet run --project .\ABC.AppHost\ABC.AppHost.csproj
 ```
 
-The development AppHost configuration enables Docker-backed PostgreSQL, so Docker Desktop must be running and healthy before local resources can start successfully.
+Development uses an external PostgreSQL connection by default, so no local
+container runtime is required. The React app connects directly to the Management
+API in this mode; the Kong gateway remains available only when
+`UseDockerPostgres` is enabled.
 
 ## Building Container Images
 
@@ -618,4 +625,3 @@ kubectl delete -k ./k8s
 * Apply namespace yaml
 * Create secrets
 * `kubectl apply -k ./k8s`
-

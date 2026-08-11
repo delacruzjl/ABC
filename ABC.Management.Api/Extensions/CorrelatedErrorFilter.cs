@@ -1,4 +1,6 @@
 using System.Diagnostics;
+using HotChocolate;
+using HotChocolate.Execution;
 
 namespace ABC.Management.Api.Extensions;
 

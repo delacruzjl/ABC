@@ -120,6 +120,7 @@ internal class Program
             .AddSorting()
             .AddProjections()
             .AddAuthorization()
+            .AddApplicationService<ILogger<ABC.Management.Api.Extensions.CorrelatedErrorFilter>>()
             .AddErrorFilter<ABC.Management.Api.Extensions.CorrelatedErrorFilter>();
 
         var app = builder.Build();

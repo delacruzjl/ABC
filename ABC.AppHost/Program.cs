@@ -1,4 +1,3 @@
-using k8s.Models;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.FeatureManagement;
@@ -33,6 +32,21 @@ IResourceBuilder<ProjectResource> managementApi = builder
         .WithEnvironment("ExternalAuth__AzureEntra__TenantId", azureEntraTenantId)
         .WithHttpsEndpoint(port: 5100, name: "kong-upstream", isProxied: false);
 
+void AddDirectReactApp()
+{
+    builder.AddJavaScriptApp("react", "../ABC.React", "start")
+        .WithReference(managementApi)
+        .WaitFor(managementApi)
+        .WithEnvironment("GOOGLE_CLIENT_ID", googleClientId)
+        .WithEnvironment("AZURE_ENTRA_CLIENT_ID", azureEntraClientId)
+        .WithEnvironment("AZURE_ENTRA_TENANT_ID", azureEntraTenantId)
+        .WithEnvironment("BROWSER", "none")
+        .WithHttpEndpoint(port: 4001, env: "PORT")
+        .WithExternalHttpEndpoints()
+        .WithBrowserLogs()
+        .PublishAsDockerFile();
+}
+
 var featureManager = builder.Services.BuildServiceProvider().GetRequiredService<IFeatureManager>();
 
 // In non-publish mode (e.g., local development), use a direct PostgreSQL configuration.
@@ -40,7 +54,13 @@ var featureManager = builder.Services.BuildServiceProvider().GetRequiredService<
 
 var useAzurePostgres = await featureManager.IsEnabledAsync("UseAzurePostgres");
 var useDockerPostgres = await featureManager.IsEnabledAsync("UseDockerPostgres");
-var usePgAdmin = await featureManager.IsEnabledAsync("UsePgAdmin");
+var useExternalPostgres = await featureManager.IsEnabledAsync("UseExternalPostgres");
+
+if (new[] { useAzurePostgres, useDockerPostgres, useExternalPostgres }.Count(enabled => enabled) != 1)
+{
+    throw new InvalidOperationException(
+        "Exactly one PostgreSQL provider must be enabled: UseAzurePostgres, UseDockerPostgres, or UseExternalPostgres.");
+}
 
 if (useAzurePostgres)
 {
@@ -54,9 +74,10 @@ if (useAzurePostgres)
         .WaitFor(dbFlex)
         .WithReference(insights!)
         .WaitFor(insights!);
-}
 
-if (useDockerPostgres)
+    AddDirectReactApp();
+}
+else if (useDockerPostgres)
 {
     var pg = builder.AddPostgres("postgres", password: pgPassword)
         .WithPgWeb(pgWeb => pgWeb.WithHostPort(5050));
@@ -112,17 +133,10 @@ if (useDockerPostgres)
 }
 else
 {
-    builder.AddJavaScriptApp("react", "../ABC.React", "start")
-        .WithReference(managementApi)
-        .WaitFor(managementApi)
-        .WithEnvironment("GOOGLE_CLIENT_ID", googleClientId)
-        .WithEnvironment("AZURE_ENTRA_CLIENT_ID", azureEntraClientId)
-        .WithEnvironment("AZURE_ENTRA_TENANT_ID", azureEntraTenantId)
-        .WithEnvironment("BROWSER", "none")
-        .WithHttpEndpoint(port: 4001, env: "PORT")
-        .WithExternalHttpEndpoints()
-        .WithBrowserLogs()
-        .PublishAsDockerFile();
+    var externalDb = builder.AddConnectionString(databaseName!);
+    managementApi = managementApi.WithReference(externalDb);
+
+    AddDirectReactApp();
 }
 
 builder.Build().Run();

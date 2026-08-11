@@ -8,7 +8,7 @@ This is a .NET Aspire-orchestrated solution with a React frontend and HotChocola
 
 **Projects:**
 
-- **ABC.AppHost** — Aspire orchestrator. Wires up PostgreSQL, the Management API, Kong gateway (local dev), and the React app. Supports Azure deployment (Azure Postgres Flexible Server + App Insights) or local Docker mode via feature flags (`UseAzurePostgres`, `UseDockerPostgres`).
+- **ABC.AppHost** — Aspire orchestrator. Wires up PostgreSQL, the Management API, Kong gateway (Docker mode), and the React app. Supports Azure deployment, local Docker, or external PostgreSQL via feature flags (`UseAzurePostgres`, `UseDockerPostgres`, `UseExternalPostgres`). External PostgreSQL is the development default and requires no container runtime.
 - **ABC.Management.Api** — ASP.NET Core GraphQL API using HotChocolate 15. Handles auth (ASP.NET Identity + JWT), CRUD for domain entities, and observation lifecycle. GraphQL types live in `Types/`. Uses Mediator pattern (source-generated) for command dispatch.
 - **ABC.Management.Domain** — Domain entities, value objects, and FluentValidation validators. No infrastructure dependencies.
 - **ABC.PostGreSQL** — EF Core data layer. `ABCContext` extends `IdentityDbContext<ApplicationUser>`. Includes `UnitOfWork`, repository access, and validation services that check uniqueness via `EF.Functions.ILike`.
